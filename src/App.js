@@ -1,4 +1,5 @@
 import React from'react';
+import Projects from './Projects';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         </nav>
       </header>
       <main>
-        {/* Content will go here */}
+        <Projects />
       </main>
       <footer>
         {/* Footer content will go here */}
