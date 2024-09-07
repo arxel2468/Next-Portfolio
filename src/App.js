@@ -1,6 +1,10 @@
 import React from'react';
 import './App.css';
 import Projects from './Projects';
+import Writing from './Writing';
+import Sketching from './Sketching';
+import About from './About';
+import Contact from './Contact';
 
 function App() {
   return (
@@ -18,9 +22,14 @@ function App() {
       </header>
       <main>
         <Projects />
+        <Writing />
+        <Sketching />
+        <About />
+        <Contact />
       </main>
       <footer>
-        {/* Footer content will go here */}
+        <p>&copy; 2023 Arxel</p>
+        <p>This website was built with React and hosted on GitHub Pages.</p>
       </footer>
     </div>
   );
