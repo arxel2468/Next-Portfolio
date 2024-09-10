@@ -45,7 +45,7 @@ export default function Home() {
 <section id="contact" className="py-12 bg-gray-100 dark:bg-gray-900">
   <div className="container mx-auto text-center">
     <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Contact Me</h2>
-    <form action="https://formspree.io/f/your-form-id" method="POST" className="max-w-lg mx-auto">
+    <form action="https://formspree.io/f/xeojdynq" method="POST" className="max-w-lg mx-auto">
       <div className="mb-4">
         <input
           type="text"
