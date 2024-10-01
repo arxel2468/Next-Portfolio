@@ -3,8 +3,8 @@ const nextConfig = {
 	images: {
     	domains: ['substackcdn.com'], // Add the domain here
   	},
-  	output: 'export', // Enable static export for GitHub Pages
-  	trailingSlash: true, 
+  	// output: 'export', // Enable static export for GitHub Pages
+  	// trailingSlash: true, 
 };
 
 export default nextConfig;
