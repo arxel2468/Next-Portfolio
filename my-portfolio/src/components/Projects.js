@@ -46,7 +46,6 @@ export default function Projects() {
         >
           <SwiperSlide>
           <a href="https://github.com/arxel2468/food" target="_blank" rel="noopener noreferrer" className="block">
-            
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg card-hover">
               <Image
                 src={Food}
