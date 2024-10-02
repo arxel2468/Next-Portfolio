@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
-    	domains: ['substackcdn.com'],
+    	domains: ['substackcdn.com'], // Add the domain here
+    	unoptimized: true,
   	},
   	assetPrefix: './',
 };
