@@ -23,7 +23,7 @@ export default function NavBar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex space-x-6">
-          {['Home', 'Projects', 'Articles', 'Contact'].map((section) => (
+          {['Home', 'Work', 'Projects', 'Articles', 'Contact'].map((section) => (
             <motion.div
               key={section}
               whileHover={{ scale: 1.05 }}
