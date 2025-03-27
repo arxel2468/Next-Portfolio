@@ -3,6 +3,8 @@ import "./globals.css";
 import { useEffect } from 'react';
 import { Analytics } from "@vercel/analytics/react"
 
+
+
 export default function RootLayout({ children }) {
   useEffect(() => {
     // Apply smooth scrolling to anchor links

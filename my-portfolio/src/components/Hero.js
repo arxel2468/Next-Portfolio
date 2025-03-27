@@ -16,7 +16,7 @@ export default function Hero() {
           Crafting smart solutions with AI/ML, building user-friendly web apps, and automating tasks.
         </p>
         <div className="flex space-x-4 mt-6">
-            <a href="#projects" className="btn-primary animate-bounce">Explore Projects</a>
+            <a href="#work" className="btn-primary animate-bounce">Explore Work</a>
             <a href="#contact" className="btn-secondary">Let&apos;s Collaborate</a>
         </div>
       </div>
