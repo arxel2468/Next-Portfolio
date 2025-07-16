@@ -36,14 +36,13 @@ export default function Experience() {
       color: "border-purple-500 dark:border-purple-400"
     },
     {
-      title: "Web Development Intern",
-      company: "Tech Startup",
-      period: "2021 - 2022",
-      description: "Worked on front-end development using React and Next.js, contributing to the company's main product and internal tools.",
+      title: "Video Editing Entrepreneur",
+      company: "NiteSwift",
+      period: "2023",
+      description: "Launched and managed a video editing business connecting clients with freelancers, enchancing negoation and client management skills",
       achievements: [
-        "Implemented responsive UI components",
-        "Optimized website performance",
-        "Collaborated with design team on UX improvements"
+        "Consistently delivered quality projects, boosting business growth",
+        "Learned workflow refinement and client management"
       ],
       logo: "/images/web-dev.png", // You'll need to create this image
       color: "border-green-500 dark:border-green-400"
