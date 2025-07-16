@@ -1,130 +1,149 @@
-/* Import Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
-/* @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap'); */
-
-
-/* Globals and Tailwind Config */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-
-/* Global Variables */
-:root {
-  --background-primary: #e0f7fa; /* light cyan */
-  --text-primary: #004d61; /* dark teal */
-  --accent-color: #00acc1; /* bright cyan accent */
-  --primary-dark: #007bb5; /* deeper blue */
-  --foreground: #004d61; /* text color */
-  --background: #e0f7fa; /* background color */
-  --highlight: #7f5fff; /* hover effect color */
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #001f3f; /* dark background */
-    --foreground: #cce7ff; /* light blue text */
-    --accent-color: #007bb5; /* dark accent */
-  }
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
 }
 
-/* Force the Montserrat font */
-html, body {
-  font-family: 'Poppins', sans-serif !important;
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #a855f7, #ec4899);
+  border-radius: 5px;
 }
 
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #9333ea, #db2777);
+}
 
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #a855f7, #ec4899);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #9333ea, #db2777);
+}
+
+/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Body Styling */
+/* Selection color */
+::selection {
+  background-color: rgba(168, 85, 247, 0.3);
+  color: inherit;
+}
+
+/* Base styles */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: 'Poppins', sans-serif;
+  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300;
 }
 
-a {
-  color: var(--foreground);
-  text-decoration: none;
+/* Hide cursor on desktop for custom cursor */
+@media (min-width: 768px) {
+  * {
+    cursor: none !important;
+  }
 }
 
-a:hover {
-  color: var(--highlight);
+/* Text gradient utility */
+.text-gradient {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400;
 }
 
-/* Button Styles */
+/* Button styles */
 .btn-primary {
-  background-color: #1d4ed8;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.375rem;
-  font-size: 1.125rem;
-  transition: transform 0.3s, background-color 0.3s;
-}
-
-.btn-primary:hover {
-  background-color: #2563eb;
-  transform: scale(1.05);
+  @apply px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg shadow-lg hover:shadow-purple-500/50 transition-all duration-300;
 }
 
 .btn-secondary {
-  background-color: #fbbf24;
-  color: black;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.375rem;
-  font-size: 1.125rem;
-  transition: transform 0.3s, background-color 0.3s;
+  @apply px-6 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-medium rounded-lg border border-gray-300 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all duration-300;
 }
 
-.btn-secondary:hover {
-  background-color: #fcd34d;
-  transform: scale(1.05);
+/* Card styles */
+.card {
+  @apply bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700;
 }
 
-/* Section Fade-In Animation */
-section {
-  animation: fadeIn 1s ease-in-out;
+/* Section padding utility */
+.section-padding {
+  @apply py-20;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
+/* Heading styles */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold;
+}
+
+/* Animation utilities */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
     transform: translateY(0);
   }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
-.animate-fadeIn {
-  opacity: 1;
-  animation: fadeIn 1.2s ease-in-out;
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Card Hover Effects */
-.card-hover {
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
-.card-hover:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+/* Gradient text animation */
+.animate-gradient-text {
+  background-size: 200% 200%;
+  animation: gradient-text 8s ease infinite;
 }
 
-/* Navbar Styling */
-nav {
-  background-color: var(--background-primary);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+@keyframes gradient-text {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-.group:hover .group-hover\\:text-indigo-300 {
-  color: #7f5fff;
+/* Glow effect */
+.glow {
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
 }
 
-.group:hover .group-hover\\:w-full {
-  width: 100%;
+.glow-text {
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+/* Glass effect */
+.glass {
+  @apply bg-white/10 backdrop-blur-md border border-white/20;
+}
+
+.dark .glass {
+  @apply bg-gray-900/30 backdrop-blur-md border border-gray-700/30;
 }
