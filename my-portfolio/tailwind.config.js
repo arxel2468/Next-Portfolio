@@ -10,8 +10,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Poppins', 'sans-serif'],
-        mono: ['Fira Code', 'monospace'], // For code snippets
+        sans: ['var(--font-poppins)', 'sans-serif'],
+        mono: ['var(--font-fira-code)', 'monospace'],
       },
       colors: {
         primary: {

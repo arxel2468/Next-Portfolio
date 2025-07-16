@@ -23,7 +23,10 @@ export default function Hero() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
   
-  const roles = ["AI Engineer", "Full Stack Developer", "ML Specialist", "Automation Expert"];
+
+  // Use useMemo for roles array to avoid dependency issues
+  const roles = useMemo(() => ["AI Engineer", "Full Stack Developer", "ML Specialist", "Automation Expert"], []);
+  
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
