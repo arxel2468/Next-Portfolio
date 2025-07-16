@@ -1,6 +1,6 @@
 // src/app/layout.js
 import './globals.css';
-import { Providers } from './providers.js';
+import { Providers } from './provider.js';
 
 export const metadata = {
   title: 'Amit Pandit | AI Engineer & Full Stack Developer',
