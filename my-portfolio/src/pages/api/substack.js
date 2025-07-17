@@ -1,3 +1,4 @@
+// src/pages/api/substack.js
 import Parser from 'rss-parser';
 
 const parser = new Parser();
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
       title: item.title,
       link: item.link,
       description: item.contentSnippet,
-      thumbnail: item.enclosure ? item.enclosure.url : '/default-thumbnail.jpg', // Check if there's an image
+      thumbnail: item.enclosure ? item.enclosure.url : '/images/article-placeholder.jpg', // Check if there's an image
       pubDate: item.pubDate
     }));
 

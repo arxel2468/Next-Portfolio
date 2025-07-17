@@ -2,20 +2,19 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import CircuitBoard from '../components/circuit/CircuitBoard';
 import CircuitLoader from '../components/circuit/CircuitLoader';
-import CircuitNode from '../components/circuit/CircuitNode';
-import CircuitPath from '../components/circuit/CircuitPath';
-import CircuitPulse from '../components/circuit/CircuitPulse';
 import CircuitCursor from '../components/ui/CircuitCursor';
 import CircuitNav from '../components/ui/CircuitNav';
 import CircuitTerminal from '../components/circuit/CircuitTerminal';
+import HolographicCircuit from '../components/circuit/HolographicCircuit';
+
+// Section components
 import About from '../components/sections/About';
 import Projects from '../components/sections/Projects';
 import Experience from '../components/sections/Experience';
-import Contact from '../components/sections/Contact';
 import Skills from '../components/sections/Skills';
-import HolographicCircuit from '../components/circuit/HolographicCircuit';
+import Articles from '../components/sections/Articles';
+import Contact from '../components/sections/Contact';
 
 // Import these components only after the initial render to avoid issues
 import dynamic from 'next/dynamic';
@@ -102,6 +101,7 @@ export default function Home() {
                   {activeSection === 'projects' && <Projects onBack={handleBackClick} />}
                   {activeSection === 'experience' && <Experience onBack={handleBackClick} />}
                   {activeSection === 'skills' && <Skills onBack={handleBackClick} />}
+                  {activeSection === 'articles' && <Articles onBack={handleBackClick} />}
                   {activeSection === 'contact' && <Contact onBack={handleBackClick} />}
                 </motion.div>
               ) : (
@@ -114,10 +114,6 @@ export default function Home() {
                   className="min-h-screen relative overflow-hidden"
                 >
                   <HolographicCircuit onNodeClick={handleNodeClick} />
-                  
-                  {/* <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center text-circuit-text/60 text-sm">
-                    <p>Click on a node to explore</p>
-                  </div> */}
                 </motion.div>
               )}
             </AnimatePresence>

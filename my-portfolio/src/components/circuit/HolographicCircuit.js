@@ -1,12 +1,14 @@
-// src/components/holographic/HolographicInterface.js
+// src/components/circuit/HolographicCircuit.js
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from 'next-themes';
 
-export default function HolographicInterface({ onNodeClick }) {
+export default function HolographicCircuit({ onNodeClick }) {
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 1000, height: 800 });
   const [hoveredSection, setHoveredSection] = useState(null);
+  const { theme } = useTheme();
   
   // Update dimensions on window resize
   useEffect(() => {
@@ -22,12 +24,13 @@ export default function HolographicInterface({ onNodeClick }) {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
   
-  // Define sections
+  // Define sections - now including Articles
   const sections = [
     { id: 'about', label: 'About', description: 'Learn about my background and expertise' },
     { id: 'projects', label: 'Projects', description: 'Explore my featured work and case studies' },
     { id: 'experience', label: 'Experience', description: 'My professional journey and achievements' },
     { id: 'skills', label: 'Skills', description: 'Technical abilities and competencies' },
+    { id: 'articles', label: 'Articles', description: 'Read my thoughts and insights on technology' },
     { id: 'contact', label: 'Contact', description: 'Get in touch for collaborations' }
   ];
   
@@ -41,10 +44,18 @@ export default function HolographicInterface({ onNodeClick }) {
     delay: Math.random() * 5
   }));
   
+  // Colors based on theme
+  const colors = {
+    primary: theme === 'dark' ? 'rgb(56, 189, 248)' : 'rgb(14, 165, 233)',
+    text: theme === 'dark' ? 'rgb(241, 245, 249)' : 'rgb(15, 23, 42)',
+    background: theme === 'dark' ? 'rgb(15, 23, 42)' : 'rgb(241, 245, 249)',
+  };
+  
   return (
     <div 
       ref={containerRef}
-      className="w-full h-screen relative overflow-hidden bg-slate-900"
+      className="w-full h-screen relative overflow-hidden transition-colors duration-300"
+      style={{ backgroundColor: colors.background }}
     >
       {/* Background glow effects */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full">
@@ -70,7 +81,7 @@ export default function HolographicInterface({ onNodeClick }) {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative w-[600px] h-[600px]">
           {sections.map((section, index) => {
-            // Position nodes in a pentagon around the center
+            // Position nodes in a hexagon around the center (6 sections)
             const angle = (index * (2 * Math.PI / sections.length)) - Math.PI / 2;
             const radius = 250; // Distance from center
             const x = 300 + radius * Math.cos(angle);
@@ -130,13 +141,13 @@ export default function HolographicInterface({ onNodeClick }) {
         {hoveredSection && (
           <motion.div
             key={`info-${hoveredSection}`}
-            className="absolute bottom-16 left-1 transform -translate-x-1/2 w-80"
+            className="absolute bottom-16 left-1/2 transform -translate-x-1/2 w-80"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="holographic-panel p-4">
+                        <div className="holographic-panel p-4">
               <h3 className="text-blue-300 font-mono text-lg mb-1">
                 {sections.find(s => s.id === hoveredSection)?.label}
               </h3>

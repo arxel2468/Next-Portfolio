@@ -1,12 +1,13 @@
 // src/components/sections/Articles.js
 "use client";
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import BackButton from '../ui/BackButton';
 import SectionHeading from '../ui/SectionHeading';
 
-export default function Articles() {
+export default function Articles({ onBack }) {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -14,18 +15,19 @@ export default function Articles() {
   
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
-  // src/components/sections/Articles.js (continued)
+
   useEffect(() => {
-    // Fetch articles from Substack
-    const fetchArticles = async () => {
-      try {
-        const response = await fetch('/api/substack');
-        const data = await response.json();
-        setArticles(data.items.slice(0, 3)); // Get only the first 3 articles
-      } catch (error) {
-        console.error('Error fetching articles:', error);
-        // Fallback articles if API fails
+    // Fetch the Substack RSS feed and parse it
+    fetch('/api/substack')
+      .then((res) => res.json())
+      .then((data) => {
+        setArticles(data.items);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching Substack articles", err);
+        setIsLoading(false);
+        // Fallback articles
         setArticles([
           {
             title: "The Future of AI in Everyday Applications",
@@ -49,36 +51,53 @@ export default function Articles() {
             thumbnail: "/images/article3.jpg"
           }
         ]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    fetchArticles();
+      });
   }, []);
-  
+
   return (
-    <section id="articles" ref={ref} className="py-20 bg-white dark:bg-magazine-dark">
-      <div className="magazine-grid">
-        <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-12">
+    <section id="articles" ref={ref} className="py-20 bg-circuit-bg">
+      <BackButton onClick={onBack} />
+      
+      <div className="max-w-6xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+        >
           <SectionHeading>Latest Articles</SectionHeading>
-          <p className="text-lg mb-12">
+          <p className="text-lg mb-12 text-circuit-text/80">
             Thoughts and insights on AI, development, and technology.
           </p>
-        </div>
+        </motion.div>
         
         {isLoading ? (
-          <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-12 flex justify-center py-12">
-            <div className="w-12 h-12 border-4 border-magazine-light border-t-magazine-accent rounded-full animate-spin"></div>
+          // Skeleton loading placeholders
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0.5 }}
+                animate={{ opacity: [0.5, 0.8, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                className="bg-circuit-surface p-6 rounded-xl"
+              >
+                <div className="h-48 bg-circuit-primary/10 rounded-lg mb-5"></div>
+                <div className="h-7 bg-circuit-primary/10 rounded w-3/4 mb-3"></div>
+                <div className="h-4 bg-circuit-primary/10 rounded mb-2"></div>
+                <div className="h-4 bg-circuit-primary/10 rounded mb-2"></div>
+                <div className="h-4 bg-circuit-primary/10 rounded w-2/3"></div>
+                <div className="mt-4 h-5 bg-circuit-primary/10 rounded w-1/3"></div>
+              </motion.div>
+            ))}
           </div>
         ) : (
-          <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {articles.map((article, index) => (
               <motion.article
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.2 + (index * 0.1) }}
+                transition={{ duration: 0.5, delay: 0.2 + (index * 0.1) }}
                 className="group"
               >
                 <a 
@@ -87,34 +106,43 @@ export default function Articles() {
                   rel="noopener noreferrer"
                   className="block"
                 >
-                  <div className="aspect-[16/9] relative mb-4 overflow-hidden">
+                  <div className="aspect-video relative mb-4 overflow-hidden rounded-lg">
                     <Image
-                      src={article.thumbnail}
+                      src={article.thumbnail || '/images/article-placeholder.jpg'}
                       alt={article.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
+                      <div className="p-3 w-full">
+                        <div className="flex justify-between items-center">
+                          <span className="text-white text-xs font-medium px-2 py-1 bg-circuit-primary/80 backdrop-blur-sm rounded-full">
+                            Article
+                          </span>
+                          <span className="text-white text-xs font-medium">
+                            {new Date(article.pubDate).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   
-                  <div className="mb-2 text-sm text-magazine-muted">
-                    {new Date(article.pubDate).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </div>
-                  
-                  <h3 className="text-xl font-serif font-bold mb-2 group-hover:text-magazine-accent transition-colors">
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-circuit-primary transition-colors">
                     {article.title}
                   </h3>
                   
-                  <p className="text-magazine-muted line-clamp-3">
+                  <p className="text-circuit-text/70 line-clamp-3 mb-4">
                     {article.description}
                   </p>
                   
-                  <div className="mt-4 inline-flex items-center text-magazine-accent">
+                  <div className="inline-flex items-center text-circuit-primary">
                     <span>Read Article</span>
-                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                   </div>
@@ -124,12 +152,12 @@ export default function Articles() {
           </div>
         )}
         
-        <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-12 text-center mt-12">
+        <div className="text-center mt-12">
           <a 
             href="https://amitpandit.substack.com" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-flex items-center text-magazine-accent hover:text-magazine-accent/80 transition-colors"
+            className="inline-flex items-center text-circuit-primary hover:text-circuit-primary/80 transition-colors"
           >
             <span>View All Articles</span>
             <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
