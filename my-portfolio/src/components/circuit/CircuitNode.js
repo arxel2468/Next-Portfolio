@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function CircuitNode({ 
@@ -10,6 +11,41 @@ export default function CircuitNode({
   primary = false,
   onClick 
 }) {
+  const [position, setPosition] = useState({ x, y });
+  
+  // Adjust position to align with grid
+  useEffect(() => {
+    const adjustToGrid = () => {
+      const board = document.querySelector('[data-grid-size]');
+      if (!board) return;
+      
+      const gridSize = parseInt(board.dataset.gridSize || '50');
+      const boardRect = board.getBoundingClientRect();
+      
+      // Calculate the nearest grid intersection
+      const percentX = parseFloat(x) / 100;
+      const percentY = parseFloat(y) / 100;
+      
+      const pixelX = percentX * boardRect.width;
+      const pixelY = percentY * boardRect.height;
+      
+      // Round to nearest grid intersection
+      const gridX = Math.round(pixelX / gridSize) * gridSize;
+      const gridY = Math.round(pixelY / gridSize) * gridSize;
+      
+      // Convert back to percentage
+      const adjustedX = (gridX / boardRect.width) * 100 + '%';
+      const adjustedY = (gridY / boardRect.height) * 100 + '%';
+      
+      setPosition({ x: adjustedX, y: adjustedY });
+    };
+    
+    adjustToGrid();
+    window.addEventListener('resize', adjustToGrid);
+    
+    return () => window.removeEventListener('resize', adjustToGrid);
+  }, [x, y]);
+  
   const sizeMap = {
     small: { outer: 40, inner: 16 },
     medium: { outer: 60, inner: 24 },
@@ -21,13 +57,14 @@ export default function CircuitNode({
   return (
     <motion.div
       className={`absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center ${onClick ? 'cursor-pointer' : ''}`}
-      style={{ left: x, top: y }}
+      style={{ left: position.x, top: position.y }}
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, type: "spring" }}
       whileHover={onClick ? { scale: 1.1 } : {}}
       onClick={onClick}
     >
+      {/* Rest of the component remains the same */}
       <div className="relative">
         {/* Outer ring */}
         <motion.div
@@ -74,8 +111,8 @@ export default function CircuitNode({
         )}
       </div>
       
-      {/* Label */}
-      {label && (
+            {/* Label */}
+            {label && (
         <motion.div 
           className="mt-4 text-center"
           initial={{ opacity: 0 }}

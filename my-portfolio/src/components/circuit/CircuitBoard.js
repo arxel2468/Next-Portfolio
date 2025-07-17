@@ -24,8 +24,11 @@ export default function CircuitBoard({ children }) {
       svg.style.zIndex = "-1";
       svg.style.opacity = "0.15";
       
+      // Grid size
+      const gridSize = 50;
+      
       // Create grid lines
-      for (let i = 0; i < width; i += 50) {
+      for (let i = 0; i < width; i += gridSize) {
         const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
         line.setAttribute("x1", i);
         line.setAttribute("y1", 0);
@@ -36,7 +39,7 @@ export default function CircuitBoard({ children }) {
         svg.appendChild(line);
       }
       
-      for (let i = 0; i < height; i += 50) {
+      for (let i = 0; i < height; i += gridSize) {
         const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
         line.setAttribute("x1", 0);
         line.setAttribute("y1", i);
@@ -49,19 +52,21 @@ export default function CircuitBoard({ children }) {
       
       // Create random circuit paths
       for (let i = 0; i < 20; i++) {
-        const startX = Math.random() * width;
-        const startY = Math.random() * height;
+        // Start at a grid intersection
+        const startX = Math.floor(Math.random() * (width / gridSize)) * gridSize;
+        const startY = Math.floor(Math.random() * (height / gridSize)) * gridSize;
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         
         let d = `M ${startX} ${startY}`;
         let currentX = startX;
         let currentY = startY;
         
-        // Create random path with 3-5 segments
+        // Create random path with 3-5 segments, always moving along grid lines
         const segments = Math.floor(Math.random() * 3) + 3;
         for (let j = 0; j < segments; j++) {
-          const nextX = currentX + (Math.random() * 200 - 100);
-          const nextY = currentY + (Math.random() * 200 - 100);
+          // Move to next grid intersection
+          const nextX = Math.floor(Math.random() * (width / gridSize)) * gridSize;
+          const nextY = Math.floor(Math.random() * (height / gridSize)) * gridSize;
           
           // 50% chance of horizontal then vertical, 50% chance of vertical then horizontal
           if (Math.random() > 0.5) {
@@ -84,6 +89,9 @@ export default function CircuitBoard({ children }) {
       
       // Add to board
       board.appendChild(svg);
+      
+      // Store grid size as a data attribute for node positioning
+      board.dataset.gridSize = gridSize;
     };
     
     createBackgroundCircuits();
