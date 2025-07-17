@@ -15,7 +15,7 @@ import Projects from '../components/sections/Projects';
 import Experience from '../components/sections/Experience';
 import Contact from '../components/sections/Contact';
 import Skills from '../components/sections/Skills';
-import CircuitBoardHex from '../components/circuit/CircuitBoardHex'
+import HolographicCircuit from '../components/circuit/HolographicCircuit';
 
 // Import these components only after the initial render to avoid issues
 import dynamic from 'next/dynamic';
@@ -113,11 +113,11 @@ export default function Home() {
                   transition={{ duration: 0.5 }}
                   className="min-h-screen relative overflow-hidden"
                 >
-                  <CircuitBoardHex onNodeClick={handleNodeClick} />
+                  <HolographicCircuit onNodeClick={handleNodeClick} />
                   
-                  <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center text-circuit-text/60 text-sm">
+                  {/* <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center text-circuit-text/60 text-sm">
                     <p>Click on a node to explore</p>
-                  </div>
+                  </div> */}
                 </motion.div>
               )}
             </AnimatePresence>
