@@ -1,57 +1,63 @@
-// src/app/components/ui/ProjectCard.js
+"use client";
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 export default function ProjectCard({ project, index }) {
   return (
-    <div className="group relative bg-white dark:bg-magazine-dark/50 overflow-hidden">
-      <div className="absolute -top-6 -left-6 text-8xl font-serif font-bold text-magazine-accent opacity-10">
-        {String(index).padStart(2, '0')}
-      </div>
-      
-      <div className="relative z-10 p-6">
-        <div className="aspect-video relative mb-4 overflow-hidden">
+    <motion.div
+      className="group bg-circuit-surface border border-circuit-primary/30 overflow-hidden"
+      whileHover={{ y: -5, boxShadow: '0 10px 30px -15px rgba(0, 240, 255, 0.3)' }}
+    >
+      <div className="relative">
+        {/* Project number */}
+        <div className="absolute top-3 right-3 z-10 bg-circuit-bg px-2 py-1 font-mono text-xs text-circuit-primary border border-circuit-primary/30">
+          #{String(index).padStart(2, '0')}
+        </div>
+        
+        {/* Project image */}
+        <div className="aspect-video relative overflow-hidden">
           <Image
             src={project.image}
             alt={project.title}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-            <div className="p-4 w-full">
-              <a 
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center text-white hover:text-magazine-accent transition-colors"
-              >
-                <span>View Project</span>
-                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-            </div>
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-circuit-bg to-transparent opacity-70"></div>
         </div>
         
-        <h3 className="text-xl font-serif font-bold mb-2 group-hover:text-magazine-accent transition-colors">
+        {/* Overlay with link */}
+        <div className="absolute inset-0 bg-circuit-bg/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <a 
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 border border-circuit-primary text-circuit-primary hover:bg-circuit-primary hover:text-circuit-bg transition-colors font-mono"
+          >
+            View Project
+          </a>
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <h3 className="text-xl font-mono font-bold text-circuit-primary mb-2">
           {project.title}
         </h3>
         
-        <p className="text-magazine-muted mb-4 line-clamp-3">
+        <p className="text-circuit-text/80 mb-4 line-clamp-3">
           {project.description}
         </p>
         
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 mt-4">
           {project.tags.map((tag, i) => (
             <span 
               key={i}
-              className="px-2 py-1 bg-magazine-light dark:bg-magazine-dark text-xs"
+              className="px-2 py-1 bg-circuit-bg text-circuit-primary text-xs font-mono"
             >
               {tag}
             </span>
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

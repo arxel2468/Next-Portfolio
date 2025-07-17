@@ -1,6 +1,18 @@
-// src/app/layout.js
-import { Providers } from './provider.js';
+import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Providers } from './providers';
 import './globals.css';
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const jetbrainsMono = JetBrains_Mono({ 
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
+});
 
 export const metadata = {
   title: 'Amit Pandit - AI Engineer & Full Stack Developer',
@@ -9,13 +21,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Fira+Code&display=swap" rel="stylesheet" />
-      </head>
-      <body>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className="bg-slate-900 text-slate-100">
         <Providers>{children}</Providers>
       </body>
     </html>

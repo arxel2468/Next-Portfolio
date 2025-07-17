@@ -1,29 +1,34 @@
-// src/app/components/sections/About.js
 "use client";
-import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import SectionHeading from '../ui/SectionHeading';
-import PullQuote from '../ui/PullQuote';
+import BackButton from '../ui/BackButton';
 
-export default function About() {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-  
+export default function About({ onBack }) {
   return (
-    <section id="about" ref={ref} className="py-20 bg-magazine-paper dark:bg-magazine-dark">
-      <div className="magazine-grid">
-        <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-12">
-          <SectionHeading>About the Author</SectionHeading>
-        </div>
+    <div className="min-h-screen bg-circuit-bg p-6 md:p-12">
+      <BackButton onClick={onBack} />
+      
+      <div className="max-w-5xl mx-auto mt-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="text-4xl md:text-5xl font-mono font-bold text-circuit-primary mb-2">
+            <span className="text-circuit-text">&lt;</span>
+            About
+            <span className="text-circuit-text">/&gt;</span>
+          </h1>
+          
+          <div className="h-1 w-24 bg-circuit-primary mb-8"></div>
+        </motion.div>
         
-        <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-8 mb-8 md:mb-0">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <motion.div
+            className="md:col-span-7"
             initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
             <p className="text-lg mb-6 leading-relaxed">
               I'm Amit Pandit, an AI Engineer and Full Stack Developer with a passion for creating intelligent solutions that solve real-world problems. My journey in technology began with a fascination for how AI can transform businesses and enhance human experiences.
@@ -36,84 +41,99 @@ export default function About() {
             <p className="text-lg leading-relaxed">
               When I'm not coding, you can find me exploring the latest advancements in machine learning, contributing to open-source projects, or writing about technology on my Substack.
             </p>
-          </motion.div>
-        </div>
-        
-        <div className="col-start-2 col-end-14 md:col-start-9 md:col-end-12">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative"
-          >
-            <div className="aspect-[3/4] relative">
-              <Image
-                src="/images/about-portrait.jpg" // You'll need to create this image
-                alt="Amit Pandit"
-                fill
-                className="object-cover"
-              />
+            
+            <div className="mt-8 p-6 bg-circuit-surface rounded-lg border border-circuit-primary/30">
+              <h3 className="text-xl font-mono font-bold text-circuit-primary mb-4">
+                $ cat personal_info.json
+              </h3>
+              <pre className="font-mono text-sm text-circuit-text/80 whitespace-pre-wrap">
+{`{
+  "name": "Amit Pandit",
+  "role": "AI Engineer & Full Stack Developer",
+  "location": "Mumbai, India",
+  "education": "Computer Science",
+  "interests": [
+    "Artificial Intelligence",
+    "Web Development",
+    "Open Source",
+    "Technical Writing"
+  ]
+}`}
+              </pre>
             </div>
-            <div className="absolute -bottom-4 -left-4 bg-magazine-accent text-white py-2 px-4">
-              <span className="text-sm font-medium">AI Engineer & Developer</span>
-            </div>
-          </motion.div>
-        </div>
-        
-        <PullQuote className="col-start-2 col-end-14 md:col-start-4 md:col-end-12 my-16">
-          I believe in creating technology that not only works well but also enhances human capabilities and improves lives.
-        </PullQuote>
-        
-        <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <h3 className="text-xl font-serif font-bold mb-4">Technical Expertise</h3>
-            <ul className="space-y-2">
-              <li className="flex items-center">
-                <span className="w-2 h-2 bg-magazine-accent mr-2"></span>
-                <span>Machine Learning & Deep Learning</span>
-              </li>
-              <li className="flex items-center">
-                <span className="w-2 h-2 bg-magazine-accent mr-2"></span>
-                <span>Natural Language Processing</span>
-              </li>
-              <li className="flex items-center">
-                <span className="w-2 h-2 bg-magazine-accent mr-2"></span>
-                <span>Full Stack Web Development</span>
-              </li>
-              <li className="flex items-center">
-                <span className="w-2 h-2 bg-magazine-accent mr-2"></span>
-                <span>Cloud Infrastructure & DevOps</span>
-              </li>
-              <li className="flex items-center">
-                <span className="w-2 h-2 bg-magazine-accent mr-2"></span>
-                <span>Data Analysis & Visualization</span>
-              </li>
-            </ul>
           </motion.div>
           
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            className="md:col-span-5"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <h3 className="text-xl font-serif font-bold mb-4">Tools & Technologies</h3>
-            <div className="flex flex-wrap gap-2">
-              {['Python', 'TensorFlow', 'PyTorch', 'JavaScript', 'React', 'Next.js', 'Node.js', 'AWS', 'Docker', 'Git'].map((tech, index) => (
-                <span 
-                  key={index}
-                  className="px-3 py-1 bg-magazine-light dark:bg-magazine-dark/50 text-magazine-ink dark:text-white text-sm"
-                >
-                  {tech}
-                </span>
-              ))}
+            <div className="relative">
+              <div className="aspect-[3/4] relative rounded-lg overflow-hidden border-2 border-circuit-primary glow">
+                <Image
+                  src="/images/about-portrait.jpg"
+                  alt="Amit Pandit"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-circuit-bg to-transparent opacity-50"></div>
+              </div>
+              
+              <div className="absolute -bottom-4 -right-4 bg-circuit-surface p-4 border border-circuit-primary">
+                <div className="font-mono text-circuit-primary">
+                  <div className="text-xs opacity-70">// ROLE</div>
+                  <div>AI Engineer & Developer</div>
+                </div>
+              </div>
+              
+              {/* Circuit decorations */}
+              <svg className="absolute -top-4 -left-4 w-16 h-16 text-circuit-primary" viewBox="0 0 100 100">
+                <path d="M0 20 H20 V0" fill="none" stroke="currentColor" strokeWidth="2" />
+              </svg>
+              
+              <svg className="absolute -bottom-4 -left-4 w-16 h-16 text-circuit-primary" viewBox="0 0 100 100">
+                <path d="M0 80 H20 V100" fill="none" stroke="currentColor" strokeWidth="2" />
+              </svg>
+              
+              <svg className="absolute -top-4 -right-4 w-16 h-16 text-circuit-primary" viewBox="0 0 100 100">
+                <path d="M100 20 H80 V0" fill="none" stroke="currentColor" strokeWidth="2" />
+              </svg>
+            </div>
+            
+            <div className="mt-12 space-y-6">
+              <h3 className="text-xl font-mono font-bold text-circuit-primary mb-4">
+                Technical Expertise
+              </h3>
+              
+              <div className="space-y-3">
+                {[
+                  { skill: "Machine Learning & Deep Learning", level: 90 },
+                  { skill: "Natural Language Processing", level: 85 },
+                  { skill: "Full Stack Web Development", level: 80 },
+                  { skill: "Cloud Infrastructure & DevOps", level: 75 },
+                  { skill: "Data Analysis & Visualization", level: 85 }
+                ].map((item, index) => (
+                  <div key={index}>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-mono text-sm">{item.skill}</span>
+                      <span className="font-mono text-xs text-circuit-primary">{item.level}%</span>
+                    </div>
+                    <div className="h-2 bg-circuit-surface rounded-full overflow-hidden">
+                      <motion.div
+                        className="h-full bg-circuit-primary"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${item.level}%` }}
+                        transition={{ duration: 1, delay: 0.6 + (index * 0.1) }}
+                      ></motion.div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

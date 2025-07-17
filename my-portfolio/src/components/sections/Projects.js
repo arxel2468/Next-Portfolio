@@ -1,68 +1,80 @@
-// src/app/components/sections/Projects.js
 "use client";
-import { useInView } from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import SectionHeading from '../ui/SectionHeading';
+import BackButton from '../ui/BackButton';
 import ProjectCard from '../ui/ProjectCard';
 
-export default function Projects() {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-  
+export default function Projects({ onBack }) {
   const projects = [
+    {
+      title: "AI Recommendation Engine",
+      description: "A sophisticated recommendation system that analyzes user behavior and content characteristics to deliver personalized suggestions.",
+      image: "/images/featured-project.jpg",
+      tags: ["Python", "TensorFlow", "AWS", "FastAPI"],
+      link: "https://github.com/arxel2468/recommendation-engine"
+    },
     {
       title: "Food Recipe Ratings",
       description: "AI-powered sentiment analysis system for recipe ratings, helping users discover top-rated dishes based on real feedback.",
       image: "/images/food.png",
-      link: "https://github.com/arxel2468/food",
       tags: ["Python", "ML", "NLP", "Sentiment Analysis"],
+      link: "https://github.com/arxel2468/food"
     },
     {
       title: "Movie Recommender",
       description: "Personalized movie recommendation engine using collaborative filtering and content-based approaches.",
       image: "/images/movie.png",
-      link: "https://github.com/arxel2468/movies-recommender",
       tags: ["Python", "Data Science", "Recommendation Systems"],
+      link: "https://github.com/arxel2468/movies-recommender"
     },
     {
       title: "Python Automation Suite",
       description: "Collection of Python scripts for automating repetitive tasks, from image processing to email notifications.",
       image: "/images/automate.jpg",
-      link: "https://github.com/arxel2468/automation-with-python",
       tags: ["Python", "Automation", "Scripting"],
+      link: "https://github.com/arxel2468/automation-with-python"
     },
     {
       title: "E-commerce Platform",
       description: "Full-featured e-commerce solution with product management, payment processing, and analytics dashboard.",
       image: "/images/shopify-store.jpg",
-      link: "https://stealstreet.in",
       tags: ["Next.js", "React", "E-commerce", "Shopify"],
-    },
+      link: "https://stealstreet.in"
+    }
   ];
   
   return (
-    <section id="projects" ref={ref} className="py-20 bg-magazine-paper dark:bg-magazine-dark">
-      <div className="magazine-grid">
-        <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-12">
-          <SectionHeading>More Projects</SectionHeading>
-        </div>
+    <div className="min-h-screen bg-circuit-bg p-6 md:p-12">
+      <BackButton onClick={onBack} />
+      
+      <div className="max-w-6xl mx-auto mt-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="text-4xl md:text-5xl font-mono font-bold text-circuit-primary mb-2">
+            <span className="text-circuit-text">&lt;</span>
+            Projects
+            <span className="text-circuit-text">/&gt;</span>
+          </h1>
+          
+          <div className="h-1 w-24 bg-circuit-primary mb-8"></div>
+        </motion.div>
         
-        <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 + (index * 0.1) }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 + (index * 0.1) }}
             >
-              <ProjectCard project={project} index={index + 2} />
+              <ProjectCard project={project} index={index + 1} />
             </motion.div>
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
