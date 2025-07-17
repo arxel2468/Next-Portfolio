@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useState, useEffect, useRef, useMemo} from 'react';
+=======
+import { useState, useEffect, useRef, useMemo } from 'react'; 
+>>>>>>> 5395b81 (Added images and svgs)
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
