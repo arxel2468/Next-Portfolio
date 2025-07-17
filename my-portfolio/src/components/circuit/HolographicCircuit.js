@@ -141,7 +141,7 @@ export default function HolographicCircuit({ onNodeClick }) {
         {hoveredSection && (
           <motion.div
             key={`info-${hoveredSection}`}
-            className="absolute bottom-16 left-1/2 transform -translate-x-1/2 w-80"
+            className="absolute bottom-16 left-1 transform -translate-x-1/2 w-80"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
