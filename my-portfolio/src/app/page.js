@@ -1,17 +1,17 @@
+// src/app/page.js
 "use client";
-
 import { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ThemeProvider } from 'next-themes';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Layout components
-import NavBar from '../components/layout/NavBar';
+import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
-import CustomCursor from '../components/ui/CustomCursor';
+import TableOfContents from '../components/layout/TableOfContents';
 
 // Section components
-import Hero from '../components/sections/Hero';
+import Cover from '../components/sections/Cover';
 import About from '../components/sections/About';
+import FeaturedProject from '../components/sections/FeaturedProject';
 import Projects from '../components/sections/Projects';
 import Experience from '../components/sections/Experience';
 import Contact from '../components/sections/Contact';
@@ -23,55 +23,56 @@ export default function Home() {
     // Simulate loading time
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 1500);
     
     return () => clearTimeout(timer);
   }, []);
   
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark">
-      <AnimatePresence>
-        {isLoading ? (
-          <motion.div
-            key="loader"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="fixed inset-0 flex items-center justify-center bg-white dark:bg-gray-900 z-50"
-          >
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-                rotate: [0, 180, 360],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="w-16 h-16 border-4 border-t-purple-600 border-r-pink-600 border-b-purple-600 border-l-pink-600 rounded-full"
-            />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <CustomCursor />
-            <NavBar />
-            <main>
-              <Hero />
-              <About />
-              <Projects />
-              <Experience />
-              <Contact />
-            </main>
-            <Footer />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </ThemeProvider>
+    <AnimatePresence>
+      {isLoading ? (
+        <motion.div
+          key="loader"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="fixed inset-0 flex flex-col items-center justify-center bg-magazine-paper dark:bg-magazine-dark z-50"
+        >
+          <div className="text-center">
+            <h1 className="text-4xl font-serif font-bold mb-4">
+              <span className="text-magazine-accent">A.</span>Pandit
+            </h1>
+            <div className="w-64 h-0.5 bg-gray-200 dark:bg-gray-700 relative overflow-hidden mx-auto">
+              <motion.div 
+                className="absolute top-0 left-0 h-full bg-magazine-accent"
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 1.5 }}
+              />
+            </div>
+            <p className="mt-4 text-magazine-muted">Portfolio Edition</p>
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          key="content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Header />
+          <TableOfContents />
+          <main>
+            <Cover />
+            <About />
+            <FeaturedProject />
+            <Projects />
+            <Experience />
+            <Contact />
+          </main>
+          <Footer />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

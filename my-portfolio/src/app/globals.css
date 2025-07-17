@@ -2,35 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
+:root {
+  --foreground-rgb: 33, 37, 41;
+  --background-rgb: 248, 249, 250;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 248, 249, 250;
+    --background-rgb: 33, 37, 41;
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #a855f7, #ec4899);
-  border-radius: 5px;
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #9333ea, #db2777);
+/* Magazine-specific styles */
+.magazine-grid {
+  display: grid;
+  grid-template-columns: minmax(1.5rem, 1fr) repeat(12, minmax(0, 4rem)) minmax(1.5rem, 1fr);
+  gap: 1rem;
 }
 
-/* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-track {
-  background: #1f2937;
+.full-bleed {
+  grid-column: 1 / -1;
+  width: 100%;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #a855f7, #ec4899);
+.article-content {
+  grid-column: 2 / 14;
 }
 
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #9333ea, #db2777);
+@media (min-width: 768px) {
+  .article-content {
+    grid-column: 4 / 12;
+  }
+}
+
+.pull-quote {
+  grid-column: 2 / 14;
+  font-family: var(--font-playfair);
+  font-size: 1.5rem;
+  line-height: 1.4;
+  font-style: italic;
+  padding: 2rem 0;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .pull-quote {
+    grid-column: 3 / 13;
+    font-size: 2rem;
+  }
+}
+
+.pull-quote::before {
+  content: '"';
+  font-size: 4rem;
+  position: absolute;
+  left: -1.5rem;
+  top: 1rem;
+  color: rgba(var(--foreground-rgb), 0.2);
+}
+
+.section-heading {
+  font-family: var(--font-playfair);
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.section-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0;
+  width: 4rem;
+  height: 3px;
+  background-color: currentColor;
 }
 
 /* Smooth scrolling */
@@ -38,112 +90,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Selection color */
+/* Selection styling */
 ::selection {
-  background-color: rgba(168, 85, 247, 0.3);
-  color: inherit;
-}
-
-/* Base styles */
-body {
-  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300;
-}
-
-/* Hide cursor on desktop for custom cursor */
-@media (min-width: 768px) {
-  * {
-    cursor: none !important;
-  }
-}
-
-/* Text gradient utility */
-.text-gradient {
-  @apply text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400;
-}
-
-/* Button styles */
-.btn-primary {
-  @apply px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg shadow-lg hover:shadow-purple-500/50 transition-all duration-300;
-}
-
-.btn-secondary {
-  @apply px-6 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-medium rounded-lg border border-gray-300 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all duration-300;
-}
-
-/* Card styles */
-.card {
-  @apply bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700;
-}
-
-/* Section padding utility */
-.section-padding {
-  @apply py-20;
-}
-
-/* Heading styles */
-h1, h2, h3, h4, h5, h6 {
-  @apply font-bold;
-}
-
-/* Animation utilities */
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-.animate-pulse-slow {
-  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* Gradient text animation */
-.animate-gradient-text {
-  background-size: 200% 200%;
-  animation: gradient-text 8s ease infinite;
-}
-
-@keyframes gradient-text {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Glow effect */
-.glow {
-  box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
-}
-
-.glow-text {
-  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
-}
-
-/* Glass effect */
-.glass {
-  @apply bg-white/10 backdrop-blur-md border border-white/20;
-}
-
-.dark .glass {
-  @apply bg-gray-900/30 backdrop-blur-md border border-gray-700/30;
+  background-color: rgba(220, 53, 69, 0.2);
 }

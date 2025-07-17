@@ -1,6 +1,9 @@
-import { motion } from 'framer-motion';
+// src/app/components/sections/Experience.js
+"use client";
 import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
+import SectionHeading from '../ui/SectionHeading';
 
 export default function Experience() {
   const [ref, inView] = useInView({
@@ -10,8 +13,8 @@ export default function Experience() {
   
   const experiences = [
     {
-      title: "E-commerce Development",
       company: "StealStreet.in",
+      role: "E-commerce Development",
       period: "2023 - Present",
       description: "Built and launched a complete Shopify store with custom theme modifications, optimized UX/UI elements, and integrated payment gateways.",
       achievements: [
@@ -19,12 +22,11 @@ export default function Experience() {
         "Increased conversion rate by 35%",
         "Implemented data-driven optimization for product listings"
       ],
-      logo: "/images/shopify-logo.png",
-      color: "border-blue-500 dark:border-blue-400"
+      logo: "/images/shopify-logo.png"
     },
     {
-      title: "AI/ML Freelancer",
       company: "Self-employed",
+      role: "AI/ML Freelancer",
       period: "2022 - Present",
       description: "Developed custom AI/ML solutions for clients across various industries, focusing on practical applications of machine learning.",
       achievements: [
@@ -32,99 +34,70 @@ export default function Experience() {
         "Built recommendation engines for e-commerce platforms",
         "Developed NLP solutions for content categorization"
       ],
-      logo: "/images/ai-freelance.png", // You'll need to create this image
-      color: "border-purple-500 dark:border-purple-400"
+      logo: "/images/ai-freelance.png" // You'll need to create this image
     },
     {
-      title: "Video Editing Entrepreneur",
-      company: "NiteSwift",
-      period: "2023",
-      description: "Launched and managed a video editing business connecting clients with freelancers, enchancing negoation and client management skills",
+      company: "Tech Startup",
+      role: "Web Development Intern",
+      period: "2021 - 2022",
+      description: "Worked on front-end development using React and Next.js, contributing to the company's main product and internal tools.",
       achievements: [
-        "Consistently delivered quality projects, boosting business growth",
-        "Learned workflow refinement and client management"
+        "Implemented responsive UI components",
+        "Optimized website performance",
+        "Collaborated with design team on UX improvements"
       ],
-      logo: "/images/web-dev.png", // You'll need to create this image
-      color: "border-green-500 dark:border-green-400"
+      logo: "/images/web-dev.png" // You'll need to create this image
     }
   ];
   
   return (
-    <section id="experience" ref={ref} className="py-20 bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-6">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Professional Experience</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-600 mx-auto mb-6"></div>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            My journey through the tech landscape
-          </p>
-        </motion.div>
+    <section id="experience" ref={ref} className="py-20 bg-magazine-light dark:bg-black">
+      <div className="magazine-grid">
+        <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-12">
+          <SectionHeading>Professional Experience</SectionHeading>
+        </div>
         
-        {/* Timeline */}
-        <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 h-full w-1 bg-gradient-to-b from-purple-600 to-pink-600 rounded-full"></div>
-          
-          {/* Experience items */}
-          <div className="space-y-12">
-            {experiences.map((exp, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.2 + (index * 0.2) }}
-                className={`relative flex flex-col md:flex-row items-center md:items-start gap-8 ${
-                  index % 2 === 0 ? 'md:flex-row-reverse' : ''
-                }`}
-              >
-                {/* Timeline dot */}
-                <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-6 h-6 bg-white dark:bg-gray-800 border-4 border-purple-600 dark:border-purple-500 rounded-full z-10"></div>
-                
-                {/* Content */}
-                <div className="md:w-1/2 pl-10 md:pl-0 md:pr-12 md:text-right space-y-4">
-                  <div className="flex items-center md:justify-end space-x-4">
-                    <div className="relative w-12 h-12 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md border-2 border-gray-200 dark:border-gray-700">
-                      <Image
-                        src={exp.logo}
-                        alt={exp.company}
-                        fill
-                        className="object-contain p-1"
-                      />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">{exp.title}</h3>
-                      <p className="text-purple-600 dark:text-purple-400 font-medium">{exp.company}</p>
-                    </div>
+        <div className="col-start-2 col-end-14 md:col-start-4 md:col-end-12 space-y-16">
+          {experiences.map((exp, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 + (index * 0.1) }}
+              className="grid grid-cols-1 md:grid-cols-12 gap-8"
+            >
+              <div className="md:col-span-4 flex flex-col">
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 relative mr-4">
+                    <Image
+                      src={exp.logo}
+                      alt={exp.company}
+                      fill
+                      className="object-contain"
+                    />
                   </div>
-                  
-                  <div className="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg shadow-md border-l-4 md:border-l-0 md:border-r-4 ${exp.color}">
-                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400 block mb-2">{exp.period}</span>
-                    <p className="text-gray-700 dark:text-gray-300 mb-4">{exp.description}</p>
-                    
-                    <h4 className="font-medium text-gray-900 dark:text-white mb-2">Key Achievements:</h4>
-                    <ul className="space-y-1">
-                      {exp.achievements.map((achievement, i) => (
-                        <li key={i} className="flex items-center text-gray-600 dark:text-gray-400">
-                          <svg className="w-4 h-4 mr-2 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                          </svg>
-                          {achievement}
-                        </li>
-                      ))}
-                    </ul>
+                  <div>
+                    <h3 className="font-serif text-xl font-bold">{exp.company}</h3>
+                    <p className="text-magazine-accent">{exp.role}</p>
                   </div>
                 </div>
-                
-                {/* Empty space for the other side */}
-                <div className="md:w-1/2"></div>
-              </motion.div>
-            ))}
-          </div>
+                <p className="text-sm text-magazine-muted mb-4">{exp.period}</p>
+              </div>
+              
+              <div className="md:col-span-8">
+                <p className="text-lg mb-4">{exp.description}</p>
+                <h4 className="font-medium mb-2">Key Achievements:</h4>
+                <ul className="space-y-2">
+                  {exp.achievements.map((achievement, i) => (
+                    <li key={i} className="flex items-start">
+                      <span className="w-2 h-2 bg-magazine-accent mt-2 mr-2 flex-shrink-0"></span>
+                      <span>{achievement}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
