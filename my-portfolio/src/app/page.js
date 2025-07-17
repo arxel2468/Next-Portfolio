@@ -14,6 +14,7 @@ import About from '../components/sections/About';
 import FeaturedProject from '../components/sections/FeaturedProject';
 import Projects from '../components/sections/Projects';
 import Experience from '../components/sections/Experience';
+import Articles from '../components/sections/Articles';
 import Contact from '../components/sections/Contact';
 
 export default function Home() {
@@ -68,6 +69,7 @@ export default function Home() {
             <FeaturedProject />
             <Projects />
             <Experience />
+            <Articles />
             <Contact />
           </main>
           <Footer />

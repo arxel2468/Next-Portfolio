@@ -5,6 +5,9 @@
 :root {
   --foreground-rgb: 33, 37, 41;
   --background-rgb: 248, 249, 250;
+  --font-inter: 'Inter', sans-serif;
+  --font-playfair: 'Playfair Display', serif;
+  --font-fira-code: 'Fira Code', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,7 +20,9 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
+  font-family: var(--font-inter);
 }
+
 
 /* Magazine-specific styles */
 .magazine-grid {

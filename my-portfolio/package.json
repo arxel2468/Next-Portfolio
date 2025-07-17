@@ -19,7 +19,8 @@
     "react-intersection-observer": "^9.16.0",
     "rss-parser": "^3.13.0",
     "sharp": "^0.33.5",
-    "swiper": "^11.1.14"
+    "swiper": "^11.1.14",
+    "@tailwindcss/typography": "^0.5.10"
   },
   "devDependencies": {
     "eslint": "^8",
