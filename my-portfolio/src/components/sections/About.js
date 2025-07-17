@@ -1,3 +1,4 @@
+// src/components/sections/About.js
 "use client";
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -82,7 +83,8 @@ export default function About({ onBack }) {
               
               <div className="absolute -bottom-4 -right-4 bg-circuit-surface p-4 border border-circuit-primary">
                 <div className="font-mono text-circuit-primary">
-                  <div className="text-xs opacity-70">// ROLE</div>
+                  {/* --- FIX IS HERE --- */}
+                  <div className="text-xs opacity-70">{/* ROLE */}</div>
                   <div>AI Engineer & Developer</div>
                 </div>
               </div>
