@@ -276,7 +276,7 @@ export default function Contact({ onBack }) {
                       className="mt-4 p-4 border border-circuit-primary/30 bg-circuit-primary/10"
                     >
                       <div className="font-mono">
-                        <div className="text-circuit-primary mb-2">// Message sent successfully</div>
+                        <div className="text-circuit-primary mb-2">{"// Message sent successfully"}</div>
                         <div className="text-circuit-text">
                         <span className="text-circuit-primary">console.log</span>
                           (<span className="text-green-400">"Thank you for reaching out! I'll get back to you as soon as possible."</span>);
@@ -303,7 +303,7 @@ export default function Contact({ onBack }) {
                       className="mt-4 p-4 border border-red-500/30 bg-red-500/10"
                     >
                       <div className="font-mono">
-                        <div className="text-red-500 mb-2">// Error sending message</div>
+                        <div className="text-red-500 mb-2">{"// Error sending message"}</div>
                         <div className="text-circuit-text">
                           <span className="text-red-500">console.error</span>
                           (<span className="text-red-400">"There was a problem sending your message. Please try again or contact me directly via email."</span>);
