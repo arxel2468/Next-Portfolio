@@ -8,14 +8,14 @@ export default function Experience({ onBack }) {
     {
       company: "StealStreet.in",
       role: "E-commerce Development",
-      period: "2023 - Present",
+      period: "2024 - 2025",
       description: "Built and launched a complete Shopify store with custom theme modifications, optimized UX/UI elements, and integrated payment gateways.",
       achievements: [
         "Managed Meta ad campaign with 7x ROAS",
         "Increased conversion rate by 35%",
         "Implemented data-driven optimization for product listings"
       ],
-      logo: "/images/shopify-logo.png"
+      logo: "/images/shopify-logo.jpg"
     },
     {
       company: "Self-employed",
@@ -30,14 +30,14 @@ export default function Experience({ onBack }) {
       logo: "/images/ai-freelance.png"
     },
     {
-      company: "Tech Startup",
-      role: "Web Development Intern",
+      company: "NiteSwift",
+      role: "Co-Founder",
       period: "2021 - 2022",
-      description: "Worked on front-end development using React and Next.js, contributing to the company's main product and internal tools.",
+      description: "Connecting clients with video editors, streamlining the process and delivering quality content that drives business.",
       achievements: [
-        "Implemented responsive UI components",
-        "Optimized website performance",
-        "Collaborated with design team on UX improvements"
+        "Learned client management",
+        "Delivered quality service and products every time",
+        "Optimized the workflow for efficiency"
       ],
       logo: "/images/web-dev.png"
     }

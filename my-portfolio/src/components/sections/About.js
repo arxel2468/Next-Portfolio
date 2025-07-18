@@ -40,7 +40,7 @@ export default function About({ onBack }) {
             </p>
             
             <p className="text-lg leading-relaxed">
-              When I'm not coding, you can find me exploring the latest advancements in machine learning, contributing to open-source projects, or writing about technology on my Substack.
+              When I'm not coding, you can find me exploring some philosphical topics and voicing out my opinions on some fundamental questions on my Substack.
             </p>
             
             <div className="mt-8 p-6 bg-circuit-surface rounded-lg border border-circuit-primary/30">
@@ -52,12 +52,12 @@ export default function About({ onBack }) {
   "name": "Amit Pandit",
   "role": "AI Engineer & Full Stack Developer",
   "location": "Mumbai, India",
-  "education": "Computer Science",
+  "education": "BSc Information Technology",
   "interests": [
     "Artificial Intelligence",
     "Web Development",
     "Open Source",
-    "Technical Writing"
+    "Writing"
   ]
 }`}
               </pre>

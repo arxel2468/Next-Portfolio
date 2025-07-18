@@ -7,11 +7,11 @@ import ProjectCard from '../ui/ProjectCard';
 export default function Projects({ onBack }) {
   const projects = [
     {
-      title: "AI Recommendation Engine",
-      description: "A sophisticated recommendation system that analyzes user behavior and content characteristics to deliver personalized suggestions.",
-      image: "/images/featured-project.jpg",
-      tags: ["Python", "TensorFlow", "AWS", "FastAPI"],
-      link: "https://github.com/arxel2468/recommendation-engine"
+      title: "Voice Website Generator",
+      description: "Create websites as you sit and relax, just voice out commands and a website of your desires will come to reality.",
+      image: "/images/voice.jpeg",
+      tags: ["Python", "Groq", "FastAPI"],
+      link: "https://github.com/arxel2468/voice-website-generator"
     },
     {
       title: "Food Recipe Ratings",
@@ -22,7 +22,7 @@ export default function Projects({ onBack }) {
     },
     {
       title: "Movie Recommender",
-      description: "Personalized movie recommendation engine using collaborative filtering and content-based approaches.",
+      description: "Personalized movie recommendation engine using content-based filtering approach.",
       image: "/images/movie.png",
       tags: ["Python", "Data Science", "Recommendation Systems"],
       link: "https://github.com/arxel2468/movies-recommender"

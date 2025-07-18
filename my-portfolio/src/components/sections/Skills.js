@@ -9,8 +9,8 @@ export default function Skills({ onBack }) {
       name: "Programming Languages",
       skills: [
         { name: "Python", level: 95 },
-        { name: "JavaScript", level: 90 },
-        { name: "TypeScript", level: 85 },
+        { name: "JavaScript", level: 70 },
+        { name: "TypeScript", level: 60 },
         { name: "SQL", level: 80 },
         { name: "C++", level: 70 }
       ]
@@ -18,11 +18,11 @@ export default function Skills({ onBack }) {
     {
       name: "AI & Machine Learning",
       skills: [
-        { name: "TensorFlow", level: 90 },
-        { name: "PyTorch", level: 85 },
+        { name: "TensorFlow", level: 75 },
         { name: "Scikit-Learn", level: 90 },
         { name: "NLP", level: 85 },
-        { name: "Computer Vision", level: 75 }
+        { name: "PyTorch", level: 60 },
+        { name: "Computer Vision", level: 70 }
       ]
     },
     {
@@ -38,11 +38,11 @@ export default function Skills({ onBack }) {
     {
       name: "DevOps & Cloud",
       skills: [
-        { name: "AWS", level: 80 },
-        { name: "Docker", level: 85 },
-        { name: "CI/CD", level: 75 },
+        { name: "Linux", level: 85 },
         { name: "Git", level: 90 },
-        { name: "Linux", level: 85 }
+        { name: "Docker", level: 70 },
+        { name: "AWS", level: 60 },
+        { name: "CI/CD", level: 75 },
       ]
     }
   ];
@@ -92,7 +92,7 @@ export default function Skills({ onBack }) {
               "Python", "JavaScript", "React", "Next.js", "Node.js", 
               "TensorFlow", "PyTorch", "Scikit-Learn", "Pandas", "NumPy",
               "AWS", "Docker", "Git", "CI/CD", "MongoDB", "PostgreSQL",
-              "REST API", "GraphQL", "Tailwind CSS", "Figma", "Jupyter"
+              "REST API", "GraphQL", "Tailwind CSS", "Jupyter"
             ].map((tool, index) => (
               <motion.div
                 key={index}
@@ -120,10 +120,10 @@ export default function Skills({ onBack }) {
           
           <ul className="space-y-2">
             {[
-              "Advanced Deep Learning Specialization",
-              "Full Stack Web Development Bootcamp",
-              "AWS Certified Solutions Architect",
-              "Data Science and Machine Learning Masterclass"
+              "Machine Learning to Deep Learning: A Journery for Remote Sensing Data Collection by ISRO",
+              "Back-End Engineering Virtual Experience by Lyft",
+              "Advanced C++ Course by SkillUP",
+              "Fundamentals of Digital Marketing by Google"
             ].map((item, index) => (
               <li key={index} className="flex items-start">
                 <span className="text-circuit-primary mr-2">❯</span>
