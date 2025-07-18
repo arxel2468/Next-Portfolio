@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import BackButton from '../ui/BackButton';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { SiSubstack } from 'react-icons/si';
@@ -11,20 +11,46 @@ export default function Contact({ onBack }) {
     email: '',
     message: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', or null
   
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Form submission logic would go here
-    console.log('Form submitted:', formData);
-    // Reset form
-    setFormData({ name: '', email: '', message: '' });
-    // Show success message
-    alert('Thank you for your message! I will get back to you soon.');
+    setIsSubmitting(true);
+    
+    try {
+      // Replace 'YOUR_FORMSPREE_ENDPOINT' with your actual Formspree form ID
+      const response = await fetch('https://formspree.io/f/xeojdynq', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      if (response.ok) {
+        setSubmitStatus('success');
+        // Reset form
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+      
+      // Clear status after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus(null);
+      }, 5000);
+    }
   };
   
   return (
@@ -130,8 +156,43 @@ export default function Contact({ onBack }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <div className="bg-circuit-surface border border-circuit-primary/30 p-6">
+            <div className="bg-circuit-surface border border-circuit-primary/30 p-6 relative">
               <h2 className="text-2xl font-mono font-bold text-circuit-primary mb-6">Send Message</h2>
+              
+              {/* Status Notification */}
+              <AnimatePresence>
+                {submitStatus && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className={`absolute top-6 right-6 p-3 font-mono text-sm border ${
+                      submitStatus === 'success' 
+                        ? 'border-green-500 bg-green-500/10 text-green-500' 
+                        : 'border-red-500 bg-red-500/10 text-red-500'
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      {submitStatus === 'success' ? (
+                        <>
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span>message.sent = true;</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                          <span>error.occurred = true;</span>
+                        </>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
@@ -184,10 +245,76 @@ export default function Contact({ onBack }) {
                 
                 <button
                   type="submit"
-                  className="w-full py-3 px-6 bg-circuit-primary text-circuit-bg font-mono hover:bg-circuit-primary/80 transition-colors"
+                  disabled={isSubmitting}
+                  className={`w-full py-3 px-6 font-mono transition-colors relative overflow-hidden ${
+                    isSubmitting 
+                      ? 'bg-circuit-primary/50 text-circuit-bg/50 cursor-not-allowed' 
+                      : 'bg-circuit-primary text-circuit-bg hover:bg-circuit-primary/80'
+                  }`}
                 >
-                  sendMessage();
+                  {isSubmitting ? (
+                    <div className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-circuit-bg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      processing...
+                    </div>
+                  ) : (
+                    'sendMessage();'
+                  )}
                 </button>
+                
+                {/* Success message that appears after form submission */}
+                <AnimatePresence>
+                  {submitStatus === 'success' && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="mt-4 p-4 border border-circuit-primary/30 bg-circuit-primary/10"
+                    >
+                      <div className="font-mono">
+                        <div className="text-circuit-primary mb-2">// Message sent successfully</div>
+                        <div className="text-circuit-text">
+                        <span className="text-circuit-primary">console.log</span>
+                          (<span className="text-green-400">"Thank you for reaching out! I'll get back to you as soon as possible."</span>);
+                        </div>
+                        <div className="mt-2 text-circuit-text">
+                          <span className="text-circuit-primary">return</span> {'{'}
+                          <br />
+                          &nbsp;&nbsp;<span className="text-circuit-primary">status</span>: <span className="text-green-400">"success"</span>,
+                          <br />
+                          &nbsp;&nbsp;<span className="text-circuit-primary">message</span>: <span className="text-green-400">"Message delivered to Amit's inbox"</span>
+                          <br />
+                          {'}'};
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                  
+                  {submitStatus === 'error' && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="mt-4 p-4 border border-red-500/30 bg-red-500/10"
+                    >
+                      <div className="font-mono">
+                        <div className="text-red-500 mb-2">// Error sending message</div>
+                        <div className="text-circuit-text">
+                          <span className="text-red-500">console.error</span>
+                          (<span className="text-red-400">"There was a problem sending your message. Please try again or contact me directly via email."</span>);
+                        </div>
+                        <div className="mt-2 text-circuit-text">
+                          <span className="text-red-500">throw new Error</span>(<span className="text-red-400">"Message delivery failed"</span>);
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </form>
             </div>
           </motion.div>
