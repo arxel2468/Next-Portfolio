@@ -29,6 +29,23 @@ export default function Home() {
   const [showTerminal, setShowTerminal] = useState(true);
   const [activeSection, setActiveSection] = useState(null);
   const [showExtras, setShowExtras] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    height: typeof window !== 'undefined' ? window.innerHeight : 800
+  });
+  
+  // Update window size on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   useEffect(() => {
     // Simulate loading time
@@ -64,9 +81,18 @@ export default function Home() {
     setShowTerminal(false);
   };
   
+  // Optionally skip terminal on very small screens
+  useEffect(() => {
+    if (windowSize.width < 480 && !isLoading) {
+      // Uncomment this if you want to skip terminal on very small screens
+      // setShowTerminal(false);
+    }
+  }, [windowSize.width, isLoading]);
+  
   return (
     <>
       <CircuitCursor />
+      
       {!isLoading && !showTerminal && (
         <>
           <CircuitNav activeSection={activeSection} onNavigate={handleNavigation} />
@@ -80,13 +106,14 @@ export default function Home() {
           )}
         </>
       )}
+      
       <AnimatePresence mode="wait">
         {isLoading ? (
           <CircuitLoader key="loader" />
         ) : showTerminal ? (
           <CircuitTerminal key="terminal" onComplete={handleTerminalComplete} />
         ) : (
-          <div className="min-h-screen">
+          <div className="min-h-screen w-full overflow-hidden">
             <AnimatePresence mode="wait">
               {activeSection ? (
                 <motion.div
@@ -95,7 +122,7 @@ export default function Home() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="min-h-screen"
+                  className="min-h-screen w-full"
                 >
                   {activeSection === 'about' && <About onBack={handleBackClick} />}
                   {activeSection === 'projects' && <Projects onBack={handleBackClick} />}
@@ -111,7 +138,7 @@ export default function Home() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="min-h-screen relative overflow-hidden"
+                  className="min-h-screen w-full relative overflow-hidden"
                 >
                   <HolographicCircuit onNodeClick={handleNodeClick} />
                 </motion.div>

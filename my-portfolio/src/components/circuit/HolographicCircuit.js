@@ -8,14 +8,21 @@ export default function HolographicCircuit({ onNodeClick }) {
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 1000, height: 800 });
   const [hoveredSection, setHoveredSection] = useState(null);
+  const [scale, setScale] = useState(1);
   const { theme } = useTheme();
   
-  // Update dimensions on window resize
+  // Update dimensions on window resize and calculate appropriate scale
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
         const { width, height } = containerRef.current.getBoundingClientRect();
         setDimensions({ width, height });
+        
+        // Calculate scale based on screen size
+        // Base design is for 1440px width, scale down proportionally for smaller screens
+        const baseWidth = 1440;
+        const newScale = Math.max(0.5, Math.min(1, width / baseWidth));
+        setScale(newScale);
       }
     };
     
@@ -34,8 +41,9 @@ export default function HolographicCircuit({ onNodeClick }) {
     { id: 'contact', label: 'Contact', description: 'Get in touch for collaborations' }
   ];
   
-  // Create random floating particles
-  const particles = Array.from({ length: 80 }).map((_, i) => ({
+  // Create random floating particles - adjust count based on screen size
+  const particleCount = dimensions.width < 768 ? 40 : 80;
+  const particles = Array.from({ length: particleCount }).map((_, i) => ({
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
@@ -74,18 +82,21 @@ export default function HolographicCircuit({ onNodeClick }) {
       
       {/* Central holographic display */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <HolographicDisplay />
+        <HolographicDisplay scale={scale} />
       </div>
       
       {/* Navigation nodes */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-[600px] h-[600px]">
+        <div className="relative" style={{ 
+          width: `${600 * scale}px`, 
+          height: `${600 * scale}px` 
+        }}>
           {sections.map((section, index) => {
             // Position nodes in a hexagon around the center (6 sections)
             const angle = (index * (2 * Math.PI / sections.length)) - Math.PI / 2;
-            const radius = 250; // Distance from center
-            const x = 300 + radius * Math.cos(angle);
-            const y = 300 + radius * Math.sin(angle);
+            const radius = 250 * scale; // Distance from center, scaled
+            const x = 300 * scale + radius * Math.cos(angle);
+            const y = 300 * scale + radius * Math.sin(angle);
             
             return (
               <div
@@ -103,6 +114,7 @@ export default function HolographicCircuit({ onNodeClick }) {
                   onHover={() => setHoveredSection(section.id)}
                   onLeave={() => setHoveredSection(null)}
                   onClick={() => onNodeClick(section.id)}
+                  scale={scale}
                 />
               </div>
             );
@@ -112,19 +124,19 @@ export default function HolographicCircuit({ onNodeClick }) {
           <svg className="absolute inset-0 w-full h-full pointer-events-none">
             {sections.map((section, index) => {
               const angle = (index * (2 * Math.PI / sections.length)) - Math.PI / 2;
-              const radius = 250;
-              const x = 300 + radius * Math.cos(angle);
-              const y = 300 + radius * Math.sin(angle);
+              const radius = 250 * scale;
+              const x = 300 * scale + radius * Math.cos(angle);
+              const y = 300 * scale + radius * Math.sin(angle);
               
               return (
                 <motion.line
                   key={`line-${section.id}`}
-                  x1="300"
-                  y1="300"
+                  x1={300 * scale}
+                  y1={300 * scale}
                   x2={x}
                   y2={y}
                   stroke="rgba(96, 165, 250, 0.3)"
-                  strokeWidth="1"
+                  strokeWidth={scale}
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 1.5, delay: index * 0.2 }}
@@ -138,30 +150,42 @@ export default function HolographicCircuit({ onNodeClick }) {
       
       {/* Info panel for hovered section */}
       <AnimatePresence>
-        {hoveredSection && (
-          <motion.div
-            key={`info-${hoveredSection}`}
-            className="absolute bottom-16 left-1 transform -translate-x-1/2 w-80"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.3 }}
-          >
-                        <div className="holographic-panel p-4">
-              <h3 className="text-blue-300 font-mono text-lg mb-1">
-                {sections.find(s => s.id === hoveredSection)?.label}
-              </h3>
-              <p className="text-blue-200/70 text-sm">
-                {sections.find(s => s.id === hoveredSection)?.description}
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center text-blue-300/60 text-sm">
-        <p>Hover to explore, click to view details</p>
+  {hoveredSection && (
+    <motion.div
+      key={`info-${hoveredSection}`}
+      className="absolute left-1 transform -translate-x-1/2"
+      style={{ 
+        width: `${Math.min(320, dimensions.width * 0.8)}px`,
+        bottom: dimensions.width < 768 ? '5rem' : '4rem' // Higher on mobile
+      }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="holographic-panel p-4">
+        <h3 className="text-blue-300 font-mono text-lg mb-1">
+          {sections.find(s => s.id === hoveredSection)?.label}
+        </h3>
+        <p className="text-blue-200/70 text-sm">
+          {sections.find(s => s.id === hoveredSection)?.description}
+        </p>
       </div>
+    </motion.div>
+  )}
+</AnimatePresence>
+
+
+<div 
+  className="absolute left-1/2 transform -translate-x-1/2 text-center text-blue-300/60 text-sm"
+  style={{ bottom: dimensions.width < 768 ? '7rem' : '2rem' }} // Much higher on mobile
+>
+  <p className="px-4">
+    {dimensions.width < 768 
+      ? "Tap nodes to navigate" 
+      : "Hover to explore, click to view details"}
+  </p>
+</div>
     </div>
   );
 }
@@ -204,7 +228,11 @@ function FloatingParticle({ particle }) {
 }
 
 // Central holographic display
-function HolographicDisplay() {
+function HolographicDisplay({ scale = 1 }) {
+  // Scale sizes based on screen size
+  const size = `${64 * scale}rem`;
+  const innerSize = `${32 * scale}rem`;
+  
   return (
     <motion.div
       className="relative"
@@ -213,7 +241,7 @@ function HolographicDisplay() {
       transition={{ duration: 1, type: "spring" }}
     >
       {/* Main hologram container */}
-      <div className="relative w-64 h-64 flex items-center justify-center">
+      <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
         {/* Rotating rings */}
         <motion.div 
           className="absolute w-full h-full rounded-full border-2 border-blue-400/30"
@@ -222,19 +250,22 @@ function HolographicDisplay() {
         ></motion.div>
         
         <motion.div 
-          className="absolute w-[90%] h-[90%] rounded-full border border-blue-400/20"
+          className="absolute rounded-full border border-blue-400/20"
+          style={{ width: '90%', height: '90%' }}
           animate={{ rotate: -360 }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
         ></motion.div>
         
         <motion.div 
-          className="absolute w-[70%] h-[70%] rounded-full border border-blue-400/40"
+          className="absolute rounded-full border border-blue-400/40"
+          style={{ width: '70%', height: '70%' }}
           animate={{ rotate: 360 }}
           transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
         ></motion.div>
         
         {/* Central sphere */}
-        <div className="relative w-32 h-32 rounded-full holographic-sphere flex items-center justify-center">
+        <div className="relative rounded-full holographic-sphere flex items-center justify-center" 
+          style={{ width: innerSize, height: innerSize }}>
           {/* Scan line effect */}
           <div className="absolute inset-0 overflow-hidden rounded-full">
             <div className="absolute inset-0 holographic-scanline"></div>
@@ -242,45 +273,56 @@ function HolographicDisplay() {
           
           {/* Content */}
           <div className="text-center z-10 p-4">
-            <h2 className="text-2xl font-mono font-bold text-blue-300">
+            <h2 className={`text-${Math.max(1, Math.round(2 * scale))}xl font-mono font-bold text-blue-300`}>
               Amit Pandit
             </h2>
-            <p className="text-sm text-blue-300/70 mt-1">
+            <p className={`text-${scale < 0.7 ? 'xs' : 'sm'} text-blue-300/70 mt-1`}>
               AI Engineer & Developer
             </p>
           </div>
         </div>
         
         {/* Orbiting dots */}
-        {Array.from({ length: 3 }).map((_, i) => (
-          <motion.div
-            key={`orbit-${i}`}
-            className="absolute w-3 h-3 rounded-full bg-blue-400"
-            style={{
-              boxShadow: '0 0 10px rgba(96, 165, 250, 0.8)'
-            }}
-            animate={{
-              x: Math.cos((i * 120) * (Math.PI / 180)) * 120,
-              y: Math.sin((i * 120) * (Math.PI / 180)) * 120,
-              rotate: 360
-            }}
-            transition={{
-              x: { duration: 8, repeat: Infinity, repeatType: 'reverse', ease: "easeInOut", delay: i * 0.5 },
-              y: { duration: 8, repeat: Infinity, repeatType: 'reverse', ease: "easeInOut", delay: i * 0.5 },
-              rotate: { duration: 2, repeat: Infinity, ease: "linear" }
-            }}
-          ></motion.div>
-        ))}
+        {Array.from({ length: 3 }).map((_, i) => {
+          const orbitRadius = 120 * scale;
+          return (
+            <motion.div
+              key={`orbit-${i}`}
+              className="absolute rounded-full bg-blue-400"
+              style={{
+                width: `${3 * scale}px`,
+                height: `${3 * scale}px`,
+                boxShadow: `0 0 ${10 * scale}px rgba(96, 165, 250, 0.8)`
+              }}
+              animate={{
+                x: Math.cos((i * 120) * (Math.PI / 180)) * orbitRadius,
+                y: Math.sin((i * 120) * (Math.PI / 180)) * orbitRadius,
+                rotate: 360
+              }}
+              transition={{
+                x: { duration: 8, repeat: Infinity, repeatType: 'reverse', ease: "easeInOut", delay: i * 0.5 },
+                y: { duration: 8, repeat: Infinity, repeatType: 'reverse', ease: "easeInOut", delay: i * 0.5 },
+                rotate: { duration: 2, repeat: Infinity, ease: "linear" }
+              }}
+            ></motion.div>
+          );
+        })}
         
         {/* Glow effect */}
-        <div className="absolute inset-0 rounded-full" style={{ boxShadow: '0 0 40px rgba(96, 165, 250, 0.4)' }}></div>
+        <div className="absolute inset-0 rounded-full" 
+          style={{ boxShadow: `0 0 ${40 * scale}px rgba(96, 165, 250, 0.4)` }}></div>
       </div>
     </motion.div>
   );
 }
 
 // Holographic navigation node
-function HolographicNode({ section, isHovered, onHover, onLeave, onClick }) {
+function HolographicNode({ section, isHovered, onHover, onLeave, onClick, scale = 1 }) {
+  // Scale sizes based on screen size
+  const nodeSize = `${16 * scale}px`;
+  const innerSize = `${8 * scale}px`;
+  const dotSize = `${4 * scale}px`;
+  
   return (
     <motion.div
       className="relative cursor-pointer"
@@ -291,27 +333,31 @@ function HolographicNode({ section, isHovered, onHover, onLeave, onClick }) {
       whileTap={{ scale: 0.95 }}
     >
       {/* Node container */}
-      <div className="relative w-16 h-16 flex items-center justify-center">
+      <div className="relative flex items-center justify-center" style={{ width: nodeSize, height: nodeSize }}>
         {/* Outer ring */}
         <motion.div 
           className="absolute w-full h-full rounded-full border border-blue-400/50"
           animate={{ 
             scale: isHovered ? [1, 1.1, 1] : 1,
             boxShadow: isHovered 
-              ? ['0 0 10px rgba(96, 165, 250, 0.5)', '0 0 20px rgba(96, 165, 250, 0.7)', '0 0 10px rgba(96, 165, 250, 0.5)'] 
-              : '0 0 10px rgba(96, 165, 250, 0.3)'
+              ? [`0 0 ${10 * scale}px rgba(96, 165, 250, 0.5)`, `0 0 ${20 * scale}px rgba(96, 165, 250, 0.7)`, `0 0 ${10 * scale}px rgba(96, 165, 250, 0.5)`] 
+              : `0 0 ${10 * scale}px rgba(96, 165, 250, 0.3)`
           }}
           transition={{ duration: 2, repeat: isHovered ? Infinity : 0, ease: "easeInOut" }}
         ></motion.div>
         
         {/* Inner circle */}
-        <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
-          <div className="w-4 h-4 rounded-full bg-blue-400/80"></div>
+        <div className="rounded-full bg-blue-500/20 flex items-center justify-center" 
+          style={{ width: innerSize, height: innerSize }}>
+          <div className="rounded-full bg-blue-400/80" 
+            style={{ width: dotSize, height: dotSize }}></div>
         </div>
         
         {/* Label */}
-        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-center">
-          <div className="font-mono text-sm text-blue-300">
+        <div className="absolute left-1/2 transform -translate-x-1/2 text-center"
+          style={{ bottom: `-${8 * scale}px` }}>
+          <div className="font-mono text-blue-300" 
+            style={{ fontSize: `${Math.max(10, 14 * scale)}px` }}>
             {section.label}
           </div>
         </div>

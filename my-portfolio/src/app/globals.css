@@ -224,3 +224,66 @@ html {
     transform: translateY(100%);
   }
 }
+
+
+/* Responsive adjustments for holographic elements */
+@media (max-width: 768px) {
+  .holographic-grid {
+    background-size: 20px 20px; /* Smaller grid on mobile */
+  }
+  
+  .holographic-panel {
+    padding: 0.75rem; /* Smaller padding on mobile */
+  }
+}
+
+/* Ensure text is readable on small screens */
+@media (max-width: 480px) {
+  .font-mono {
+    font-size: 0.875rem; /* Slightly smaller font on very small screens */
+  }
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 640px) {
+  button, 
+  [role="button"],
+  .cursor-pointer {
+    min-height: 44px; /* Minimum touch target size */
+    min-width: 44px;
+  }
+}
+
+
+
+
+/* Fix for navbar covering content on mobile */
+.section-container {
+  padding-bottom: 40px; /* Space for the navbar */
+}
+
+/* Adjust content positioning for mobile */
+@media (max-width: 768px) {
+  /* Ensure content is properly spaced from bottom navbar */
+  .min-h-screen {
+    min-height: calc(100vh - 60px);
+    padding-bottom: 40px;
+  }
+  
+  /* Fix for bottom-positioned elements */
+  .bottom-positioned {
+    bottom: 40px !important; /* Force position above navbar */
+  }
+  
+  /* Adjust holographic info panel */
+  .info-panel {
+    bottom: 40px !important;
+  }
+}
+
+/* Fix for iOS devices with home indicator */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .section-container {
+    padding-bottom: calc(40px + env(safe-area-inset-bottom));
+  }
+}

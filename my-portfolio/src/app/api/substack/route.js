@@ -45,7 +45,7 @@ export async function GET() {
     });
 
     // Limit to 6 articles
-    const limitedArticles = articles.slice(0, 4);
+    const limitedArticles = articles.slice(0, 6);
 
     // Add a small delay to simulate network latency (remove in production)
     // This helps ensure the loading state is visible

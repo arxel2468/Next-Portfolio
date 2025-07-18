@@ -6,7 +6,7 @@ import BackButton from '../ui/BackButton';
 
 export default function About({ onBack }) {
   return (
-    <div className="min-h-screen bg-circuit-bg p-6 md:p-12">
+    <div className="min-h-screen bg-circuit-bg p-6 md:p-12 section-container">
       <BackButton onClick={onBack} />
       
       <div className="max-w-5xl mx-auto mt-16">

@@ -44,7 +44,7 @@ export default function Projects({ onBack }) {
   ];
   
   return (
-    <div className="min-h-screen bg-circuit-bg p-6 md:p-12">
+    <div className="min-h-screen bg-circuit-bg p-6 md:p-12 v">
       <BackButton onClick={onBack} />
       
       <div className="max-w-6xl mx-auto mt-16">
