@@ -1,26 +1,26 @@
-// src/app/providers.js
 "use client";
 
 import { ThemeProvider } from 'next-themes';
-import { Analytics } from "@vercel/analytics/react";
 import { useEffect, useState } from 'react';
 
 export function Providers({ children }) {
   const [mounted, setMounted] = useState(false);
 
-  // Prevent hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) {
-    return <>{children}</>;
+    return <div style={{ visibility: 'hidden' }}>{children}</div>;
   }
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem={false}
+    >
       {children}
-      <Analytics />
     </ThemeProvider>
   );
 }
