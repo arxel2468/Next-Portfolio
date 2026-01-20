@@ -1,7 +1,5 @@
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Providers } from './providers';
-import Noise from '@/components/ui/Noise';
-import GridBackground from '@/components/ui/GridBackground';
 import './globals.css';
 
 const inter = Inter({
@@ -18,10 +16,10 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata = {
   title: 'Amit Pandit — Engineer',
-  description: 'I build complete systems. AI, web, automation — end to end.',
+  description: 'Full-stack engineer building high-performance systems. Specialized in AI integration and scalable architecture.',
   openGraph: {
     title: 'Amit Pandit — Engineer',
-    description: 'I build complete systems. AI, web, automation — end to end.',
+    description: 'Full-stack engineer building high-performance systems.',
     url: 'https://amitpandit.vercel.app',
     siteName: 'Amit Pandit',
     locale: 'en_US',
@@ -30,7 +28,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Amit Pandit — Engineer',
-    description: 'I build complete systems. AI, web, automation — end to end.',
+    description: 'Full-stack engineer building high-performance systems.',
   },
   robots: {
     index: true,
@@ -45,12 +43,16 @@ export default function RootLayout({ children }) {
       className={`${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-[var(--bg)] text-[var(--text-primary)] antialiased">
+      <body>
         <Providers>
-          {children}
-          <Noise />
-          <GridBackground />
+          {/* Background Grid */}
+          <div className="fixed inset-0 bg-grid pointer-events-none z-0" />
+          <div className="fixed inset-0 bg-gradient-fade pointer-events-none z-0 h-32" />
 
+          {/* Content */}
+          <div className="relative z-10">
+            {children}
+          </div>
         </Providers>
       </body>
     </html>

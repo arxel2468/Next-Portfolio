@@ -1,26 +1,53 @@
-
 export const appliedWork = [
   {
     id: 'stealstreet',
     title: 'StealStreet.in',
-    type: 'E-commerce Build + Acquisition',
+    category: 'E-Commerce',
+    type: 'Complete Store Build + Marketing',
     period: '2024',
-    outcome: 'Complete store launch with 7x ROAS on paid acquisition.',
-    description: `Built a production Shopify store from template to launch. Not just theme customization — full operational setup.`,
-    details: [
-      'Custom theme modifications for conversion optimization',
-      'WhatsApp integration for direct customer contact',
-      'Product catalog with SEO-optimized metadata',
-      'Shiprocket integration for shipping logistics',
-      'Google Analytics + Meta Pixel implementation',
-      'Domain setup and DNS configuration (GoDaddy → Shopify)',
-      'Brand assets: logo, social presence',
+    status: 'Live',
+    image: '/images/shopify-store.jpg',
+    outcome: 'Built and launched a production Shopify store from zero. Handled everything from design to customer acquisition.',
+    description: 'End-to-end ownership of an e-commerce business — not just development, but the entire operational stack including design, logistics, and paid acquisition.',
+    metrics: [
+      { label: 'Purchases', value: '106', context: 'in 6 active days' },
+      { label: 'Best CPR', value: '₹0.48', context: 'Cost per Result' },
+      { label: 'Platform', value: 'Shopify', context: 'E-commerce' },
     ],
-    acquisition: {
-      channel: 'Meta Ads',
-      result: '7x ROAS',
-      note: 'Campaign management including creative iteration and audience targeting.',
-    },
+    sections: [
+      {
+        title: 'Store Development',
+        items: [
+          'Custom theme design and layout modifications',
+          'PageFly integration for enhanced landing pages',
+          'Product catalog with SEO-optimized metadata',
+          'Custom Liquid code for WhatsApp integration button',
+          'Policy pages (Shipping, Returns, Privacy, Terms)',
+          'Mobile POS setup with Shopify POS',
+        ]
+      },
+      {
+        title: 'Operations & Integrations',
+        items: [
+          'Shiprocket integration for shipping logistics',
+          'Google Analytics 4 implementation',
+          'Meta Pixel setup and event tracking',
+          'Domain configuration and DNS setup',
+          'Logo and brand identity design',
+        ]
+      },
+      {
+        title: 'Paid Acquisition',
+        items: [
+          'Meta Ads campaign strategy and execution',
+          'A/B testing for ad copy optimization',
+          'Product catalog carousel ads',
+          'Audience targeting and narrowing',
+          '106 purchases over 6 active days of advertising',
+          'Best performing ad achieved ₹0.48 cost per purchase',
+        ]
+      }
+    ],
     link: 'https://stealstreet.in',
   },
 ];

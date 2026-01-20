@@ -3,7 +3,7 @@ import Footer from '@/components/layout/Footer';
 import Hero from '@/components/sections/Hero';
 import Projects from '@/components/sections/Projects';
 import Applied from '@/components/sections/Applied';
-import About from '@/components/sections/About';
+import TechStack from '@/components/sections/TechStack';
 import Contact from '@/components/sections/Contact';
 import { getPinnedRepos } from '@/lib/github';
 
@@ -15,9 +15,9 @@ export default async function Home() {
       <Header />
       <main>
         <Hero />
+        <TechStack />
         <Projects repos={pinnedRepos} />
         <Applied />
-        <About />
         <Contact />
       </main>
       <Footer />

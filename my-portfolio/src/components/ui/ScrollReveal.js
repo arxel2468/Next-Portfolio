@@ -1,37 +1,29 @@
 "use client";
 
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export default function ScrollReveal({
   children,
   className = '',
   delay = 0,
-  duration = 0.6,
-  y = 30,
-  once = true,
-  blur = false,
+  direction = 'up', // 'up', 'down', 'left', 'right'
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, margin: '-80px' });
+  const directions = {
+    up: { y: 30 },
+    down: { y: -30 },
+    left: { x: 30 },
+    right: { x: -30 },
+  };
 
   return (
     <motion.div
-      ref={ref}
-      initial={{
-        opacity: 0,
-        y,
-        filter: blur ? 'blur(8px)' : 'blur(0px)',
-      }}
-      animate={isInView ? {
-        opacity: 1,
-        y: 0,
-        filter: 'blur(0px)',
-      } : {}}
+      initial={{ opacity: 0, ...directions[direction] }}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
       transition={{
-        duration,
+        duration: 0.6,
         delay,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: [0.16, 1, 0.3, 1],
       }}
       className={className}
     >

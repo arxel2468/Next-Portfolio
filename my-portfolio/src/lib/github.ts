@@ -1,12 +1,18 @@
 const GITHUB_USERNAME = 'arxel2468';
-
-// GitHub GraphQL endpoint
 const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql';
 
-// Query to get pinned repositories
+// Fallback descriptions for repos that might not have descriptions on GitHub
+const FALLBACK_DESCRIPTIONS = {
+  'voice-website-generator': 'Voice-controlled website generator. Speak commands, get a deployed site instantly using Groq and Python.',
+  'food': 'AI-powered sentiment analysis for recipe ratings. Extracts flavor profiles from thousands of reviews.',
+  'movies-recommender': 'Content-based movie recommendation engine using cosine similarity on high-dimensional vectors.',
+  'automation-with-python': 'Production-grade automation scripts for OS operations, image processing, and data pipelines.',
+  'Next-Portfolio': 'This portfolio. Built with Next.js 14, engineered for performance and clarity.',
+};
+
 const PINNED_REPOS_QUERY = `
-  query {
-    user(login: "${GITHUB_USERNAME}") {
+  query($username: String!) {
+    user(login: $username) {
       pinnedItems(first: 6, types: REPOSITORY) {
         nodes {
           ... on Repository {
@@ -14,18 +20,20 @@ const PINNED_REPOS_QUERY = `
             description
             url
             homepageUrl
-            repositoryTopics(first: 5) {
+            pushedAt
+            stargazerCount
+            forkCount
+            primaryLanguage {
+              name
+              color
+            }
+            repositoryTopics(first: 6) {
               nodes {
                 topic {
                   name
                 }
               }
             }
-            primaryLanguage {
-              name
-              color
-            }
-            stargazerCount
           }
         }
       }
@@ -34,9 +42,9 @@ const PINNED_REPOS_QUERY = `
 `;
 
 export async function getPinnedRepos() {
-  // If no GitHub token, return fallback data
+  // Check for GitHub token
   if (!process.env.GITHUB_TOKEN) {
-    console.warn('GITHUB_TOKEN not set. Using fallback project data.');
+    console.warn('GITHUB_TOKEN not found. Using fallback data.');
     return getFallbackProjects();
   }
 
@@ -46,80 +54,115 @@ export async function getPinnedRepos() {
       headers: {
         'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
         'Content-Type': 'application/json',
+        'User-Agent': 'Portfolio-App',
       },
-      body: JSON.stringify({ query: PINNED_REPOS_QUERY }),
+      body: JSON.stringify({
+        query: PINNED_REPOS_QUERY,
+        variables: { username: GITHUB_USERNAME },
+      }),
+      next: { revalidate: 3600 }, // Cache for 1 hour
     });
 
     if (!response.ok) {
-      throw new Error(`GitHub API error: ${response.status}`);
+      console.error('GitHub API HTTP Error:', response.status);
+      return getFallbackProjects();
     }
 
-    const data = await response.json();
+    const json = await response.json();
 
-    if (data.errors) {
-      throw new Error(data.errors[0].message);
+    if (json.errors) {
+      console.error('GitHub GraphQL Errors:', json.errors);
+      return getFallbackProjects();
     }
 
-    const pinnedItems = data.data?.user?.pinnedItems?.nodes || [];
+    const nodes = json.data?.user?.pinnedItems?.nodes;
 
-    return pinnedItems.map((repo) => ({
-      name: repo.name,
-      description: repo.description || 'No description provided.',
+    if (!nodes || nodes.length === 0) {
+      console.warn('No pinned repos found. Using fallback data.');
+      return getFallbackProjects();
+    }
+
+    return nodes.map((repo) => ({
+      name: formatRepoName(repo.name),
+      slug: repo.name,
+      description: repo.description || FALLBACK_DESCRIPTIONS[repo.name] || 'A project built with care.',
       url: repo.url,
       liveUrl: repo.homepageUrl || null,
-      topics: repo.repositoryTopics.nodes.map((t) => t.topic.name),
-      language: repo.primaryLanguage?.name || null,
-      languageColor: repo.primaryLanguage?.color || null,
-      stars: repo.stargazerCount,
+      stars: repo.stargazerCount || 0,
+      forks: repo.forkCount || 0,
+      language: repo.primaryLanguage?.name || 'Code',
+      languageColor: repo.primaryLanguage?.color || '#666666',
+      updatedAt: repo.pushedAt,
+      topics: repo.repositoryTopics?.nodes?.map((t) => t.topic.name) || [],
     }));
   } catch (error) {
-    console.error('Failed to fetch pinned repos:', error);
+    console.error('Failed to fetch GitHub repos:', error);
     return getFallbackProjects();
   }
 }
 
-// Fallback data if GitHub API fails or token not set
+function formatRepoName(name) {
+  return name
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
 function getFallbackProjects() {
-  return [
+  const fallbackRepos = [
     {
-      name: 'voice-website-generator',
-      description: 'Create websites with voice commands. Speak, and watch your site come to life.',
-      url: 'https://github.com/arxel2468/voice-website-generator',
+      name: 'Voice Website Generator',
+      slug: 'voice-website-generator',
+      description: FALLBACK_DESCRIPTIONS['voice-website-generator'],
+      url: `https://github.com/${GITHUB_USERNAME}/voice-website-generator`,
       liveUrl: null,
-      topics: ['python', 'groq', 'fastapi', 'voice'],
+      stars: 0,
+      forks: 0,
       language: 'Python',
       languageColor: '#3572A5',
-      stars: 0,
+      updatedAt: new Date().toISOString(),
+      topics: ['python', 'groq', 'voice', 'ai'],
     },
     {
-      name: 'food',
-      description: 'AI-powered sentiment analysis for recipe ratings.',
-      url: 'https://github.com/arxel2468/food',
+      name: 'Food Sentiment Analysis',
+      slug: 'food',
+      description: FALLBACK_DESCRIPTIONS['food'],
+      url: `https://github.com/${GITHUB_USERNAME}/food`,
       liveUrl: null,
+      stars: 0,
+      forks: 0,
+      language: 'Python',
+      languageColor: '#3572A5',
+      updatedAt: new Date().toISOString(),
       topics: ['python', 'nlp', 'sentiment-analysis'],
-      language: 'Python',
-      languageColor: '#3572A5',
-      stars: 0,
     },
     {
-      name: 'movies-recommender',
-      description: 'Personalized movie recommendations using content-based filtering.',
-      url: 'https://github.com/arxel2468/movies-recommender',
+      name: 'Movies Recommender',
+      slug: 'movies-recommender',
+      description: FALLBACK_DESCRIPTIONS['movies-recommender'],
+      url: `https://github.com/${GITHUB_USERNAME}/movies-recommender`,
       liveUrl: null,
+      stars: 0,
+      forks: 0,
+      language: 'Python',
+      languageColor: '#3572A5',
+      updatedAt: new Date().toISOString(),
       topics: ['python', 'recommendation-system'],
-      language: 'Python',
-      languageColor: '#3572A5',
-      stars: 0,
     },
     {
-      name: 'automation-with-python',
-      description: 'Collection of Python scripts for automating repetitive tasks.',
-      url: 'https://github.com/arxel2468/automation-with-python',
+      name: 'Automation With Python',
+      slug: 'automation-with-python',
+      description: FALLBACK_DESCRIPTIONS['automation-with-python'],
+      url: `https://github.com/${GITHUB_USERNAME}/automation-with-python`,
       liveUrl: null,
-      topics: ['python', 'automation'],
+      stars: 0,
+      forks: 0,
       language: 'Python',
       languageColor: '#3572A5',
-      stars: 0,
+      updatedAt: new Date().toISOString(),
+      topics: ['python', 'automation'],
     },
   ];
+
+  return fallbackRepos;
 }

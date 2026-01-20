@@ -1,29 +1,38 @@
 "use client";
 
-const techs = [
-  "NEXT.JS", "PYTHON", "TENSORFLOW", "FASTAPI", "POSTGRESQL", "REACT", "NODE.JS", "TYPESCRIPT", "OPENAI", "DOCKER", "REDIS", "SHOPIFY"
+const technologies = [
+  'NEXT.JS',
+  'REACT',
+  'PYTHON',
+  'TYPESCRIPT',
+  'TENSORFLOW',
+  'FASTAPI',
+  'NODE.JS',
+  'POSTGRESQL',
+  'DOCKER',
+  'OPENAI',
+  'TAILWIND',
+  'SHOPIFY',
 ];
 
 export default function TechStack() {
-  return (
-    <section className="py-20 border-y border-[var(--accents-2)] overflow-hidden bg-[var(--accents-1)]">
-      <div className="relative flex overflow-x-hidden group">
-        <div className="animate-marquee whitespace-nowrap flex gap-16 items-center">
-          {techs.concat(techs).map((tech, i) => (
-            <span
-              key={i}
-              className="text-4xl md:text-6xl font-bold text-[var(--accents-3)] select-none"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
+  // Duplicate array for seamless loop
+  const items = [...technologies, ...technologies];
 
-        <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex gap-16 items-center">
-          {techs.concat(techs).map((tech, i) => (
+  return (
+    <section className="py-12 border-y overflow-hidden" style={{ borderColor: 'var(--border)' }}>
+      <div className="relative">
+        {/* Fade edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-r from-[var(--bg)] to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-l from-[var(--bg)] to-transparent pointer-events-none" />
+
+        {/* Scrolling content */}
+        <div className="flex animate-marquee">
+          {items.map((tech, index) => (
             <span
-              key={i}
-              className="text-4xl md:text-6xl font-bold text-[var(--accents-3)] select-none"
+              key={index}
+              className="flex-shrink-0 px-8 text-4xl md:text-6xl font-bold tracking-tighter select-none"
+              style={{ color: 'var(--fg-subtle)' }}
             >
               {tech}
             </span>
