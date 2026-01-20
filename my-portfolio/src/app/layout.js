@@ -1,38 +1,23 @@
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import { Providers } from './providers';
 import './globals.css';
 
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-mono',
-});
-
 export const metadata = {
-  title: 'Amit Pandit — Engineer',
-  description: 'Full-stack engineer building high-performance systems. Specialized in AI integration and scalable architecture.',
+  title: 'Amit Pandit — Full-Stack Engineer',
+  description: 'I build products fast. AI integration, automation, full-stack systems — from zero to shipped.',
+  keywords: ['Full-Stack Engineer', 'AI', 'Web Development', 'React', 'Next.js', 'Python', 'Automation'],
+  authors: [{ name: 'Amit Pandit' }],
   openGraph: {
-    title: 'Amit Pandit — Engineer',
-    description: 'Full-stack engineer building high-performance systems.',
+    title: 'Amit Pandit — Full-Stack Engineer',
+    description: 'I build products fast. AI integration, automation, full-stack systems — from zero to shipped.',
     url: 'https://amitpandit.vercel.app',
-    siteName: 'Amit Pandit',
-    locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Amit Pandit — Engineer',
-    description: 'Full-stack engineer building high-performance systems.',
-  },
-  robots: {
-    index: true,
-    follow: true,
+    title: 'Amit Pandit — Full-Stack Engineer',
+    description: 'I build products fast. AI integration, automation, full-stack systems — from zero to shipped.',
   },
 };
 
@@ -40,20 +25,11 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
       <body>
-        <Providers>
-          {/* Background Grid */}
-          <div className="fixed inset-0 bg-grid pointer-events-none z-0" />
-          <div className="fixed inset-0 bg-gradient-fade pointer-events-none z-0 h-32" />
-
-          {/* Content */}
-          <div className="relative z-10">
-            {children}
-          </div>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

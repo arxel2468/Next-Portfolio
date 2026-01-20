@@ -1,110 +1,86 @@
 "use client";
 
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
-import SpotlightCard from './SpotlightCard';
 import { motion } from 'framer-motion';
+import { FiGithub, FiExternalLink, FiStar } from 'react-icons/fi';
 
-export default function ProjectCard({ project }) {
-  const { name, description, url, liveUrl, topics, language, languageColor } = project;
-
-  const displayName = name
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+export default function ProjectCard({ project, index, featured = false }) {
+  const {
+    name,
+    description,
+    url,
+    liveUrl,
+    language,
+    languageColor,
+    stars,
+    topics,
+    color,
+  } = project;
 
   return (
-    <SpotlightCard className="h-full">
-      <motion.div
-        className="h-full p-6 border border-[var(--border)] rounded-xl bg-[var(--surface)] transition-all duration-300 hover:border-[var(--border-hover)] hover:shadow-lg hover:shadow-[var(--accent)]/5"
-        whileHover={{ y: -2 }}
-        transition={{ duration: 0.2 }}
-      >
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div className="flex items-center gap-3">
-            {/* Folder icon */}
-            <div className="w-10 h-10 rounded-lg bg-[var(--accent-subtle)] flex items-center justify-center flex-shrink-0">
-              <svg
-                className="w-5 h-5 text-[var(--accent)]"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-                />
-              </svg>
-            </div>
-            <h3 className="font-medium text-[var(--text-primary)] leading-tight">
-              {displayName}
-            </h3>
-          </div>
-
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
-              aria-label="View on GitHub"
-            >
-              <FaGithub className="w-5 h-5" />
-            </a>
-            {liveUrl && (
-              <a
-                href={liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
-                aria-label="View live site"
-              >
-                <FaExternalLinkAlt className="w-4 h-4" />
-              </a>
-            )}
-          </div>
+    <motion.a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className={`card block p-6 ${featured ? 'md:col-span-2' : ''}`}
+      style={{ '--project-color': color }}
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between mb-4">
+        <div
+          className="w-10 h-10 rounded-lg flex items-center justify-center"
+          style={{ backgroundColor: `${color}15` }}
+        >
+          <div
+            className="w-3 h-3 rounded-full"
+            style={{ backgroundColor: color }}
+          />
         </div>
 
-        {/* Description */}
-        <p className="text-sm text-[var(--text-secondary)] mb-6 line-clamp-2 leading-relaxed">
-          {description}
-        </p>
+        <div className="flex items-center gap-3">
+          {stars > 0 && (
+            <span className="flex items-center gap-1 text-sm text-muted">
+              <FiStar className="w-3.5 h-3.5" />
+              {stars}
+            </span>
+          )}
+          <FiGithub className="w-4 h-4 text-muted" />
+          {liveUrl && (
+            <FiExternalLink className="w-4 h-4 text-accent" />
+          )}
+        </div>
+      </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between mt-auto pt-4 border-t border-[var(--border)]">
-          {/* Language */}
-          {language && (
-            <div className="flex items-center gap-2">
+      {/* Content */}
+      <h3 className="heading-3 mb-2">{name}</h3>
+      <p className="text-muted text-sm mb-4 line-clamp-2">{description}</p>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span
+            className="w-2.5 h-2.5 rounded-full"
+            style={{ backgroundColor: languageColor }}
+          />
+          <span className="text-xs font-mono text-subtle">{language}</span>
+        </div>
+
+        {topics.length > 0 && (
+          <div className="flex gap-2">
+            {topics.slice(0, 2).map((topic) => (
               <span
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: languageColor || 'var(--text-muted)' }}
-              />
-              <span className="text-xs font-mono text-[var(--text-muted)]">{language}</span>
-            </div>
-          )}
-
-          {/* Topics */}
-          {topics.length > 0 && (
-            <div className="flex items-center gap-1.5">
-              {topics.slice(0, 2).map((topic) => (
-                <span
-                  key={topic}
-                  className="text-xs text-[var(--text-muted)] bg-[var(--bg-secondary)] px-2 py-1 rounded-md"
-                >
-                  {topic}
-                </span>
-              ))}
-              {topics.length > 2 && (
-                <span className="text-xs text-[var(--text-muted)]">
-                  +{topics.length - 2}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-      </motion.div>
-    </SpotlightCard>
+                key={topic}
+                className="text-xs text-subtle bg-background-elevated px-2 py-0.5 rounded"
+              >
+                {topic}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </motion.a>
   );
 }

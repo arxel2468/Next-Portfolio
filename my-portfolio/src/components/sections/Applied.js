@@ -2,26 +2,29 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { FaExternalLinkAlt } from 'react-icons/fa';
+import { FiExternalLink } from 'react-icons/fi';
 import { appliedWork } from '@/data/applied';
 
 export default function Applied() {
   return (
-    <section id="applied" className="section" style={{ backgroundColor: 'var(--bg-elevated)' }}>
-      <div className="container-wide">
-        {/* Section Header */}
-        <div className="section-header">
-          <div>
-            <span className="label block mb-4">02 — Work</span>
-            <h2 className="text-headline">Applied Execution</h2>
-          </div>
-          <span className="hidden md:block label">Production Systems</span>
-        </div>
+    <section id="applied" className="section bg-background-elevated">
+      <div className="container">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-12"
+        >
+          <span className="caption block mb-3">02 — Work</span>
+          <h2 className="heading-2">Production Systems</h2>
+        </motion.div>
 
         {/* Case Studies */}
         <div className="space-y-16">
           {appliedWork.map((work, index) => (
-            <CaseStudyCard key={work.id} work={work} index={index} />
+            <CaseStudy key={work.id} work={work} index={index} />
           ))}
         </div>
       </div>
@@ -29,142 +32,95 @@ export default function Applied() {
   );
 }
 
-function CaseStudyCard({ work, index }) {
-  const {
-    title,
-    category,
-    type,
-    period,
-    status,
-    image,
-    outcome,
-    description,
-    metrics,
-    sections,
-    link
-  } = work;
+function CaseStudy({ work, index }) {
+  const { title, subtitle, image, period, status, link, metrics, summary, sections } = work;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
+    <motion.article
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="border overflow-hidden"
-      style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg)' }}
+      className="bg-background border border-border rounded-xl overflow-hidden"
     >
-      {/* Header with Image */}
-      <div className="grid grid-cols-1 lg:grid-cols-3">
-        {/* Image */}
-        {image && (
-          <div className="relative h-48 lg:h-auto lg:min-h-[300px] overflow-hidden">
-            <Image
-              src={image}
-              alt={`${title} logo`}
-              fill
-              className="object-cover"
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-              }}
-            />
-          </div>
-        )}
+      {/* Image Header */}
+      {image && (
+        <div className="relative h-48 md:h-64 bg-background-elevated">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
 
-        {/* Content */}
-        <div className={`p-8 md:p-12 ${image ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
-          {/* Top Row */}
-          <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+          {/* Overlay Content */}
+          <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
             <div>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="label">{category}</span>
-                <span className="w-1 h-1 rounded-full" style={{ backgroundColor: 'var(--fg-subtle)' }} />
-                <span className="label">{period}</span>
-                {status === 'Live' && (
+              <div className="flex items-center gap-3 mb-2">
+                <span className="caption text-white/70">{period}</span>
+                {status === 'live' && (
                   <>
-                    <span className="w-1 h-1 rounded-full" style={{ backgroundColor: 'var(--fg-subtle)' }} />
+                    <span className="w-1 h-1 rounded-full bg-white/40" />
                     <span className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                      <span className="label text-green-600 dark:text-green-400">Live</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                      <span className="caption text-green-400">Live</span>
                     </span>
                   </>
                 )}
               </div>
-              <h3 className="text-2xl md:text-3xl font-bold mb-2">{title}</h3>
-              <p style={{ color: 'var(--fg-muted)' }}>{type}</p>
+              <h3 className="text-2xl md:text-3xl font-semibold text-white">{title}</h3>
             </div>
 
             {link && (
               <a
                 href={link}
                 target="_blank"
-                rel="noreferrer"
-                className="btn-secondary text-sm"
+                rel="noopener noreferrer"
+                className="btn btn-secondary bg-white/10 border-white/20 text-white hover:bg-white/20 hidden md:flex"
               >
-                View Live
-                <FaExternalLinkAlt className="w-3 h-3" />
+                Visit Site
+                <FiExternalLink className="w-4 h-4" />
               </a>
             )}
           </div>
-
-          {/* Metrics Row */}
-          {metrics && metrics.length > 0 && (
-            <div
-              className="flex flex-wrap gap-8 mb-8 pb-8 border-b"
-              style={{ borderColor: 'var(--border)' }}
-            >
-              {metrics.map((metric) => (
-                <div key={metric.label}>
-                  <span
-                    className="block text-3xl md:text-4xl font-bold mb-1"
-                    style={{ color: 'var(--accent)' }}
-                  >
-                    {metric.value}
-                  </span>
-                  <span className="label">{metric.label}</span>
-                  {metric.context && (
-                    <span
-                      className="block text-xs mt-1"
-                      style={{ color: 'var(--fg-subtle)' }}
-                    >
-                      {metric.context}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Outcome */}
-          <div className="mb-8">
-            <p className="text-lg leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-              {outcome}
-            </p>
-          </div>
         </div>
-      </div>
+      )}
 
-      {/* Detailed Sections */}
-      {sections && sections.length > 0 && (
-        <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 md:p-12 border-t"
-          style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg-elevated)' }}
-        >
+      {/* Content */}
+      <div className="p-6 md:p-10">
+        {/* Metrics */}
+        {metrics && (
+          <div className="grid grid-cols-3 gap-6 mb-10 pb-10 border-b border-border">
+            {metrics.map((metric) => (
+              <div key={metric.label}>
+                <span className="block text-3xl md:text-4xl font-semibold text-accent mb-1">
+                  {metric.value}
+                </span>
+                <span className="caption block">{metric.label}</span>
+                {metric.detail && (
+                  <span className="text-xs text-subtle">{metric.detail}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Summary */}
+        <p className="body-large mb-10">{summary}</p>
+
+        {/* Detailed Sections */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {sections.map((section, sIndex) => (
             <div key={sIndex}>
-              <span className="label block mb-4">{section.title}</span>
+              <h4 className="font-semibold mb-4">{section.title}</h4>
               <ul className="space-y-2">
                 {section.items.map((item, iIndex) => (
                   <li
                     key={iIndex}
-                    className="flex items-start gap-3 text-sm"
-                    style={{ color: 'var(--fg-muted)' }}
+                    className="flex items-start gap-2 text-sm text-muted"
                   >
-                    <span
-                      className="w-1 h-1 rounded-full mt-2 flex-shrink-0"
-                      style={{ backgroundColor: 'var(--accent)' }}
-                    />
+                    <span className="w-1 h-1 rounded-full bg-accent mt-2 flex-shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -172,7 +128,20 @@ function CaseStudyCard({ work, index }) {
             </div>
           ))}
         </div>
-      )}
-    </motion.div>
+
+        {/* Mobile Link */}
+        {link && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-secondary w-full mt-8 md:hidden"
+          >
+            Visit Site
+            <FiExternalLink className="w-4 h-4" />
+          </a>
+        )}
+      </div>
+    </motion.article>
   );
 }

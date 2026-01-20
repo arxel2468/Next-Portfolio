@@ -1,178 +1,95 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt, FaStar } from 'react-icons/fa';
+import { IconBrandGithub, IconExternalLink } from '@tabler/icons-react';
+import { projects } from '@/data/projects';
 
-export default function Projects({ repos }) {
+export default function Projects() {
   return (
     <section id="projects" className="section">
-      <div className="container-wide">
-        {/* Section Header */}
-        <div className="section-header">
-          <div>
-            <span className="label block mb-4">01 — Projects</span>
-            <h2 className="text-headline">Selected Work</h2>
-          </div>
-          <a
-            href="https://github.com/arxel2468"
-            target="_blank"
-            rel="noreferrer"
-            className="hidden md:flex link-arrow text-sm"
-          >
-            View All
-            <FaGithub className="w-4 h-4" />
-          </a>
-        </div>
+      <div className="container">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-12"
+        >
+          <span className="label block mb-3">Projects</span>
+          <h2 className="h2">Things I've built.</h2>
+        </motion.div>
 
-        {/* Projects List */}
-        <div className="border-t" style={{ borderColor: 'var(--border)' }}>
-          {repos.map((repo, index) => (
-            <ProjectRow key={repo.slug} project={repo} index={index} />
+        {/* Projects Grid */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {projects.map((project, i) => (
+            <ProjectCard key={project.id} project={project} index={i} />
           ))}
-        </div>
-
-        {/* Mobile View All Link */}
-        <div className="mt-8 md:hidden">
-          <a
-            href="https://github.com/arxel2468"
-            target="_blank"
-            rel="noreferrer"
-            className="link-arrow text-sm"
-          >
-            View All on GitHub
-            <FaGithub className="w-4 h-4" />
-          </a>
         </div>
       </div>
     </section>
   );
 }
 
-function ProjectRow({ project, index }) {
-  const { name, slug, description, url, liveUrl, language, languageColor, stars, updatedAt } = project;
-
-  // Calculate time since update
-  const daysAgo = Math.floor((Date.now() - new Date(updatedAt).getTime()) / (1000 * 60 * 60 * 24));
-  const timeAgo = daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : `${daysAgo}d ago`;
-
-  // Determine primary link - prefer live URL if exists
-  const primaryLink = liveUrl || url;
-  const hasLiveUrl = Boolean(liveUrl);
-
+function ProjectCard({ project, index }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
+      viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group border-b py-8 transition-colors hover:bg-[var(--bg-elevated)]"
-      style={{ borderColor: 'var(--border)' }}
+      className={`card p-6 ${project.featured ? 'md:col-span-2' : ''}`}
     >
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start md:items-center px-4 md:px-6">
-        {/* Project Name */}
-        <div className="md:col-span-4">
-          <h3 className="text-xl font-semibold mb-1 group-hover:text-[var(--accent)] transition-colors">
-            {name}
-          </h3>
-          <div className="flex items-center gap-3 md:hidden">
-            <span className="flex items-center gap-1.5">
-              <span
-                className="w-2.5 h-2.5 rounded-full"
-                style={{ backgroundColor: languageColor }}
-              />
-              <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>{language}</span>
-            </span>
-            {stars > 0 && (
-              <span className="flex items-center gap-1 text-sm" style={{ color: 'var(--fg-muted)' }}>
-                <FaStar className="w-3 h-3 text-yellow-500" />
-                {stars}
-              </span>
-            )}
-          </div>
+      {/* Header */}
+      <div className="flex items-start justify-between mb-4">
+        <div
+          className="w-12 h-12 rounded-xl flex items-center justify-center"
+          style={{ backgroundColor: `${project.color}15` }}
+        >
+          <div
+            className="w-4 h-4 rounded-full"
+            style={{ backgroundColor: project.color }}
+          />
         </div>
-
-        {/* Description */}
-        <div className="md:col-span-5">
-          <p className="text-sm md:text-base leading-relaxed" style={{ color: 'var(--fg-muted)' }}>
-            {description}
-          </p>
-        </div>
-
-        {/* Meta */}
-        <div className="md:col-span-3 flex items-center justify-between md:justify-end gap-4">
-          {/* Language & Stars - Desktop */}
-          <div className="hidden md:flex items-center gap-4">
-            <span className="flex items-center gap-1.5">
-              <span
-                className="w-2.5 h-2.5 rounded-full"
-                style={{ backgroundColor: languageColor }}
-              />
-              <span className="text-sm font-mono" style={{ color: 'var(--fg-subtle)' }}>{language}</span>
-            </span>
-            {stars > 0 && (
-              <span className="flex items-center gap-1 text-sm" style={{ color: 'var(--fg-muted)' }}>
-                <FaStar className="w-3 h-3 text-yellow-500" />
-                {stars}
-              </span>
-            )}
-          </div>
-
-          {/* Links */}
-          <div className="flex items-center gap-3">
-            <span
-              className="text-xs font-mono hidden sm:block"
-              style={{ color: 'var(--fg-subtle)' }}
-            >
-              {timeAgo}
-            </span>
-
-            {/* GitHub Link */}
+        <div className="flex gap-2">
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 rounded-lg hover:bg-bg transition-colors text-muted hover:text-fg"
+            aria-label="GitHub"
+          >
+            <IconBrandGithub size={20} />
+          </a>
+          {project.live && (
             <a
-              href={url}
+              href={project.live}
               target="_blank"
-              rel="noreferrer"
-              className="p-2 rounded transition-colors hover:bg-[var(--accent-subtle)]"
-              style={{ color: 'var(--fg-muted)' }}
-              title="View on GitHub"
-              onClick={(e) => e.stopPropagation()}
+              rel="noopener noreferrer"
+              className="p-2 rounded-lg hover:bg-bg transition-colors text-accent"
+              aria-label="Live site"
             >
-              <FaGithub className="w-4 h-4" />
+              <IconExternalLink size={20} />
             </a>
-
-            {/* Live Link (if exists) */}
-            {hasLiveUrl && (
-              <a
-                href={liveUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2 rounded transition-colors hover:bg-[var(--accent-subtle)]"
-                style={{ color: 'var(--accent)' }}
-                title="View Live"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <FaExternalLinkAlt className="w-3.5 h-3.5" />
-              </a>
-            )}
-
-            {/* Arrow indicator */}
-            <a
-              href={url}
-              target="_blank"
-              rel="noreferrer"
-              className="p-2"
-            >
-              <svg
-                className="w-5 h-5 transform -rotate-45 group-hover:rotate-0 transition-transform duration-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                style={{ color: 'var(--fg-subtle)' }}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
-          </div>
+          )}
         </div>
+      </div>
+
+      {/* Content */}
+      <h3 className="h3 mb-1">{project.title}</h3>
+      <p className="text-sm text-accent mb-3">{project.tagline}</p>
+      <p className="text-muted mb-4">{project.description}</p>
+
+      {/* Problem/Solution */}
+      <div className="bg-bg rounded-lg p-4 mb-4">
+        <div className="text-xs font-medium text-subtle mb-1">THE PROBLEM</div>
+        <p className="text-sm text-muted">{project.problem}</p>
+      </div>
+
+      {/* Tech */}
+      <div className="flex flex-wrap gap-2">
+        {project.tech.map((t) => (
+          <span key={t} className="badge">{t}</span>
+        ))}
       </div>
     </motion.div>
   );

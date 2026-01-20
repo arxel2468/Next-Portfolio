@@ -1,23 +1,20 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/components/sections/Hero';
+import Work from '@/components/sections/Work';
 import Projects from '@/components/sections/Projects';
-import Applied from '@/components/sections/Applied';
-import TechStack from '@/components/sections/TechStack';
+import Process from '@/components/sections/Process';
 import Contact from '@/components/sections/Contact';
-import { getPinnedRepos } from '@/lib/github';
 
-export default async function Home() {
-  const pinnedRepos = await getPinnedRepos();
-
+export default function Home() {
   return (
     <>
       <Header />
       <main>
         <Hero />
-        <TechStack />
-        <Projects repos={pinnedRepos} />
-        <Applied />
+        <Work />
+        <Projects />
+        <Process />
         <Contact />
       </main>
       <Footer />

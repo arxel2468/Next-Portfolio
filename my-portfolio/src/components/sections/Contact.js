@@ -2,169 +2,78 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { IconMail, IconCopy, IconCheck, IconBrandGithub, IconBrandLinkedin, IconBrandTwitter } from '@tabler/icons-react';
 
 const socials = [
-  { icon: FaGithub, href: 'https://github.com/arxel2468', label: 'GitHub' },
-  { icon: FaLinkedin, href: 'https://www.linkedin.com/in/amitpandit2468', label: 'LinkedIn' },
-  { icon: FaTwitter, href: 'https://twitter.com/amitpandit2468', label: 'Twitter' },
+  { icon: IconBrandGithub, href: 'https://github.com/arxel2468', label: 'GitHub' },
+  { icon: IconBrandLinkedin, href: 'https://linkedin.com/in/amitpandit2468', label: 'LinkedIn' },
+  { icon: IconBrandTwitter, href: 'https://twitter.com/amitpandit2468', label: 'Twitter' },
 ];
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState(null); // 'loading', 'success', 'error'
+  const [copied, setCopied] = useState(false);
+  const email = '1amitpandit2468@gmail.com';
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus('loading');
-
-    try {
-      const res = await fetch('https://formspree.io/f/xeojdynq', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (res.ok) {
-        setStatus('success');
-        setFormData({ name: '', email: '', message: '' });
-        setTimeout(() => setStatus(null), 5000);
-      } else {
-        throw new Error('Failed');
-      }
-    } catch {
-      setStatus('error');
-      setTimeout(() => setStatus(null), 5000);
-    }
+  const copyEmail = async () => {
+    await navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <section id="contact" className="section">
-      <div className="container-wide">
-        {/* Section Header */}
-        <div className="section-header">
-          <div>
-            <span className="label block mb-4">03 — Contact</span>
-            <h2 className="text-headline">Let's Work Together</h2>
-          </div>
-        </div>
+      <div className="container max-w-3xl text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <span className="label block mb-3">Contact</span>
+          <h2 className="h2 mb-6">Let's build something.</h2>
+          <p className="body-lg mb-10">
+            Have a project in mind? Need someone who ships fast?
+            I'm available for freelance work and full-time opportunities.
+          </p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Left: Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-xl leading-relaxed mb-8" style={{ color: 'var(--fg-muted)' }}>
-              Available for freelance projects, consulting, and full-time opportunities.
-              I typically respond within 24 hours.
-            </p>
-
-            <div className="space-y-4 mb-12">
-              <a
-                href="mailto:1amitpandit2468@gmail.com"
-                className="block text-lg hover:text-[var(--accent)] transition-colors"
-              >
-                1amitpandit2468@gmail.com
-              </a>
-              <p style={{ color: 'var(--fg-muted)' }}>Mumbai, India · IST (UTC+5:30)</p>
-            </div>
-
-            <div className="flex items-center gap-4">
-              {socials.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-center w-12 h-12 border transition-colors hover:bg-[var(--fg)] hover:text-[var(--bg)] hover:border-[var(--fg)]"
-                  style={{ borderColor: 'var(--border)' }}
-                  aria-label={social.label}
-                >
-                  <social.icon className="w-5 h-5" />
-                </a>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Right: Form */}
-          <motion.form
-            onSubmit={handleSubmit}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="space-y-6"
-          >
-            <div>
-              <label htmlFor="name" className="label block mb-2">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-                className="w-full px-4 py-3 border bg-transparent transition-colors focus:outline-none focus:border-[var(--fg)]"
-                style={{ borderColor: 'var(--border)' }}
-                placeholder="Your name"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="email" className="label block mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-                className="w-full px-4 py-3 border bg-transparent transition-colors focus:outline-none focus:border-[var(--fg)]"
-                style={{ borderColor: 'var(--border)' }}
-                placeholder="you@example.com"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="message" className="label block mb-2">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                required
-                rows={5}
-                className="w-full px-4 py-3 border bg-transparent transition-colors focus:outline-none focus:border-[var(--fg)] resize-none"
-                style={{ borderColor: 'var(--border)' }}
-                placeholder="Tell me about your project..."
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={status === 'loading'}
-              className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+          {/* Email */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+            <a
+              href={`mailto:${email}`}
+              className="btn btn-primary"
             >
-              {status === 'loading' ? 'Sending...' : 'Send Message'}
+              <IconMail size={18} />
+              {email}
+            </a>
+            <button
+              onClick={copyEmail}
+              className="btn btn-secondary"
+            >
+              {copied ? <IconCheck size={18} className="text-success" /> : <IconCopy size={18} />}
+              {copied ? 'Copied!' : 'Copy email'}
             </button>
+          </div>
 
-            {status === 'success' && (
-              <p className="text-sm text-green-600">Message sent successfully. I'll respond soon.</p>
-            )}
-            {status === 'error' && (
-              <p className="text-sm text-red-600">Something went wrong. Please email me directly.</p>
-            )}
-          </motion.form>
-        </div>
+          {/* Socials */}
+          <div className="flex items-center justify-center gap-4">
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-xl border border-border flex items-center justify-center text-muted hover:text-fg hover:border-subtle transition-all"
+                aria-label={s.label}
+              >
+                <s.icon size={22} />
+              </a>
+            ))}
+          </div>
+
+          {/* Location */}
+          <p className="text-muted mt-10">
+            Mumbai, India · IST (UTC+5:30)
+          </p>
+        </motion.div>
       </div>
     </section>
   );

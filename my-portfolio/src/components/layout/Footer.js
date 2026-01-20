@@ -1,57 +1,36 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { IconBrandGithub, IconBrandLinkedin, IconBrandTwitter } from '@tabler/icons-react';
+
+const socials = [
+  { icon: IconBrandGithub, href: 'https://github.com/arxel2468', label: 'GitHub' },
+  { icon: IconBrandLinkedin, href: 'https://linkedin.com/in/amitpandit2468', label: 'LinkedIn' },
+  { icon: IconBrandTwitter, href: 'https://twitter.com/amitpandit2468', label: 'Twitter' },
+];
 
 export default function Footer() {
-  const [time, setTime] = useState('');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-
-    const updateTime = () => {
-      const now = new Date();
-      setTime(
-        now.toLocaleTimeString('en-US', {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false,
-          timeZone: 'Asia/Kolkata',
-        })
-      );
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <footer className="py-12 border-t" style={{ borderColor: 'var(--border)' }}>
-      <div className="container-wide">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          {/* Left */}
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8">
-            <span className="font-semibold">Amit Pandit</span>
-            <span className="hidden md:block w-px h-4" style={{ backgroundColor: 'var(--border)' }} />
-            <span className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-              Building systems that work.
-            </span>
-          </div>
+    <footer className="py-8 border-t border-border">
+      <div className="container flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <span className="font-semibold">amit<span className="text-accent">.</span></span>
+          <span className="text-sm text-muted">Building things that work.</span>
+        </div>
 
-          {/* Right */}
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8">
-            {mounted && (
-              <span className="font-mono text-sm tabular-nums" style={{ color: 'var(--fg-subtle)' }}>
-                {time} IST
-              </span>
-            )}
-            <span className="hidden md:block w-px h-4" style={{ backgroundColor: 'var(--border)' }} />
-            <span className="text-sm" style={{ color: 'var(--fg-subtle)' }}>
-              © {new Date().getFullYear()}
-            </span>
-          </div>
+        <div className="flex items-center gap-4">
+          {socials.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted hover:text-fg transition-colors"
+              aria-label={s.label}
+            >
+              <s.icon size={20} />
+            </a>
+          ))}
+          <span className="text-sm text-subtle ml-4">© {new Date().getFullYear()}</span>
         </div>
       </div>
     </footer>
