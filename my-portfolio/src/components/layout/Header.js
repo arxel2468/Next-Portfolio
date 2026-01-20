@@ -5,11 +5,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { IconSun, IconMoon, IconMenu2, IconX } from '@tabler/icons-react';
+import { scrollToSection } from '@/lib/utils';
 
 const navItems = [
-  { label: 'Work', href: '#work' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Work', href: 'work' },
+  { label: 'Projects', href: 'projects' },
+  { label: 'Process', href: 'process' },
+  { label: 'Contact', href: 'contact' },
 ];
 
 export default function Header() {
@@ -20,33 +22,33 @@ export default function Header() {
 
   useEffect(() => {
     setMounted(true);
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollTo = (id) => {
-    const el = document.querySelector(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      setMobileOpen(false);
-    }
+  const handleNavClick = (href) => {
+    scrollToSection(href);
+    setMobileOpen(false);
   };
 
   return (
     <>
       <motion.header
-        initial={{ y: -20, opacity: 0 }}
+        initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'glass border-b border-border' : ''
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled ? 'glass border-b border-[var(--border-light)]' : ''
         }`}
       >
-        <div className="container h-16 md:h-20 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="text-lg font-semibold tracking-tight">
-            amit<span className="text-accent">.</span>
+        <div className="container h-20 flex items-center justify-between">
+          {/* Logo - Simple Text */}
+          <Link
+            href="/"
+            className="text-xl font-bold tracking-tight hover:opacity-70 transition-opacity"
+          >
+            amit<span className="text-gradient">.</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -54,42 +56,52 @@ export default function Header() {
             {navItems.map((item) => (
               <button
                 key={item.href}
-                onClick={() => scrollTo(item.href)}
+                onClick={() => handleNavClick(item.href)}
                 className="btn-ghost text-sm"
               >
                 {item.label}
               </button>
             ))}
 
-            <div className="w-px h-5 bg-border mx-2" />
+            <div className="w-px h-6 bg-[var(--border-light)] mx-3" />
 
+            {/* Theme Toggle */}
             {mounted && (
               <button
                 onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-                className="btn-ghost p-2"
+                className="btn-ghost p-2.5 rounded-xl"
                 aria-label="Toggle theme"
               >
                 {resolvedTheme === 'dark' ? (
-                  <IconSun size={18} />
+                  <IconSun size={20} />
                 ) : (
-                  <IconMoon size={18} />
+                  <IconMoon size={20} />
                 )}
               </button>
             )}
 
-            <div className="flex items-center gap-2 ml-2 pl-4 border-l border-border">
-              <span className="status-dot" />
-              <span className="text-xs font-medium text-muted">Available</span>
+            {/* Status + CTA */}
+            <div className="flex items-center gap-4 ml-3 pl-3 border-l border-[var(--border-light)]">
+              <div className="flex items-center gap-2">
+                <span className="status-dot" />
+                <span className="text-xs font-medium text-[var(--text-muted)]">Available</span>
+              </div>
+              <a
+                href="mailto:1amitpandit2468@gmail.com"
+                className="btn btn-primary"
+              >
+                Let's Talk
+              </a>
             </div>
           </nav>
 
           {/* Mobile Toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2"
+            className="md:hidden p-2 rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors"
             aria-label="Menu"
           >
-            {mobileOpen ? <IconX size={20} /> : <IconMenu2 size={20} />}
+            {mobileOpen ? <IconX size={24} /> : <IconMenu2 size={24} />}
           </button>
         </div>
       </motion.header>
@@ -97,48 +109,64 @@ export default function Header() {
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 md:hidden"
-          >
-            <div className="absolute inset-0 bg-bg/95 backdrop-blur-sm" />
-            <motion.nav
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileOpen(false)}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+            />
+
+            {/* Menu Panel */}
+            <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 bottom-0 w-72 bg-bg-elevated border-l border-border p-6 pt-24"
+              className="fixed right-0 top-0 bottom-0 w-80 bg-[var(--bg-secondary)] border-l border-[var(--border-light)] z-50 md:hidden p-6 pt-24"
             >
-              <div className="flex flex-col gap-2">
-                {navItems.map((item) => (
-                  <button
+              <nav className="flex flex-col gap-2">
+                {navItems.map((item, i) => (
+                  <motion.button
                     key={item.href}
-                    onClick={() => scrollTo(item.href)}
-                    className="text-left text-lg py-3 border-b border-border"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    onClick={() => handleNavClick(item.href)}
+                    className="text-left text-lg font-medium py-3 px-4 rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors"
                   >
                     {item.label}
-                  </button>
+                  </motion.button>
                 ))}
-              </div>
+              </nav>
 
-              <div className="mt-8 flex items-center justify-between">
-                <div className="flex items-center gap-2">
+              <div className="divider my-6" />
+
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
                   <span className="status-dot" />
-                  <span className="text-sm text-muted">Available for work</span>
+                  <span className="text-small">Available for work</span>
                 </div>
                 {mounted && (
                   <button
                     onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-                    className="p-2"
+                    className="p-2 rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors"
                   >
-                    {resolvedTheme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
+                    {resolvedTheme === 'dark' ? <IconSun size={20} /> : <IconMoon size={20} />}
                   </button>
                 )}
               </div>
-            </motion.nav>
-          </motion.div>
+
+              <a
+                href="mailto:1amitpandit2468@gmail.com"
+                className="btn btn-primary w-full"
+              >
+                Let's Talk
+              </a>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

@@ -4,20 +4,15 @@ import { Providers } from './providers';
 import './globals.css';
 
 export const metadata = {
-  title: 'Amit Pandit — Full-Stack Engineer',
-  description: 'I build products fast. AI integration, automation, full-stack systems — from zero to shipped.',
+  title: 'Amit Pandit — I Build Products Fast',
+  description: 'Full-stack engineer specializing in AI integration, automation, and shipping products from zero to production.',
   keywords: ['Full-Stack Engineer', 'AI', 'Web Development', 'React', 'Next.js', 'Python', 'Automation'],
   authors: [{ name: 'Amit Pandit' }],
   openGraph: {
-    title: 'Amit Pandit — Full-Stack Engineer',
-    description: 'I build products fast. AI integration, automation, full-stack systems — from zero to shipped.',
+    title: 'Amit Pandit — I Build Products Fast',
+    description: 'Full-stack engineer specializing in AI integration, automation, and shipping products from zero to production.',
     url: 'https://amitpandit.vercel.app',
     type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Amit Pandit — Full-Stack Engineer',
-    description: 'I build products fast. AI integration, automation, full-stack systems — from zero to shipped.',
   },
 };
 
