@@ -1,98 +1,57 @@
 "use client";
 
-import ScrollReveal from '@/components/ui/ScrollReveal';
-import SpotlightCard from '@/components/ui/SpotlightCard';
 import { appliedWork } from '@/data/applied';
-import { FaExternalLinkAlt } from 'react-icons/fa';
-import { motion } from 'framer-motion';
 
 export default function Applied() {
   return (
-    <section id="applied" className="section px-6 bg-[var(--bg-secondary)]">
-      <div className="max-w-wide mx-auto">
-        <ScrollReveal>
-          <p className="section-header">Applied Execution</p>
-        </ScrollReveal>
+    <section id="applied" className="py-32 border-b border-[var(--accents-2)]">
+      <div className="container-wide">
 
-        <div className="space-y-8">
-          {appliedWork.map((work, index) => (
-            <ScrollReveal key={work.id} delay={index * 0.1}>
-              <SpotlightCard>
-                <motion.article
-                  className="p-8 md:p-10 border border-[var(--border)] rounded-2xl bg-[var(--surface)]"
-                  whileHover={{ y: -2 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {/* Header */}
-                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                    <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-2xl font-semibold">{work.title}</h3>
-                        {work.link && (
-                          <a
-                            href={work.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
-                            aria-label={`Visit ${work.title}`}
-                          >
-                            <FaExternalLinkAlt className="w-4 h-4" />
-                          </a>
-                        )}
-                      </div>
-                      <p className="text-sm text-[var(--text-muted)] font-mono">
-                        {work.type} · {work.period}
-                      </p>
-                    </div>
+        <div className="flex items-end justify-between mb-16">
+          <h2 className="text-4xl font-bold tracking-tight">Applied Execution</h2>
+          <span className="mono-micro hidden md:block">02 — SYSTEMS</span>
+        </div>
 
-                    {/* Result badge */}
-                    {work.acquisition && (
-                      <div className="inline-flex items-center gap-3 px-4 py-2 bg-[var(--accent-subtle)] border border-[var(--accent)]/20 rounded-full">
-                        <span className="text-sm font-mono text-[var(--text-muted)]">
-                          {work.acquisition.channel}
-                        </span>
-                        <span className="text-sm font-semibold text-[var(--accent)]">
-                          {work.acquisition.result}
-                        </span>
-                      </div>
-                    )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {appliedWork.map((work) => (
+            <div
+              key={work.id}
+              className="bg-[var(--accents-1)] p-8 md:p-12 border border-[var(--accents-2)] hover:border-[var(--accents-4)] transition-colors"
+            >
+              <div className="flex justify-between items-start mb-8">
+                <div>
+                  <h3 className="text-2xl font-bold mb-1">{work.title}</h3>
+                  <p className="font-mono text-sm text-[var(--accents-5)]">{work.type}</p>
+                </div>
+                {work.acquisition && (
+                  <div className="text-right">
+                    <span className="block text-3xl font-bold text-[var(--success)]">{work.acquisition.result}</span>
+                    <span className="mono-micro">RETURN</span>
                   </div>
+                )}
+              </div>
 
-                  {/* Outcome */}
-                  <p className="text-lg text-[var(--text-secondary)] mb-6 leading-relaxed">
-                    {work.outcome}
-                  </p>
+              <div className="space-y-6">
+                <div>
+                  <span className="mono-micro block mb-2">Outcome</span>
+                  <p className="text-lg text-[var(--accents-6)]">{work.outcome}</p>
+                </div>
 
-                  {/* Description */}
-                  <p className="text-[var(--text-secondary)] mb-6">
-                    {work.description}
-                  </p>
-
-                  {/* Details Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="pt-6 border-t border-[var(--accents-2)]">
+                  <ul className="grid grid-cols-1 gap-2">
                     {work.details.map((detail, i) => (
-                      <motion.div
-                        key={i}
-                        className="flex items-start gap-3 text-sm text-[var(--text-secondary)]"
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.05 }}
-                        viewport={{ once: true }}
-                      >
-                        <span className="text-[var(--accent)] mt-0.5">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </span>
-                        <span>{detail}</span>
-                      </motion.div>
+                      <li key={i} className="flex items-start gap-2 text-sm text-[var(--accents-5)]">
+                        <span className="mt-1.5 w-1 h-1 bg-[var(--accents-4)] rounded-full" />
+                        {detail}
+                      </li>
                     ))}
-                  </div>
-                </motion.article>
-              </SpotlightCard>
-            </ScrollReveal>
+                  </ul>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
+
       </div>
     </section>
   );

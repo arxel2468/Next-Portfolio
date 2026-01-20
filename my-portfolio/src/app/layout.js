@@ -1,6 +1,7 @@
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { Providers } from './providers';
 import Noise from '@/components/ui/Noise';
+import GridBackground from '@/components/ui/GridBackground';
 import './globals.css';
 
 const inter = Inter({
@@ -48,6 +49,8 @@ export default function RootLayout({ children }) {
         <Providers>
           {children}
           <Noise />
+          <GridBackground />
+
         </Providers>
       </body>
     </html>

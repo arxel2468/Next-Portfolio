@@ -1,40 +1,25 @@
 "use client";
 
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
-import { motion } from 'framer-motion';
-
-const socials = [
-  { icon: FaGithub, href: 'https://github.com/arxel2468', label: 'GitHub' },
-  { icon: FaLinkedin, href: 'https://www.linkedin.com/in/amitpandit2468', label: 'LinkedIn' },
-  { icon: FaTwitter, href: 'https://twitter.com/amitpandit2468', label: 'Twitter' },
-];
-
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--surface)]">
-      <div className="max-w-wide mx-auto px-6 py-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Socials */}
-          <div className="flex items-center gap-4">
-            {socials.map((social) => (
-              <motion.a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-full text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-colors"
-                aria-label={social.label}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <social.icon className="w-5 h-5" />
-              </motion.a>
-            ))}
-          </div>
+    <footer className="py-20 bg-[var(--fg)] text-[var(--bg)]">
+      <div className="container-wide grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h3 className="text-2xl font-bold mb-6">Amit Pandit.</h3>
+          <p className="text-[var(--accents-4)] max-w-sm">
+            Engineering robust solutions for complex problems.
+            Based in India, working globally.
+          </p>
+        </div>
 
-          {/* Copyright */}
-          <p className="text-sm text-[var(--text-muted)]">
-            © {new Date().getFullYear()} Amit Pandit
+        <div className="flex flex-col md:items-end justify-between">
+          <div className="flex gap-8 font-mono text-sm">
+            <a href="https://github.com/arxel2468" className="hover:text-[var(--accents-4)] transition-colors">GITHUB</a>
+            <a href="https://linkedin.com/in/amitpandit2468" className="hover:text-[var(--accents-4)] transition-colors">LINKEDIN</a>
+            <a href="mailto:1amitpandit2468@gmail.com" className="hover:text-[var(--accents-4)] transition-colors">EMAIL</a>
+          </div>
+          <p className="text-[var(--accents-6)] text-sm mt-8">
+            © {new Date().getFullYear()} — SYSTEM.VER.2.0
           </p>
         </div>
       </div>
