@@ -1,16 +1,17 @@
 "use client";
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import Image from 'next/image';
 import { IconExternalLink, IconQuote, IconCheck } from '@tabler/icons-react';
 import { appliedWork } from '@/data/applied';
 import SectionHeader from '@/components/ui/SectionHeader';
+import { AnimatedNumber } from '@/components/ui/AnimatedNumber';
 
 export default function Work() {
   const work = appliedWork[0];
 
   return (
-    <section id="work" className="section relative overflow-hidden">
+    <section id="work" className="section section-hero-gap relative overflow-hidden bg-[var(--bg-secondary)]">
       <div className="container">
         <SectionHeader
           label="Featured Work"
@@ -18,16 +19,15 @@ export default function Work() {
           description="I don't just build things — I ship products that generate real business outcomes."
         />
 
-        {/* Case Study Card */}
-        <motion.article
+        <m.article
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="card overflow-hidden"
         >
           {/* Image Section */}
-          <div className="relative aspect-[21/9] bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
+          <div className="relative aspect-[21/9] bg-gradient-to-br from-indigo-500/10 to-purple-500/10 overflow-hidden">
             {work.image && (
               <Image
                 src={work.image}
@@ -35,6 +35,7 @@ export default function Work() {
                 fill
                 className="object-cover object-center"
                 priority
+                sizes="100vw"
               />
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-secondary)] via-transparent to-transparent" />
@@ -49,24 +50,26 @@ export default function Work() {
 
             {/* Title Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
               >
-                <h3 className="text-title text-white mb-2 drop-shadow-lg">{work.title}</h3>
+                <h3 className="text-title text-white mb-2 drop-shadow-lg">
+                  {work.title}
+                </h3>
                 <p className="text-body text-white/80">{work.tagline}</p>
-              </motion.div>
+              </m.div>
             </div>
           </div>
 
           {/* Content */}
           <div className="p-8 md:p-12">
-            {/* Metrics Grid */}
+            {/* Metrics Grid with AnimatedNumber */}
             <div className="grid grid-cols-3 gap-6 mb-12">
               {work.metrics.map((metric, i) => (
-                <motion.div
+                <m.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -75,11 +78,13 @@ export default function Work() {
                   className="text-center md:text-left p-6 rounded-2xl bg-gradient-to-br from-[var(--bg-tertiary)] to-transparent"
                 >
                   <div className="text-4xl md:text-5xl font-bold text-gradient mb-2">
-                    {metric.value}
+                    <AnimatedNumber value={metric.value} />
                   </div>
-                  <div className="font-semibold text-[var(--text-primary)]">{metric.label}</div>
+                  <div className="font-semibold text-[var(--text-primary)]">
+                    {metric.label}
+                  </div>
                   <div className="text-small">{metric.sublabel}</div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
 
@@ -88,7 +93,7 @@ export default function Work() {
 
             {/* Testimonial */}
             {work.testimonial && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -96,16 +101,18 @@ export default function Work() {
               >
                 <IconQuote size={32} className="text-[var(--brand-primary)] mb-4" />
                 <blockquote className="text-xl font-medium mb-4">
-                  "{work.testimonial.quote}"
+                  &ldquo;{work.testimonial.quote}&rdquo;
                 </blockquote>
-                <cite className="text-small not-italic">— {work.testimonial.author}</cite>
-              </motion.div>
+                <cite className="text-small not-italic">
+                  — {work.testimonial.author}
+                </cite>
+              </m.div>
             )}
 
             {/* Scope Grid */}
             <div className="grid md:grid-cols-3 gap-8 mb-10">
               {work.scope.map((section, i) => (
-                <motion.div
+                <m.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -114,7 +121,10 @@ export default function Work() {
                 >
                   <div
                     className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold mb-4"
-                    style={{ backgroundColor: `${section.color}15`, color: section.color }}
+                    style={{
+                      backgroundColor: `${section.color}12`,
+                      color: section.color,
+                    }}
                   >
                     <div
                       className="w-2 h-2 rounded-full"
@@ -124,13 +134,19 @@ export default function Work() {
                   </div>
                   <ul className="space-y-3">
                     {section.items.map((item, j) => (
-                      <li key={j} className="flex items-start gap-3 text-body">
-                        <IconCheck size={18} className="text-[var(--accent-green)] mt-0.5 shrink-0" />
+                      <li
+                        key={j}
+                        className="flex items-start gap-3 text-body"
+                      >
+                        <IconCheck
+                          size={18}
+                          className="text-[var(--accent-green)] mt-0.5 shrink-0"
+                        />
                         {item}
                       </li>
                     ))}
                   </ul>
-                </motion.div>
+                </m.div>
               ))}
             </div>
 
@@ -147,7 +163,7 @@ export default function Work() {
               </a>
             )}
           </div>
-        </motion.article>
+        </m.article>
       </div>
     </section>
   );

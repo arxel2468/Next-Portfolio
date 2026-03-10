@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef, useCallback } from 'react';
+import { m } from 'framer-motion';
 import {
   IconMail,
   IconCopy,
@@ -20,10 +20,79 @@ const socials = [
   { icon: IconBrandTwitter, href: 'https://twitter.com/amitpandit2468', label: 'Twitter' },
 ];
 
+// Particle burst on success
+function createParticleBurst(buttonElement) {
+  if (!buttonElement) return;
+
+  const rect = buttonElement.getBoundingClientRect();
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+  `;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  const particles = Array.from({ length: 30 }, () => ({
+    x: cx,
+    y: cy,
+    vx: (Math.random() - 0.5) * 8,
+    vy: (Math.random() - 0.5) * 8 - 2,
+    radius: Math.random() * 3 + 1.5,
+    color: ['#6366F1', '#8B5CF6', '#EC4899', '#059669', '#D97706'][
+      Math.floor(Math.random() * 5)
+    ],
+    life: 1,
+    decay: Math.random() * 0.02 + 0.015,
+  }));
+
+  let frameId;
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+
+    particles.forEach((p) => {
+      if (p.life <= 0) return;
+      alive = true;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.1; // gravity
+      p.life -= p.decay;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.life;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+
+    if (alive) {
+      frameId = requestAnimationFrame(animate);
+    } else {
+      cancelAnimationFrame(frameId);
+      canvas.remove();
+    }
+  }
+
+  animate();
+}
+
 export default function Contact() {
   const [copied, setCopied] = useState(false);
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState(null); // null | 'loading' | 'success' | 'error'
+  const [status, setStatus] = useState(null);
+  const submitRef = useRef(null);
   const email = '1amitpandit2468@gmail.com';
 
   const copyEmail = async () => {
@@ -32,39 +101,45 @@ export default function Contact() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus('loading');
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setStatus('loading');
 
-    try {
-      const res = await fetch('https://formspree.io/f/xeojdynq', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formState),
-      });
+      try {
+        const res = await fetch('https://formspree.io/f/xeojdynq', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formState),
+        });
 
-      if (res.ok) {
-        setStatus('success');
-        setFormState({ name: '', email: '', message: '' });
+        if (res.ok) {
+          setStatus('success');
+          setFormState({ name: '', email: '', message: '' });
+          createParticleBurst(submitRef.current);
+          setTimeout(() => setStatus(null), 5000);
+        } else {
+          throw new Error();
+        }
+      } catch {
+        setStatus('error');
         setTimeout(() => setStatus(null), 5000);
-      } else {
-        throw new Error();
       }
-    } catch {
-      setStatus('error');
-      setTimeout(() => setStatus(null), 5000);
-    }
-  };
+    },
+    [formState]
+  );
 
   return (
-    <section id="contact" className="section bg-[var(--bg-tertiary)] relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="gradient-blob gradient-blob-2" style={{ opacity: 0.3 }} />
+    <section
+      id="contact"
+      className="section section-chapter bg-[var(--bg-tertiary)] relative overflow-hidden"
+    >
+      <div className="gradient-blob gradient-blob-2" style={{ opacity: 0.15 }} />
 
       <div className="container relative z-10">
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Left: Info */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -78,17 +153,11 @@ export default function Contact() {
 
             {/* Email */}
             <div className="flex flex-wrap items-center gap-3 mb-8">
-              <a
-                href={`mailto:${email}`}
-                className="btn btn-primary"
-              >
+              <a href={`mailto:${email}`} className="btn btn-primary">
                 <IconMail size={18} />
                 {email}
               </a>
-              <button
-                onClick={copyEmail}
-                className="btn btn-secondary"
-              >
+              <button onClick={copyEmail} className="btn btn-secondary">
                 {copied ? (
                   <>
                     <IconCheck size={18} className="text-[var(--accent-green)]" />
@@ -124,10 +193,10 @@ export default function Contact() {
                 </a>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Right: Form */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -146,7 +215,9 @@ export default function Contact() {
                     id="name"
                     name="name"
                     value={formState.name}
-                    onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                    onChange={(e) =>
+                      setFormState({ ...formState, name: e.target.value })
+                    }
                     required
                     className="input"
                     placeholder="Your name"
@@ -162,7 +233,9 @@ export default function Contact() {
                     id="email"
                     name="email"
                     value={formState.email}
-                    onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                    onChange={(e) =>
+                      setFormState({ ...formState, email: e.target.value })
+                    }
                     required
                     className="input"
                     placeholder="you@example.com"
@@ -177,7 +250,9 @@ export default function Contact() {
                     id="message"
                     name="message"
                     value={formState.message}
-                    onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                    onChange={(e) =>
+                      setFormState({ ...formState, message: e.target.value })
+                    }
                     required
                     className="input textarea"
                     placeholder="Tell me about your project..."
@@ -185,6 +260,7 @@ export default function Contact() {
                 </div>
 
                 <button
+                  ref={submitRef}
                   type="submit"
                   disabled={status === 'loading'}
                   className="btn btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
@@ -199,29 +275,28 @@ export default function Contact() {
                   )}
                 </button>
 
-                {/* Status Messages */}
                 {status === 'success' && (
-                  <motion.p
+                  <m.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="text-sm text-[var(--accent-green)] flex items-center gap-2"
                   >
                     <IconCheck size={18} />
-                    Message sent! I'll get back to you soon.
-                  </motion.p>
+                    Message sent! I&apos;ll get back to you soon.
+                  </m.p>
                 )}
                 {status === 'error' && (
-                  <motion.p
+                  <m.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="text-sm text-red-500"
                   >
                     Something went wrong. Please email me directly.
-                  </motion.p>
+                  </m.p>
                 )}
               </div>
             </form>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

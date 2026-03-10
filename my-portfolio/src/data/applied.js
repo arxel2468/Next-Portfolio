@@ -3,12 +3,14 @@ export const appliedWork = [
     id: 'stealstreet',
     title: 'StealStreet.in',
     tagline: 'From zero to 106 purchases in 6 days.',
-    description: 'Built and launched a complete e-commerce business — not just the store, but the entire operation: brand, logistics, and paid customer acquisition.',
+    description:
+      'Built and launched a complete e-commerce business — not just the store, but the entire operation: brand, logistics, and paid customer acquisition.',
     image: '/images/shopify-store.jpg',
     link: 'https://stealstreet.in',
     testimonial: {
-      quote: 'Built it really fast. Only took a day of our time to ship. Efficient and effective.',
-      author: 'Client',
+      quote:
+        'Built it really fast. Only took a day of our time to ship. Efficient and effective.',
+      author: 'Rahul, Founder of StealStreet',
     },
     metrics: [
       { value: '106', label: 'Purchases', sublabel: '6 active days' },
@@ -29,7 +31,7 @@ export const appliedWork = [
       },
       {
         title: 'Operations Setup',
-        color: '#10B981',
+        color: '#059669',
         items: [
           'Shiprocket logistics integration',
           'Google Analytics 4 setup',
@@ -40,7 +42,7 @@ export const appliedWork = [
       },
       {
         title: 'Growth & Acquisition',
-        color: '#F59E0B',
+        color: '#D97706',
         items: [
           'Meta Ads campaign strategy',
           'A/B testing for ad copy',

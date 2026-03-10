@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { IconSun, IconMoon, IconMenu2, IconX } from '@tabler/icons-react';
@@ -27,6 +27,25 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Focus trap for mobile menu
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
   const handleNavClick = (href) => {
     scrollToSection(href);
     setMobileOpen(false);
@@ -34,7 +53,7 @@ export default function Header() {
 
   return (
     <>
-      <motion.header
+      <m.header
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -43,7 +62,7 @@ export default function Header() {
         }`}
       >
         <div className="container h-20 flex items-center justify-between">
-          {/* Logo - Simple Text */}
+          {/* Logo */}
           <Link
             href="/"
             className="text-xl font-bold tracking-tight hover:opacity-70 transition-opacity"
@@ -65,10 +84,11 @@ export default function Header() {
 
             <div className="w-px h-6 bg-[var(--border-light)] mx-3" />
 
-            {/* Theme Toggle */}
             {mounted && (
               <button
-                onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+                onClick={() =>
+                  setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+                }
                 className="btn-ghost p-2.5 rounded-xl"
                 aria-label="Toggle theme"
               >
@@ -80,17 +100,18 @@ export default function Header() {
               </button>
             )}
 
-            {/* Status + CTA */}
             <div className="flex items-center gap-4 ml-3 pl-3 border-l border-[var(--border-light)]">
               <div className="flex items-center gap-2">
                 <span className="status-dot" />
-                <span className="text-xs font-medium text-[var(--text-muted)]">Available</span>
+                <span className="text-xs font-medium text-[var(--text-muted)]">
+                  Available
+                </span>
               </div>
               <a
                 href="mailto:1amitpandit2468@gmail.com"
                 className="btn btn-primary"
               >
-                Let's Talk
+                Let&apos;s Talk
               </a>
             </div>
           </nav>
@@ -100,18 +121,18 @@ export default function Header() {
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors"
             aria-label="Menu"
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? <IconX size={24} /> : <IconMenu2 size={24} />}
           </button>
         </div>
-      </motion.header>
+      </m.header>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <>
-            {/* Backdrop */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -119,17 +140,19 @@ export default function Header() {
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
             />
 
-            {/* Menu Panel */}
-            <motion.div
+            <m.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed right-0 top-0 bottom-0 w-80 bg-[var(--bg-secondary)] border-l border-[var(--border-light)] z-50 md:hidden p-6 pt-24"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation menu"
             >
               <nav className="flex flex-col gap-2">
                 {navItems.map((item, i) => (
-                  <motion.button
+                  <m.button
                     key={item.href}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -138,7 +161,7 @@ export default function Header() {
                     className="text-left text-lg font-medium py-3 px-4 rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors"
                   >
                     {item.label}
-                  </motion.button>
+                  </m.button>
                 ))}
               </nav>
 
@@ -151,10 +174,17 @@ export default function Header() {
                 </div>
                 {mounted && (
                   <button
-                    onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+                    onClick={() =>
+                      setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+                    }
                     className="p-2 rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors"
+                    aria-label="Toggle theme"
                   >
-                    {resolvedTheme === 'dark' ? <IconSun size={20} /> : <IconMoon size={20} />}
+                    {resolvedTheme === 'dark' ? (
+                      <IconSun size={20} />
+                    ) : (
+                      <IconMoon size={20} />
+                    )}
                   </button>
                 )}
               </div>
@@ -163,9 +193,9 @@ export default function Header() {
                 href="mailto:1amitpandit2468@gmail.com"
                 className="btn btn-primary w-full"
               >
-                Let's Talk
+                Let&apos;s Talk
               </a>
-            </motion.div>
+            </m.div>
           </>
         )}
       </AnimatePresence>

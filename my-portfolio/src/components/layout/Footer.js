@@ -1,6 +1,11 @@
 "use client";
 
-import { IconBrandGithub, IconBrandLinkedin, IconBrandTwitter, IconHeart } from '@tabler/icons-react';
+import {
+  IconBrandGithub,
+  IconBrandLinkedin,
+  IconBrandTwitter,
+  IconHeart,
+} from '@tabler/icons-react';
 
 const socials = [
   { icon: IconBrandGithub, href: 'https://github.com/arxel2468', label: 'GitHub' },
@@ -12,8 +17,7 @@ export default function Footer() {
   return (
     <footer className="py-12 border-t border-[var(--border-light)]">
       <div className="container">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Logo & Tagline */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
           <div className="flex items-center gap-4">
             <span className="text-xl font-bold">
               amit<span className="text-gradient">.</span>
@@ -21,7 +25,6 @@ export default function Footer() {
             <span className="text-small">Building products that work.</span>
           </div>
 
-          {/* Socials */}
           <div className="flex items-center gap-3">
             {socials.map((s) => (
               <a
@@ -37,12 +40,25 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Copyright */}
           <div className="flex items-center gap-2 text-small">
             <span>Made with</span>
             <IconHeart size={16} className="text-red-500" />
             <span>© {new Date().getFullYear()}</span>
           </div>
+        </div>
+
+        {/* Tech Stack Strip — Recruiter Signal */}
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-6 border-t border-[var(--border-light)]">
+          {['Next.js 14', 'Framer Motion', 'Tailwind CSS', 'Vercel'].map(
+            (tech) => (
+              <span key={tech} className="text-label">
+                {tech}
+              </span>
+            )
+          )}
+          <span className="text-label text-[var(--accent-green)]">
+            ● Lighthouse 100
+          </span>
         </div>
       </div>
     </footer>
