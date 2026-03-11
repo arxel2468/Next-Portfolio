@@ -4,22 +4,29 @@ import { m } from 'framer-motion';
 import Image from 'next/image';
 import { IconBrandGithub, IconExternalLink, IconArrowUpRight } from '@tabler/icons-react';
 import { projects } from '@/data/projects';
-import SectionHeader from '@/components/ui/SectionHeader';
-import { MagneticCard } from '@/components/ui/MagneticCard';
+import { ScrollTextReveal } from '@/components/ui/TextReveal';
 
 export default function Projects() {
   return (
-    <section id="projects" className="section bg-[var(--bg-tertiary)] relative">
+    <section id="projects" className="py-32 md:py-40 relative">
       <div className="container">
-        <SectionHeader
-          label="Projects"
-          title="Things I've built."
-          description="A selection of projects that showcase my approach to building software."
-        />
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20">
+          <div>
+            <span className="type-mono block mb-4">Selected Projects</span>
+            <h2 className="type-headline" data-cursor="text">
+              <ScrollTextReveal>Things I've built.</ScrollTextReveal>
+            </h2>
+          </div>
+          <p className="type-body-lg md:max-w-sm md:text-right">
+            Each project is a product — built to solve a real problem, not to fill a portfolio.
+          </p>
+        </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        {/* Projects List — Editorial Style */}
+        <div className="space-y-0">
           {projects.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
+            <ProjectRow key={project.id} project={project} index={i} />
           ))}
         </div>
       </div>
@@ -27,115 +34,105 @@ export default function Projects() {
   );
 }
 
-function ProjectCard({ project, index }) {
+function ProjectRow({ project, index }) {
   return (
-    <m.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className={project.featured ? 'lg:col-span-2' : ''}
+    <m.article
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.6 }}
+      className="group border-t border-[var(--border)] py-10 md:py-14"
     >
-      <MagneticCard className="h-full">
-        <article className="card group h-full">
-          {/* Image/Visual Header */}
-          <div
-            className={`relative ${project.featured ? 'aspect-[21/9]' : 'aspect-video'} overflow-hidden`}
-            style={{
-              backgroundImage: `linear-gradient(135deg, ${project.color}15, ${project.color}05)`,
-            }}
-          >
-            {project.image ? (
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-700 ease-out"
-                sizes={project.featured ? '100vw' : '(max-width: 1024px) 100vw, 50vw'}
+      <a
+        href={project.live || project.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block"
+        data-cursor="pointer"
+      >
+        <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-start">
+          {/* Number */}
+          <div className="md:col-span-1">
+            <span className="type-mono text-[var(--text-muted)]">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+          </div>
+
+          {/* Title & Tagline */}
+          <div className="md:col-span-4">
+            <h3 className="type-title mb-2 flex items-center gap-2 group-hover:text-[var(--accent)] transition-colors duration-300">
+              {project.title}
+              <IconArrowUpRight
+                size={18}
+                className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300"
               />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div
-                  className="w-24 h-24 rounded-3xl flex items-center justify-center text-4xl font-bold text-white shadow-2xl"
-                  style={{
-                    background: `linear-gradient(135deg, ${project.color}, ${project.color}CC)`,
-                  }}
-                >
-                  {project.title[0]}
-                </div>
-              </div>
-            )}
+            </h3>
+            <p className="font-serif italic text-[var(--text-muted)] text-sm">
+              {project.tagline}
+            </p>
+          </div>
 
-            {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-secondary)] via-transparent to-transparent opacity-40" />
+          {/* Description + Architecture */}
+          <div className="md:col-span-5">
+            <p className="type-body text-sm mb-3">{project.description}</p>
+            <p className="type-mono text-[0.625rem] text-[var(--text-muted)] leading-relaxed">
+              {project.architecture}
+            </p>
+          </div>
 
-            {/* Links - Top Right */}
-            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {/* Tech + Links */}
+          <div className="md:col-span-2 flex flex-col items-start md:items-end gap-3">
+            <div className="flex flex-wrap gap-1.5 md:justify-end">
+              {project.tech.slice(0, 3).map((t) => (
+                <span key={t} className="tag text-[0.6875rem]">
+                  {t}
+                </span>
+              ))}
+            </div>
+            <div className="flex gap-2">
               <a
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-white/90 dark:bg-black/50 backdrop-blur-sm flex items-center justify-center text-[var(--text-primary)] hover:bg-white dark:hover:bg-black transition-colors"
-                aria-label={`${project.title} GitHub repository`}
+                className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+                aria-label="GitHub"
+                onClick={(e) => e.stopPropagation()}
               >
-                <IconBrandGithub size={20} />
+                <IconBrandGithub size={16} />
               </a>
               {project.live && (
                 <a
                   href={project.live}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-xl bg-white/90 dark:bg-black/50 backdrop-blur-sm flex items-center justify-center text-[var(--brand-primary)] hover:bg-white dark:hover:bg-black transition-colors"
-                  aria-label={`${project.title} live demo`}
+                  className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
+                  aria-label="Live"
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <IconExternalLink size={20} />
+                  <IconExternalLink size={16} />
                 </a>
               )}
             </div>
           </div>
+        </div>
+      </a>
 
-          {/* Content */}
-          <div className="p-6 md:p-8">
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div>
-                <h3 className="text-title mb-1 group-hover:text-gradient transition-all duration-300">
-                  {project.title}
-                </h3>
-                <p className="text-sm font-medium" style={{ color: project.color }}>
-                  {project.tagline}
-                </p>
-              </div>
-              <IconArrowUpRight
-                size={24}
-                className="text-[var(--text-muted)] group-hover:text-[var(--brand-primary)] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 shrink-0"
+      {/* Reveal image on hover — desktop only */}
+      {project.image && (
+        <div className="hidden md:block overflow-hidden max-h-0 group-hover:max-h-[300px] transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]">
+          <div className="pt-8">
+            <div className="relative w-full max-w-2xl aspect-video rounded-xl overflow-hidden border border-[var(--border)] ml-auto">
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover object-top"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
-
-            <p className="text-body mb-6">{project.description}</p>
-
-            {/* Problem / Architecture */}
-            <div className="grid gap-3 mb-6">
-              <div className="bg-[var(--bg-tertiary)] rounded-xl p-4">
-                <div className="text-label mb-1.5">What I Solved</div>
-                <p className="text-small">{project.problem}</p>
-              </div>
-              <div className="bg-[var(--bg-tertiary)] rounded-xl p-4">
-                <div className="text-label mb-1.5">How I Built It</div>
-                <p className="text-small">{project.solution}</p>
-              </div>
-            </div>
-
-            {/* Tech Stack */}
-            <div className="flex flex-wrap gap-2">
-              {project.tech.map((tech) => (
-                <span key={tech} className="badge">
-                  {tech}
-                </span>
-              ))}
-            </div>
           </div>
-        </article>
-      </MagneticCard>
-    </m.div>
+        </div>
+      )}
+    </m.article>
   );
 }

@@ -1,56 +1,31 @@
-export const appliedWork = [
-  {
-    id: 'stealstreet',
-    title: 'StealStreet.in',
-    tagline: 'From zero to 106 purchases in 6 days.',
-    description:
-      'Built and launched a complete e-commerce business — not just the store, but the entire operation: brand, logistics, and paid customer acquisition.',
-    image: '/images/shopify-store.jpg',
-    link: 'https://stealstreet.in',
-    testimonial: {
-      quote:
-        'Built it really fast. Only took a day of our time to ship. Efficient and effective.',
-      author: 'Rahul, Founder of StealStreet',
-    },
-    metrics: [
-      { value: '106', label: 'Purchases', sublabel: '6 active days' },
-      { value: '₹0.48', label: 'Best CPR', sublabel: 'Cost per result' },
-      { value: '7x', label: 'ROAS', sublabel: 'Return on ad spend' },
-    ],
-    scope: [
-      {
-        title: 'Store Development',
-        color: '#6366F1',
-        items: [
-          'Custom Shopify theme design',
-          'PageFly enhanced landing pages',
-          'All policy pages created',
-          'WhatsApp integration (Liquid)',
-          'Brand logo and identity design',
-        ],
-      },
-      {
-        title: 'Operations Setup',
-        color: '#059669',
-        items: [
-          'Shiprocket logistics integration',
-          'Google Analytics 4 setup',
-          'Meta Pixel + event tracking',
-          'Shopify POS configuration',
-          'Domain and DNS management',
-        ],
-      },
-      {
-        title: 'Growth & Acquisition',
-        color: '#D97706',
-        items: [
-          'Meta Ads campaign strategy',
-          'A/B testing for ad copy',
-          'Carousel catalog advertisements',
-          'Audience targeting refinement',
-          '106 purchases in 6 days',
-        ],
-      },
-    ],
+export const caseStudy = {
+  id: 'stealstreet',
+  client: 'StealStreet.in',
+  year: '2024',
+  duration: '6 days',
+  headline: 'From zero to 106 purchases.',
+  subheadline: 'Built an entire e-commerce business — brand, store, logistics, ads — that started generating revenue in under a week.',
+  description:
+    'A client came to me with a product idea and no digital presence. I didn\'t just build a website — I built the entire business infrastructure. The Shopify store, brand identity, logistics pipeline, payment processing, and a Meta Ads campaign that achieved 7x return on ad spend.',
+  link: 'https://stealstreet.in',
+  image: '/images/shopify-store.jpg',
+  testimonial: {
+    quote: 'Built it really fast. Only took a day of our time to ship. Efficient and effective.',
+    author: 'Rahul',
+    role: 'Founder, StealStreet',
   },
-];
+  metrics: [
+    { value: '106', label: 'Purchases', detail: 'In 6 active days' },
+    { value: '₹0.48', label: 'Cost Per Result', detail: 'Lowest CPR achieved' },
+    { value: '7x', label: 'ROAS', detail: 'Return on ad spend' },
+    { value: '<1 day', label: 'Client Time', detail: 'Total time needed from client' },
+  ],
+  deliverables: [
+    'Custom Shopify store with PageFly landing pages',
+    'Complete brand identity and logo design',
+    'Shiprocket logistics + payment integration',
+    'Meta Pixel, GA4, and full analytics setup',
+    'Meta Ads campaign with A/B tested creatives',
+    'Audience targeting and carousel ad strategy',
+  ],
+};

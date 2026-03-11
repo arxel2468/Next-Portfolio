@@ -1,98 +1,84 @@
 "use client";
 
 import { m } from 'framer-motion';
-import { IconArrowDown, IconSparkles } from '@tabler/icons-react';
+import { IconArrowDown } from '@tabler/icons-react';
 import { scrollToSection } from '@/lib/utils';
 import { TextReveal } from '@/components/ui/TextReveal';
-import { AnimatedNumber } from '@/components/ui/AnimatedNumber';
+import MagneticButton from '@/components/ui/MagneticButton';
+import dynamic from 'next/dynamic';
 
-const stats = [
-  { value: '4+', label: 'Projects Shipped' },
-  { value: '106', label: 'Sales Generated' },
-  { value: '7x', label: 'Best ROAS' },
-  { value: '<1 day', label: 'Client Time Needed' },
-];
+const FloatingShape = dynamic(() => import('@/components/ui/FloatingShape'), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0" />,
+});
 
 export default function Hero() {
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-32 pb-20">
-      {/* Background Elements */}
-      <div className="gradient-blob gradient-blob-1" />
-      <div className="gradient-blob gradient-blob-2" />
-      <div className="grid-pattern" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* 3D Background Element */}
+      <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] opacity-60">
+        <FloatingShape className="w-full h-full" />
+      </div>
 
-      <div className="container relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Availability Badge */}
+      <div className="container relative z-10 pt-32 pb-24">
+        <div className="max-w-3xl">
+          {/* Label */}
           <m.div
-            initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 0.6 }}
-            className="mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 2.2 }}
+            className="flex items-center gap-3 mb-8"
           >
-            <span className="badge badge-success inline-flex">
-              <span className="status-dot" style={{ width: 8, height: 8 }} />
-              Available for new projects
-            </span>
+            <span className="status-indicator" />
+            <span className="type-mono">Product Engineer · Mumbai</span>
           </m.div>
 
-          {/* Main Headline with TextReveal */}
-          <h1 className="text-display mb-6">
-            <TextReveal delay={0.2}>I build products</TextReveal>
+          {/* Headline */}
+          <h1 className="type-display mb-8" data-cursor="text">
+            <TextReveal delay={2.3}>I build products,</TextReveal>
             <br />
-            <span className="text-gradient">
-              <TextReveal delay={0.5}>fast.</TextReveal>
-            </span>
+            <TextReveal delay={2.5} className="text-accent">
+              not just code.
+            </TextReveal>
           </h1>
 
-          {/* Subheadline */}
+          {/* Subtitle */}
           <m.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-            className="text-body-lg mx-auto mb-10"
+            transition={{ duration: 0.7, delay: 2.9 }}
+            className="type-subtitle mb-12 max-w-xl"
           >
-            Full-stack engineer specializing in AI integration, automation, and shipping
-            complete systems. I take ideas from zero to production — quickly.
+            I shipped an entire e-commerce business — brand, store, logistics, ads — that
+            generated 106 sales in 6 days. All self-taught. All from scratch.
           </m.p>
 
           {/* CTAs */}
           <m.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.85 }}
-            className="flex flex-wrap justify-center gap-4 mb-20"
+            transition={{ duration: 0.7, delay: 3.1 }}
+            className="flex flex-wrap items-center gap-4"
           >
-            <button
-              onClick={() => scrollToSection('work')}
-              className="btn btn-primary"
-            >
-              <IconSparkles size={18} />
-              See my work
-            </button>
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="btn btn-secondary"
-            >
-              Get in touch
-            </button>
-          </m.div>
+            <MagneticButton strength={0.15}>
+              <button
+                onClick={() => scrollToSection('work')}
+                className="btn btn-primary"
+                data-cursor="pointer"
+              >
+                See the case study
+              </button>
+            </MagneticButton>
 
-          {/* Animated Stats */}
-          <m.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-10 border-t border-[var(--border-light)]"
-          >
-            {stats.map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="text-3xl font-bold text-gradient">
-                  <AnimatedNumber value={stat.value} />
-                </div>
-                <div className="text-small mt-1">{stat.label}</div>
-              </div>
-            ))}
+            <MagneticButton strength={0.15}>
+              <button
+                onClick={() => scrollToSection('contact')}
+                className="btn btn-text"
+                data-cursor="pointer"
+              >
+                Get in touch →
+              </button>
+            </MagneticButton>
           </m.div>
         </div>
       </div>
@@ -101,18 +87,19 @@ export default function Hero() {
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        transition={{ delay: 3.5, duration: 0.5 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2"
       >
         <m.button
           onClick={() => scrollToSection('work')}
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex flex-col items-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-          aria-label="Scroll to work section"
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="flex flex-col items-center gap-3 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+          aria-label="Scroll to work"
+          data-cursor="pointer"
         >
-          <span className="text-label">Scroll</span>
-          <IconArrowDown size={20} />
+          <span className="type-mono text-[0.625rem]">Scroll</span>
+          <IconArrowDown size={16} />
         </m.button>
       </m.div>
     </section>

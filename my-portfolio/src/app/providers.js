@@ -14,7 +14,7 @@ export function Providers({ children }) {
 
     lenisRef.current = new Lenis({
       autoRaf: true,
-      duration: 1.2,
+      duration: 1.4,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       smoothWheel: true,
@@ -31,7 +31,7 @@ export function Providers({ children }) {
     <div
       style={{
         opacity: mounted ? 1 : 0,
-        transition: 'opacity 0.4s ease',
+        transition: 'opacity 0.5s ease',
       }}
     >
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>

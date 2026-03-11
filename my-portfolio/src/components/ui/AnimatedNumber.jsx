@@ -3,63 +3,40 @@
 import { useEffect, useRef, useState } from 'react';
 import { useInView, useMotionValue, useSpring } from 'framer-motion';
 
-export function AnimatedNumber({ value, className = '' }) {
+export default function AnimatedNumber({ value, className = '' }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
   const [display, setDisplay] = useState('0');
 
-  // Parse the value to extract number, prefix, and suffix
-  // Examples: "106" → 106, "₹0.48" → 0.48, "7x" → 7, "<1 day" → 1, "4+" → 4
   const parsed = parseValue(value);
-
-  const motionValue = useMotionValue(0);
-  const spring = useSpring(motionValue, {
-    stiffness: 80,
-    damping: 25,
-    restDelta: 0.001,
-  });
+  const motionVal = useMotionValue(0);
+  const spring = useSpring(motionVal, { stiffness: 60, damping: 20, restDelta: 0.01 });
 
   useEffect(() => {
-    if (isInView) {
-      motionValue.set(parsed.number);
-    }
-  }, [isInView, parsed.number, motionValue]);
+    if (isInView) motionVal.set(parsed.number);
+  }, [isInView, parsed.number, motionVal]);
 
   useEffect(() => {
-    const unsubscribe = spring.on('change', (v) => {
-      if (parsed.isDecimal) {
-        setDisplay(v.toFixed(2));
-      } else {
-        setDisplay(Math.round(v).toString());
-      }
+    const unsub = spring.on('change', (v) => {
+      setDisplay(parsed.isDecimal ? v.toFixed(2) : Math.round(v).toString());
     });
-    return unsubscribe;
+    return unsub;
   }, [spring, parsed.isDecimal]);
 
   return (
     <span ref={ref} className={className}>
-      {parsed.prefix}
-      {isInView ? display : '0'}
-      {parsed.suffix}
+      {parsed.prefix}{isInView ? display : '0'}{parsed.suffix}
     </span>
   );
 }
 
 function parseValue(value) {
   const str = String(value);
-
-  // Match patterns like "<1 day", "₹0.48", "7x", "4+", "106"
   const match = str.match(/^([<>₹$]*)([0-9.]+)(.*)$/);
-
-  if (!match) {
-    return { prefix: '', number: 0, suffix: str, isDecimal: false };
-  }
-
-  const num = parseFloat(match[2]);
-
+  if (!match) return { prefix: '', number: 0, suffix: str, isDecimal: false };
   return {
     prefix: match[1] || '',
-    number: num,
+    number: parseFloat(match[2]),
     suffix: match[3] || '',
     isDecimal: match[2].includes('.'),
   };

@@ -1,94 +1,75 @@
 "use client";
 
 import { m } from 'framer-motion';
-import { IconMessageCircle, IconCode, IconRocket } from '@tabler/icons-react';
-import SectionHeader from '@/components/ui/SectionHeader';
+import { ScrollTextReveal } from '@/components/ui/TextReveal';
 
 const steps = [
   {
-    icon: IconMessageCircle,
+    number: '01',
     title: 'Discovery',
     timeline: 'Day 1',
     description:
-      'We align on your goals, constraints, and what "done" looks like. I ask the hard questions upfront so there are zero surprises later.',
-    color: '#6366F1',
+      'We talk. I learn your goals, constraints, and what success looks like. I ask hard questions upfront — no surprises later.',
   },
   {
-    icon: IconCode,
+    number: '02',
     title: 'Build',
     timeline: 'Days 2–7',
     description:
-      'You get daily updates with live previews. We iterate in real-time until every detail is bulletproof. No vanishing acts.',
-    color: '#059669',
+      'Daily updates with live previews. We iterate in real-time. I work fast but never sloppy. You see progress every day.',
   },
   {
-    icon: IconRocket,
+    number: '03',
     title: 'Ship',
     timeline: 'Day 7+',
     description:
-      'It goes live. I monitor performance, fix edge cases, and hand over complete documentation. I stay available for support.',
-    color: '#D97706',
+      'It goes live. I monitor, fix edge cases, and hand over documentation. I stay available because launching is just the beginning.',
   },
 ];
 
 export default function Process() {
   return (
-    <section id="process" className="section section-tight relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--brand-light)] to-transparent opacity-30" />
-
-      <div className="container relative z-10">
-        <SectionHeader
-          label="Process"
-          title="How I work."
-          description="A simple, effective process that respects your time and delivers results. Most projects ship within a week."
-          align="center"
-        />
+    <section id="process" className="py-32 md:py-40 bg-[var(--bg-tertiary)]">
+      <div className="container">
+        {/* Header */}
+        <div className="max-w-2xl mb-20">
+          <span className="type-mono block mb-4">Process</span>
+          <h2 className="type-headline mb-6" data-cursor="text">
+            <ScrollTextReveal>Simple process. Fast results.</ScrollTextReveal>
+          </h2>
+          <p className="type-body-lg">
+            Most projects ship within a week. Here's how I make that happen without cutting corners.
+          </p>
+        </div>
 
         {/* Steps */}
-        <div className="max-w-4xl mx-auto">
+        <div className="space-y-0">
           {steps.map((step, i) => (
             <m.div
               key={i}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative flex gap-6 md:gap-10 mb-12 last:mb-0"
+              className="grid md:grid-cols-12 gap-6 md:gap-10 py-12 border-t border-[var(--border)]"
             >
-              {/* Timeline line */}
-              <div className="flex flex-col items-center">
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 relative z-10"
-                  style={{
-                    backgroundColor: `${step.color}12`,
-                    color: step.color,
-                  }}
-                >
-                  <step.icon size={28} />
-                </div>
-                {i < steps.length - 1 && (
-                  <div
-                    className="w-px flex-1 mt-3"
-                    style={{ backgroundColor: `${step.color}25` }}
-                  />
-                )}
+              {/* Number + Timeline */}
+              <div className="md:col-span-3 flex items-baseline gap-4">
+                <span className="font-serif text-4xl md:text-5xl text-[var(--accent)] opacity-40">
+                  {step.number}
+                </span>
+                <span className="tag tag-accent text-[0.6875rem]">
+                  {step.timeline}
+                </span>
               </div>
 
               {/* Content */}
-              <div className="pb-12 last:pb-0 pt-2">
-                <div className="flex items-center gap-3 mb-2">
-                  <span
-                    className="text-xs font-bold px-2.5 py-1 rounded-md"
-                    style={{
-                      backgroundColor: `${step.color}12`,
-                      color: step.color,
-                    }}
-                  >
-                    {step.timeline}
-                  </span>
-                </div>
-                <h3 className="text-title mb-2">{step.title}</h3>
-                <p className="text-body max-w-lg">{step.description}</p>
+              <div className="md:col-span-4">
+                <h3 className="type-title mb-3">{step.title}</h3>
+              </div>
+
+              <div className="md:col-span-5">
+                <p className="type-body">{step.description}</p>
               </div>
             </m.div>
           ))}

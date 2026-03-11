@@ -8,8 +8,8 @@ export function scrollToSection(id) {
   const element = document.getElementById(id);
   if (element && window.lenis) {
     window.lenis.scrollTo(element, {
-      offset: -100,
-      duration: 1.5,
+      offset: -80,
+      duration: 1.6,
     });
   }
 }

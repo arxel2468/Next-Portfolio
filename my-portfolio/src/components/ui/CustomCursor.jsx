@@ -1,125 +1,110 @@
 "use client";
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { m, useMotionValue, useSpring } from 'framer-motion';
 
-export function CustomCursor() {
-  // 1. All hooks must be at the very top level
+export default function CustomCursor() {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isPointerDevice, setIsPointerDevice] = useState(false);
+  const [variant, setVariant] = useState('default');
+  const [visible, setVisible] = useState(false);
+  const [isFine, setIsFine] = useState(false);
+  const rafRef = useRef(null);
 
-  // Main cursor springs
-  const springConfig = { stiffness: 300, damping: 28, mass: 0.5 };
-  const springX = useSpring(cursorX, springConfig);
-  const springY = useSpring(cursorY, springConfig);
+  const springConfig = { stiffness: 500, damping: 35, mass: 0.3 };
+  const x = useSpring(cursorX, springConfig);
+  const y = useSpring(cursorY, springConfig);
 
-  // Trailing ring springs (Moved from JSX to top level to fix the error)
-  const trailingX = useSpring(cursorX, { stiffness: 120, damping: 28 });
-  const trailingY = useSpring(cursorY, { stiffness: 120, damping: 28 });
+  const ringSpring = { stiffness: 180, damping: 25, mass: 0.5 };
+  const ringX = useSpring(cursorX, ringSpring);
+  const ringY = useSpring(cursorY, ringSpring);
 
-  const handleMouseMove = useCallback(
-    (e) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
-    },
-    [cursorX, cursorY, isVisible]
-  );
-
-  const handleMouseLeave = useCallback(() => {
-    setIsVisible(false);
-  }, []);
+  const handleMouseMove = useCallback((e) => {
+    cursorX.set(e.clientX);
+    cursorY.set(e.clientY);
+    if (!visible) setVisible(true);
+  }, [cursorX, cursorY, visible]);
 
   useEffect(() => {
-    const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
-    setIsPointerDevice(hasFinePointer);
-
-    if (!hasFinePointer) return;
+    const fine = window.matchMedia('(pointer: fine)').matches;
+    setIsFine(fine);
+    if (!fine) return;
 
     window.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('mouseleave', () => setVisible(false));
+    document.addEventListener('mouseenter', () => setVisible(true));
 
-    const onEnter = () => setIsHovering(true);
-    const onLeave = () => setIsHovering(false);
+    const onEnter = (e) => {
+      const el = e.target.closest('a, button, input, textarea, [data-cursor="pointer"]');
+      if (el) setVariant('pointer');
 
-    const refreshListeners = () => {
-      const interactives = document.querySelectorAll(
-        'a, button, input, textarea, [data-magnetic], [role="button"]'
-      );
-      interactives.forEach((el) => {
-        el.removeEventListener('mouseenter', onEnter);
-        el.removeEventListener('mouseleave', onLeave);
-        el.addEventListener('mouseenter', onEnter);
-        el.addEventListener('mouseleave', onLeave);
-      });
+      const text = e.target.closest('[data-cursor="text"]');
+      if (text) setVariant('text');
     };
 
-    const observer = new MutationObserver(refreshListeners);
-    observer.observe(document.body, { childList: true, subtree: true });
+    const onLeave = () => setVariant('default');
 
-    refreshListeners();
+    document.addEventListener('mouseover', onEnter);
+    document.addEventListener('mouseout', onLeave);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      observer.disconnect();
+      document.removeEventListener('mouseover', onEnter);
+      document.removeEventListener('mouseout', onLeave);
     };
-  }, [handleMouseMove, handleMouseLeave]);
+  }, [handleMouseMove, visible]);
 
-  // 2. Early return AFTER all hooks have been declared
-  if (!isPointerDevice) return null;
+  if (!isFine) return null;
+
+  const sizes = {
+    default: { w: 12, h: 12, ring: 36 },
+    pointer: { w: 40, h: 40, ring: 0 },
+    text: { w: 2, h: 28, ring: 0 },
+  };
+
+  const s = sizes[variant];
 
   return (
     <>
-      {/* Main cursor dot */}
       <m.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference"
-        style={{
-          x: springX,
-          y: springY,
-          opacity: isVisible ? 1 : 0,
-        }}
+        className="fixed top-0 left-0 pointer-events-none z-[9999]"
+        style={{ x, y, opacity: visible ? 1 : 0 }}
       >
         <m.div
           animate={{
-            width: isHovering ? 48 : 16,
-            height: isHovering ? 48 : 16,
-            borderRadius: '50%',
+            width: s.w,
+            height: s.h,
+            borderRadius: variant === 'text' ? 1 : 999,
           }}
-          transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-          className="bg-white rounded-full"
+          transition={{ type: 'spring', stiffness: 500, damping: 28 }}
+          className="bg-[var(--text-primary)] mix-blend-difference"
           style={{
-            marginLeft: isHovering ? -24 : -8,
-            marginTop: isHovering ? -24 : -8,
+            marginLeft: -s.w / 2,
+            marginTop: -s.h / 2,
           }}
         />
       </m.div>
 
-      {/* Trailing ring */}
-      <m.div
-        className="fixed top-0 left-0 pointer-events-none z-[9998]"
-        style={{
-          x: trailingX,
-          y: trailingY,
-          opacity: isVisible ? 0.3 : 0,
-        }}
-      >
+      {variant === 'default' && (
         <m.div
-          animate={{
-            width: isHovering ? 64 : 32,
-            height: isHovering ? 64 : 32,
-          }}
-          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-          className="border border-white/50 rounded-full mix-blend-difference"
+          className="fixed top-0 left-0 pointer-events-none z-[9998]"
           style={{
-            marginLeft: isHovering ? -32 : -16,
-            marginTop: isHovering ? -32 : -16,
+            x: ringX,
+            y: ringY,
+            opacity: visible ? 0.4 : 0,
           }}
-        />
-      </m.div>
+        >
+          <div
+            className="border border-[var(--text-primary)] rounded-full mix-blend-difference"
+            style={{
+              width: s.ring,
+              height: s.ring,
+              marginLeft: -s.ring / 2,
+              marginTop: -s.ring / 2,
+            }}
+          />
+        </m.div>
+      )}
     </>
   );
 }

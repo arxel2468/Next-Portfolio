@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  IconBrandGithub,
-  IconBrandLinkedin,
-  IconBrandTwitter,
-  IconHeart,
-} from '@tabler/icons-react';
+import { IconBrandGithub, IconBrandLinkedin, IconBrandTwitter } from '@tabler/icons-react';
+import MagneticButton from '@/components/ui/MagneticButton';
 
 const socials = [
   { icon: IconBrandGithub, href: 'https://github.com/arxel2468', label: 'GitHub' },
@@ -15,50 +11,36 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="py-12 border-t border-[var(--border-light)]">
+    <footer className="py-16 border-t border-[var(--border)]">
       <div className="container">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
-          <div className="flex items-center gap-4">
-            <span className="text-xl font-bold">
-              amit<span className="text-gradient">.</span>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="flex items-center gap-5">
+            <span className="font-serif text-lg">
+              amit<span className="text-accent">.</span>
             </span>
-            <span className="text-small">Building products that work.</span>
+            <span className="type-small">Mumbai, India</span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {socials.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-11 h-11 rounded-xl border border-[var(--border-light)] flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--brand-primary)] hover:border-[var(--brand-primary)] hover:bg-[var(--brand-light)] transition-all"
-                aria-label={s.label}
-              >
-                <s.icon size={20} />
-              </a>
+              <MagneticButton key={s.label} strength={0.2}>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] transition-all"
+                  aria-label={s.label}
+                  data-cursor="pointer"
+                >
+                  <s.icon size={18} />
+                </a>
+              </MagneticButton>
             ))}
           </div>
 
-          <div className="flex items-center gap-2 text-small">
-            <span>Made with</span>
-            <IconHeart size={16} className="text-red-500" />
-            <span>© {new Date().getFullYear()}</span>
-          </div>
-        </div>
-
-        {/* Tech Stack Strip — Recruiter Signal */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-6 border-t border-[var(--border-light)]">
-          {['Next.js 14', 'Framer Motion', 'Tailwind CSS', 'Vercel'].map(
-            (tech) => (
-              <span key={tech} className="text-label">
-                {tech}
-              </span>
-            )
-          )}
-          <span className="text-label text-[var(--accent-green)]">
-            ● Lighthouse 100
-          </span>
+          <p className="type-small">
+            © {new Date().getFullYear()} Amit Pandit
+          </p>
         </div>
       </div>
     </footer>
