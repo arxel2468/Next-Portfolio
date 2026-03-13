@@ -3,149 +3,84 @@
 import { useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import { IconExternalLink, IconQuote } from '@tabler/icons-react';
-import { caseStudy } from '@/data/applied';
-import { ScrollTextReveal } from '@/components/ui/TextReveal';
-import AnimatedNumber from '@/components/ui/AnimatedNumber';
-import MagneticButton from '@/components/ui/MagneticButton';
+import { caseStudy as d } from '@/data/projects';
+import { IconQuote, IconExternalLink } from '@tabler/icons-react';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 export default function Work() {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const imageScale = useTransform(scrollYProgress, [0, 0.25], [1.15, 1]);
-  const imageOpacity = useTransform(scrollYProgress, [0, 0.15], [0.3, 1]);
-  const metricsY = useTransform(scrollYProgress, [0.2, 0.35], [40, 0]);
-  const metricsOpacity = useTransform(scrollYProgress, [0.2, 0.35], [0, 1]);
-  const testimonialOpacity = useTransform(scrollYProgress, [0.35, 0.48], [0, 1]);
-  const testimonialScale = useTransform(scrollYProgress, [0.35, 0.48], [0.97, 1]);
-  const deliverablesOpacity = useTransform(scrollYProgress, [0.45, 0.58], [0, 1]);
-  const deliverablesY = useTransform(scrollYProgress, [0.45, 0.58], [30, 0]);
-
-  const d = caseStudy;
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const imgScale = useTransform(scrollYProgress, [0, 0.4], [1.15, 1]);
+  const imgOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
   return (
-    <section id="work" ref={containerRef} className="relative" style={{ minHeight: '250vh' }}>
-      <div className="sticky top-0 min-h-screen py-24 flex flex-col justify-center overflow-hidden">
-        <div className="container">
-          {/* Section Label */}
-          <m.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="mb-6"
-          >
-            <span className="type-mono">{d.year} · {d.duration}</span>
-          </m.div>
+    <section id="work" ref={ref} className="py-24 md:py-40 section-glow">
+      <div className="container-wide">
+        <m.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+          className="flex items-center gap-4 mb-6">
+          <div className="w-8 h-px bg-[var(--accent-color)]" />
+          <span className="font-label">Case Study — {d.year}</span>
+        </m.div>
 
-          {/* Headline */}
-          <div className="mb-12">
-            <h2 className="type-headline mb-4" data-cursor="text">
-              <ScrollTextReveal>{d.headline}</ScrollTextReveal>
-            </h2>
-            <m.p
-              style={{ opacity: metricsOpacity }}
-              className="type-body-lg max-w-2xl"
-            >
-              {d.subheadline}
-            </m.p>
-          </div>
+        <m.h2 initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="font-display text-[clamp(2.5rem,7vw,5.5rem)] mb-16 max-w-4xl" data-c="hover">
+          {d.headline}
+        </m.h2>
 
-          {/* Image */}
-          {d.image && (
-            <m.div
-              className="relative w-full aspect-[16/8] rounded-2xl overflow-hidden mb-12 border border-[var(--border)]"
-              style={{ scale: imageScale, opacity: imageOpacity }}
-            >
-              <Image
-                src={d.image}
-                alt={d.client}
-                fill
-                className="object-cover"
-                priority
-                sizes="100vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)]/60 via-transparent to-transparent" />
+        {d.image && (
+          <m.div initial={{ opacity: 0, y: 80 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="relative w-full aspect-[16/8] rounded-2xl overflow-hidden mb-20 group"
+            data-c="project" data-c-label="View Site"
+            onClick={() => window.open(d.link, '_blank')}>
+            <m.div style={{ scale: imgScale, opacity: imgOpacity }} className="absolute inset-0">
+              <Image src={d.image} alt={d.client} fill className="object-cover" priority sizes="100vw" />
             </m.div>
-          )}
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)]/40 to-transparent" />
+          </m.div>
+        )}
 
-          {/* Metrics */}
-          <m.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 mb-16"
-            style={{ y: metricsY, opacity: metricsOpacity }}
-          >
-            {d.metrics.map((metric, i) => (
-              <div key={i} className="border-l-2 border-[var(--accent)] pl-5">
-                <div className="text-3xl md:text-4xl font-semibold text-[var(--text-primary)] mb-1">
-                  <AnimatedNumber value={metric.value} />
-                </div>
-                <div className="type-small font-medium text-[var(--text-secondary)]">
-                  {metric.label}
-                </div>
-                <div className="type-small text-[0.75rem]">{metric.detail}</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-20 mb-24">
+          {d.metrics.map((met, i) => (
+            <m.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
+              <div className="font-display text-[clamp(2.5rem,5vw,4rem)]">
+                <AnimatedNumber value={met.value} />
               </div>
+              <div className="text-[var(--text-muted)] text-sm mt-1">{met.label}</div>
+            </m.div>
+          ))}
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-16 md:gap-24 mb-20">
+          <m.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <p className="text-lg md:text-xl leading-relaxed text-[var(--text-secondary)]">{d.description}</p>
+          </m.div>
+          <m.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            <div className="font-label mb-6">Scope</div>
+            {d.scope.map((item, i) => (
+              <m.div key={i} initial={{ opacity: 0, x: -15 }} whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }} transition={{ delay: i * 0.05 }}
+                className="py-3 border-b border-[var(--border)] text-[var(--text-secondary)] text-sm flex items-center gap-3 group">
+                <span className="text-[var(--accent-color)] group-hover:translate-x-1 transition-transform duration-300">→</span>
+                {item}
+              </m.div>
             ))}
           </m.div>
-
-          {/* Testimonial */}
-          {d.testimonial && (
-            <m.div
-              className="max-w-2xl mb-16"
-              style={{ opacity: testimonialOpacity, scale: testimonialScale }}
-            >
-              <div className="relative pl-6 border-l-2 border-[var(--border)]">
-                <IconQuote
-                  size={24}
-                  className="text-[var(--accent)] mb-3 opacity-60"
-                />
-                <blockquote className="font-serif text-xl md:text-2xl leading-relaxed mb-4 text-[var(--text-primary)]">
-                  "{d.testimonial.quote}"
-                </blockquote>
-                <cite className="type-small not-italic">
-                  {d.testimonial.author}, {d.testimonial.role}
-                </cite>
-              </div>
-            </m.div>
-          )}
-
-          {/* Deliverables */}
-          <m.div
-            style={{ y: deliverablesY, opacity: deliverablesOpacity }}
-            className="mb-10"
-          >
-            <h3 className="type-mono mb-6">What I Delivered</h3>
-            <div className="grid md:grid-cols-2 gap-x-12 gap-y-3">
-              {d.deliverables.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-3 py-2 border-b border-[var(--border)]"
-                >
-                  <span className="text-accent mt-1 text-sm">✦</span>
-                  <span className="type-body text-sm">{item}</span>
-                </div>
-              ))}
-            </div>
-          </m.div>
-
-          {/* CTA */}
-          <m.div style={{ opacity: deliverablesOpacity }}>
-            <MagneticButton strength={0.15}>
-              <a
-                href={d.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-secondary"
-                data-cursor="pointer"
-              >
-                Visit {d.client}
-                <IconExternalLink size={16} />
-              </a>
-            </MagneticButton>
-          </m.div>
         </div>
+
+        {d.testimonial && (
+          <m.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="max-w-3xl">
+            <IconQuote size={32} className="text-[var(--accent-color)] opacity-30 mb-6" />
+            <blockquote className="font-display text-[clamp(1.5rem,3vw,2.5rem)] leading-[1.2] mb-6">
+              &ldquo;{d.testimonial.quote}&rdquo;
+            </blockquote>
+            <div className="text-[var(--text-muted)] text-sm">{d.testimonial.author} — {d.testimonial.role}</div>
+          </m.div>
+        )}
       </div>
     </section>
   );

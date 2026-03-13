@@ -7,34 +7,17 @@ import Lenis from 'lenis';
 
 export function Providers({ children }) {
   const [mounted, setMounted] = useState(false);
-  const lenisRef = useRef(null);
 
   useEffect(() => {
     setMounted(true);
-
-    lenisRef.current = new Lenis({
-      autoRaf: true,
-      duration: 1.4,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      smoothWheel: true,
-    });
-
-    window.lenis = lenisRef.current;
-
-    return () => {
-      lenisRef.current?.destroy();
-    };
+    const lenis = new Lenis({ autoRaf: true, duration: 1.6, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    window.lenis = lenis;
+    return () => lenis.destroy();
   }, []);
 
   return (
-    <div
-      style={{
-        opacity: mounted ? 1 : 0,
-        transition: 'opacity 0.5s ease',
-      }}
-    >
-      <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+    <div style={{ opacity: mounted ? 1 : 0, transition: 'opacity 0.5s ease' }}>
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
         <LazyMotion features={domAnimation} strict>
           {children}
         </LazyMotion>

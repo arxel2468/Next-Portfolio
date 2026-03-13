@@ -1,15 +1,4 @@
-import { clsx } from 'clsx';
-
-export function cn(...inputs) {
-  return clsx(inputs);
-}
-
-export function scrollToSection(id) {
-  const element = document.getElementById(id);
-  if (element && window.lenis) {
-    window.lenis.scrollTo(element, {
-      offset: -80,
-      duration: 1.6,
-    });
-  }
+export function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el && window.lenis) window.lenis.scrollTo(el, { offset: 0, duration: 1.8 });
 }

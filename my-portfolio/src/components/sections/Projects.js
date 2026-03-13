@@ -1,138 +1,92 @@
 "use client";
 
-import { m } from 'framer-motion';
+import { useRef } from 'react';
+import { m, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import { IconBrandGithub, IconExternalLink, IconArrowUpRight } from '@tabler/icons-react';
+import { IconBrandGithub, IconExternalLink } from '@tabler/icons-react';
 import { projects } from '@/data/projects';
-import { ScrollTextReveal } from '@/components/ui/TextReveal';
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-32 md:py-40 relative">
-      <div className="container">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20">
-          <div>
-            <span className="type-mono block mb-4">Selected Projects</span>
-            <h2 className="type-headline" data-cursor="text">
-              <ScrollTextReveal>Things I've built.</ScrollTextReveal>
-            </h2>
-          </div>
-          <p className="type-body-lg md:max-w-sm md:text-right">
-            Each project is a product — built to solve a real problem, not to fill a portfolio.
-          </p>
-        </div>
+    <section id="projects" className="py-24 md:py-40 bg-[var(--bg-deep)] section-glow">
+      <div className="container-wide">
+        <m.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+          className="flex items-center gap-4 mb-6">
+          <div className="w-8 h-px bg-[var(--accent-color)]" />
+          <span className="font-label">Selected Projects</span>
+        </m.div>
 
-        {/* Projects List — Editorial Style */}
-        <div className="space-y-0">
-          {projects.map((project, i) => (
-            <ProjectRow key={project.id} project={project} index={i} />
-          ))}
-        </div>
+        <m.h2 initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="font-display text-[clamp(2.5rem,7vw,5.5rem)] mb-20 max-w-3xl" data-c="hover">
+          Things I've built.
+        </m.h2>
+      </div>
+
+      <div className="space-y-1">
+        {projects.map((p, i) => <ProjectRow key={p.title} project={p} index={i} />)}
       </div>
     </section>
   );
 }
 
-function ProjectRow({ project, index }) {
+function ProjectRow({ project: p, index }) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.95', 'start 0.4'] });
+  const xDir = index % 2 === 0 ? -30 : 30;
+  const x = useTransform(scrollYProgress, [0, 1], [xDir, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
   return (
-    <m.article
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.6 }}
-      className="group border-t border-[var(--border)] py-10 md:py-14"
-    >
-      <a
-        href={project.live || project.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block"
-        data-cursor="pointer"
-      >
-        <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-start">
-          {/* Number */}
-          <div className="md:col-span-1">
-            <span className="type-mono text-[var(--text-muted)]">
-              {String(index + 1).padStart(2, '0')}
-            </span>
-          </div>
-
-          {/* Title & Tagline */}
-          <div className="md:col-span-4">
-            <h3 className="type-title mb-2 flex items-center gap-2 group-hover:text-[var(--accent)] transition-colors duration-300">
-              {project.title}
-              <IconArrowUpRight
-                size={18}
-                className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300"
-              />
-            </h3>
-            <p className="font-serif italic text-[var(--text-muted)] text-sm">
-              {project.tagline}
-            </p>
-          </div>
-
-          {/* Description + Architecture */}
-          <div className="md:col-span-5">
-            <p className="type-body text-sm mb-3">{project.description}</p>
-            <p className="type-mono text-[0.625rem] text-[var(--text-muted)] leading-relaxed">
-              {project.architecture}
-            </p>
-          </div>
-
-          {/* Tech + Links */}
-          <div className="md:col-span-2 flex flex-col items-start md:items-end gap-3">
-            <div className="flex flex-wrap gap-1.5 md:justify-end">
-              {project.tech.slice(0, 3).map((t) => (
-                <span key={t} className="tag text-[0.6875rem]">
-                  {t}
-                </span>
-              ))}
+    <m.div ref={ref} style={{ x, opacity }}>
+      <a href={p.live || p.github} target="_blank" rel="noopener noreferrer"
+        className="block group" data-c="project" data-c-label="View">
+        <div className="container-wide">
+          <div className="grid md:grid-cols-12 gap-6 md:gap-10 py-10 md:py-14 border-t border-[var(--border)] items-center">
+            <div className="md:col-span-1">
+              <span className="font-label text-[var(--accent-color)]">0{index + 1}</span>
             </div>
-            <div className="flex gap-2">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-                aria-label="GitHub"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <IconBrandGithub size={16} />
-              </a>
-              {project.live && (
-                <a
-                  href={project.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
-                  aria-label="Live"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <IconExternalLink size={16} />
-                </a>
+
+            <div className="md:col-span-4">
+              <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-[var(--bg)]">
+                {p.image ? (
+                  <Image src={p.image} alt={p.title} fill
+                    className="object-cover object-top group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+                    sizes="(max-width:768px) 100vw, 33vw" />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-lg text-xl font-bold text-white flex items-center justify-center"
+                      style={{ background: p.color }}>{p.title[0]}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="md:col-span-5">
+              <h3 className="font-display text-[clamp(1.5rem,3vw,2.25rem)] mb-2 group-hover:text-[var(--accent-color)] transition-colors duration-300">
+                {p.title}
+              </h3>
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-4">{p.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {p.tags.map(t => (
+                  <span key={t} className="px-3 py-1 text-[11px] font-medium rounded-full border border-[var(--border)] text-[var(--text-muted)]">{t}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="md:col-span-2 flex md:justify-end gap-3">
+              <a href={p.github} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}
+                className="w-10 h-10 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--text-muted)] transition-all"
+                data-c="hover"><IconBrandGithub size={16} /></a>
+              {p.live && (
+                <a href={p.live} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}
+                  className="w-10 h-10 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] transition-all"
+                  data-c="hover"><IconExternalLink size={16} /></a>
               )}
             </div>
           </div>
         </div>
       </a>
-
-      {/* Reveal image on hover — desktop only */}
-      {project.image && (
-        <div className="hidden md:block overflow-hidden max-h-0 group-hover:max-h-[300px] transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]">
-          <div className="pt-8">
-            <div className="relative w-full max-w-2xl aspect-video rounded-xl overflow-hidden border border-[var(--border)] ml-auto">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                className="object-cover object-top"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-    </m.article>
+    </m.div>
   );
 }

@@ -1,24 +1,18 @@
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+import Shell from '@/components/Shell';
 import Hero from '@/components/sections/Hero';
 import Work from '@/components/sections/Work';
 import Projects from '@/components/sections/Projects';
-import Process from '@/components/sections/Process';
+import About from '@/components/sections/About';
 import Contact from '@/components/sections/Contact';
-import ClientShell from '@/components/ClientShell';
 
 export default function Home() {
   return (
-    <ClientShell>
-      <Header />
-      <main>
-        <Hero />
-        <Work />
-        <Projects />
-        <Process />
-        <Contact />
-      </main>
-      <Footer />
-    </ClientShell>
+    <Shell>
+      <Hero />
+      <Work />
+      <Projects />
+      <About />
+      <Contact />
+    </Shell>
   );
 }

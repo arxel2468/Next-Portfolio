@@ -1,107 +1,84 @@
 "use client";
 
-import { m } from 'framer-motion';
-import { IconArrowDown } from '@tabler/icons-react';
-import { scrollToSection } from '@/lib/utils';
-import { TextReveal } from '@/components/ui/TextReveal';
-import MagneticButton from '@/components/ui/MagneticButton';
-import dynamic from 'next/dynamic';
-
-const FloatingShape = dynamic(() => import('@/components/ui/FloatingShape'), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0" />,
-});
+import { useRef } from 'react';
+import { m, useScroll, useTransform } from 'framer-motion';
+import { scrollTo } from '@/lib/utils';
 
 export default function Hero() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const subtitleY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const scaleDown = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* 3D Background Element */}
-      <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] opacity-60">
-        <FloatingShape className="w-full h-full" />
+    <section ref={ref} className="relative h-[200vh]">
+      {/* Ambient gradient */}
+      <div className="fixed top-0 left-0 w-full h-screen pointer-events-none z-0">
+        <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full opacity-[0.025] dark:opacity-[0.04]"
+          style={{ background: 'radial-gradient(circle, var(--accent-color), transparent 65%)', filter: 'blur(100px)' }} />
+        <div className="absolute bottom-[-30%] left-[-15%] w-[50vw] h-[50vw] rounded-full opacity-[0.02] dark:opacity-[0.03]"
+          style={{ background: 'radial-gradient(circle, var(--accent-color), transparent 65%)', filter: 'blur(100px)' }} />
       </div>
 
-      <div className="container relative z-10 pt-32 pb-24">
-        <div className="max-w-3xl">
-          {/* Label */}
-          <m.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 2.2 }}
-            className="flex items-center gap-3 mb-8"
-          >
-            <span className="status-indicator" />
-            <span className="type-mono">Product Engineer · Mumbai</span>
+      <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+        <m.div style={{ scale: scaleDown, opacity: titleOpacity }}
+          className="container-wide text-center relative z-10">
+          <m.div style={{ y: titleY }}>
+            <m.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2.3, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="font-label mb-8">Product Engineer · Mumbai</m.p>
+
+            <m.h1 className="font-display text-[clamp(3rem,12vw,10rem)] leading-[0.85]"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 0.01 }}>
+              {'I build'.split('').map((c, i) => (
+                <m.span key={i} className="inline-block"
+                  initial={{ y: 120, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 2.5 + i * 0.04, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                  {c === ' ' ? '\u00A0' : c}
+                </m.span>
+              ))}
+              <br />
+              {'products'.split('').map((c, i) => (
+                <m.span key={`p${i}`} className="inline-block text-pop"
+                  initial={{ y: 120, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 2.8 + i * 0.04, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                  {c}
+                </m.span>
+              ))}
+            </m.h1>
           </m.div>
 
-          {/* Headline */}
-          <h1 className="type-display mb-8" data-cursor="text">
-            <TextReveal delay={2.3}>I build products,</TextReveal>
-            <br />
-            <TextReveal delay={2.5} className="text-accent">
-              not just code.
-            </TextReveal>
-          </h1>
+          <m.div style={{ y: subtitleY }}>
+            <m.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 3.4, duration: 0.8 }}
+              className="mt-10 text-[var(--text-secondary)] text-lg md:text-xl max-w-xl mx-auto font-serif italic leading-relaxed">
+              106 sales in 6 days. An entire e-commerce business shipped from scratch.
+            </m.p>
 
-          {/* Subtitle */}
-          <m.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 2.9 }}
-            className="type-subtitle mb-12 max-w-xl"
-          >
-            I shipped an entire e-commerce business — brand, store, logistics, ads — that
-            generated 106 sales in 6 days. All self-taught. All from scratch.
-          </m.p>
-
-          {/* CTAs */}
-          <m.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 3.1 }}
-            className="flex flex-wrap items-center gap-4"
-          >
-            <MagneticButton strength={0.15}>
-              <button
-                onClick={() => scrollToSection('work')}
-                className="btn btn-primary"
-                data-cursor="pointer"
-              >
-                See the case study
-              </button>
-            </MagneticButton>
-
-            <MagneticButton strength={0.15}>
-              <button
-                onClick={() => scrollToSection('contact')}
-                className="btn btn-text"
-                data-cursor="pointer"
-              >
-                Get in touch →
-              </button>
-            </MagneticButton>
+            <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 3.8, duration: 0.8 }}
+              className="mt-10 flex justify-center gap-4">
+              <button onClick={() => scrollTo('work')}
+                className="px-7 py-3.5 bg-[var(--text)] text-[var(--bg)] rounded-full text-sm font-medium hover:opacity-80 transition-opacity"
+                data-c="hover">View case study</button>
+              <button onClick={() => scrollTo('contact')}
+                className="px-7 py-3.5 rounded-full text-sm font-medium text-[var(--text-secondary)] border border-[var(--border-strong)] hover:text-[var(--text)] hover:border-[var(--text-muted)] transition-all"
+                data-c="hover">Contact</button>
+            </m.div>
           </m.div>
-        </div>
+        </m.div>
+
+        <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 4.2 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2">
+          <m.div animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }}
+            className="w-[1px] h-12 bg-gradient-to-b from-transparent via-[var(--text-muted)] to-transparent" />
+        </m.div>
       </div>
-
-      {/* Scroll Indicator */}
-      <m.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 3.5, duration: 0.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
-      >
-        <m.button
-          onClick={() => scrollToSection('work')}
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex flex-col items-center gap-3 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-          aria-label="Scroll to work"
-          data-cursor="pointer"
-        >
-          <span className="type-mono text-[0.625rem]">Scroll</span>
-          <IconArrowDown size={16} />
-        </m.button>
-      </m.div>
     </section>
   );
 }

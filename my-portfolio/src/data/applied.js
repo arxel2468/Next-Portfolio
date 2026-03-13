@@ -5,20 +5,18 @@ export const caseStudy = {
   duration: '6 days',
   headline: 'From zero to 106 purchases.',
   subheadline: 'Built an entire e-commerce business — brand, store, logistics, ads — that started generating revenue in under a week.',
-  description:
-    'A client came to me with a product idea and no digital presence. I didn\'t just build a website — I built the entire business infrastructure. The Shopify store, brand identity, logistics pipeline, payment processing, and a Meta Ads campaign that achieved 7x return on ad spend.',
+  description: 'Anurag and Parth came to me with a product idea and no digital presence. I didn\'t just build a website — I built the entire business infrastructure. Shopify store, brand identity, logistics, payments, and a Meta Ads campaign that achieved 7x ROAS. Store was developed in a day.',
   link: 'https://stealstreet.in',
-  image: '/images/shopify-store.jpg',
+  image: '/images/shopify.jpg',
   testimonial: {
     quote: 'Built it really fast. Only took a day of our time to ship. Efficient and effective.',
-    author: 'Rahul',
-    role: 'Founder, StealStreet',
+    author: 'Anurag & Parth, Founders of StealStreet',
   },
   metrics: [
     { value: '106', label: 'Purchases', detail: 'In 6 active days' },
     { value: '₹0.48', label: 'Cost Per Result', detail: 'Lowest CPR achieved' },
     { value: '7x', label: 'ROAS', detail: 'Return on ad spend' },
-    { value: '<1 day', label: 'Client Time', detail: 'Total time needed from client' },
+    { value: '<1 day', label: 'Client Time', detail: 'Total time from client' },
   ],
   deliverables: [
     'Custom Shopify store with PageFly landing pages',
