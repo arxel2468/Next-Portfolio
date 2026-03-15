@@ -1,26 +1,21 @@
 "use client";
-
 import { ThemeProvider } from 'next-themes';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import Lenis from 'lenis';
 
 export function Providers({ children }) {
-  const [mounted, setMounted] = useState(false);
-
+  const [ok, setOk] = useState(false);
   useEffect(() => {
-    setMounted(true);
-    const lenis = new Lenis({ autoRaf: true, duration: 1.6, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
-    window.lenis = lenis;
-    return () => lenis.destroy();
+    setOk(true);
+    const l = new Lenis({ autoRaf: true, duration: 1.6, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    window.lenis = l;
+    return () => l.destroy();
   }, []);
-
   return (
-    <div style={{ opacity: mounted ? 1 : 0, transition: 'opacity 0.5s ease' }}>
+    <div style={{ opacity: ok ? 1 : 0, transition: 'opacity .5s' }}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-        <LazyMotion features={domAnimation} strict>
-          {children}
-        </LazyMotion>
+        <LazyMotion features={domAnimation} strict>{children}</LazyMotion>
       </ThemeProvider>
     </div>
   );
