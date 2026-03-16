@@ -1,54 +1,23 @@
-"use client";
-
+'use client';
 import { useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
 
-export default function SpotlightCard({ children, className, spotlightColor }) {
+export default function SpotlightCard({ children, className = '', spotlightColor = 'rgba(255, 255, 255, 0.25)' }) {
   const divRef = useRef(null);
+  const [isFocused, setIsFocused] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
 
-  const handleMouseMove = (e) => {
-    if (!divRef.current) return;
+  const handleMouseMove = e => {
+    if (!divRef.current || isFocused) return;
     const rect = divRef.current.getBoundingClientRect();
     setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
 
   return (
-    <div
-      ref={divRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setOpacity(1)}
-      onMouseLeave={() => setOpacity(0)}
-      className={cn(
-        'relative overflow-hidden rounded-2xl border border-border bg-card',
-        className
-      )}
-    >
-      {/* Spotlight gradient */}
-      <div
-        className="pointer-events-none absolute inset-0 transition-opacity duration-500"
-        style={{
-          opacity,
-          background: `radial-gradient(700px circle at ${position.x}px ${position.y}px, ${
-            spotlightColor || 'hsla(var(--glow-color), 0.07)'
-          }, transparent 40%)`,
-        }}
-      />
-      {/* Border glow */}
-      <div
-        className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-500"
-        style={{
-          opacity: opacity * 0.6,
-          background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, hsla(var(--glow-color), 0.15), transparent 40%)`,
-          mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-          maskComposite: 'exclude',
-          WebkitMaskComposite: 'xor',
-          padding: '1px',
-          borderRadius: 'inherit',
-        }}
-      />
-      <div className="relative z-10">{children}</div>
+    <div ref={divRef} onMouseMove={handleMouseMove} onFocus={() => { setIsFocused(true); setOpacity(0.6); }} onBlur={() => { setIsFocused(false); setOpacity(0); }} onMouseEnter={() => setOpacity(0.6)} onMouseLeave={() => setOpacity(0)}
+      className={`relative rounded-2xl border border-white/[0.06] bg-[#111113] overflow-hidden ${className}`}>
+      <div className="pointer-events-none absolute inset-0 transition-opacity duration-500" style={{ opacity, background: `radial-gradient(circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 80%)` }} />
+      {children}
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import Portfolio from '@/components/Portfolio';
-export default function Page() {
-  return <Portfolio />;
-}
+import { Providers } from './providers';
+import App from '@/components/App';
+export default function Page() { return <Providers><App /></Providers>; }

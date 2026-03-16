@@ -1,33 +1,28 @@
-"use client";
-
-import { ThemeProvider } from 'next-themes';
+'use client';
 import { useEffect, useState } from 'react';
-import { LazyMotion, domAnimation } from 'framer-motion';
 import Lenis from 'lenis';
 
 export function Providers({ children }) {
-  const [mounted, setMounted] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    setReady(true);
     const lenis = new Lenis({
-      autoRaf: true,
       duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 1.5,
     });
     window.lenis = lenis;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
     return () => lenis.destroy();
   }, []);
 
-  return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-      <LazyMotion features={domAnimation} strict>
-        <div style={{ opacity: mounted ? 1 : 0, transition: 'opacity 0.5s ease' }}>
-          {children}
-        </div>
-      </LazyMotion>
-    </ThemeProvider>
-  );
+  if (!ready) return null;
+  return <>{children}</>;
 }
