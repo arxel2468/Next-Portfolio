@@ -1,92 +1,187 @@
 'use client';
-import { Suspense } from 'react';
-import dynamic from 'next/dynamic';
-import { motion } from 'framer-motion';
-import SplitText from '../ui/SplitText';
-import CountUp from '../ui/CountUp';
-import StarBorder from '../ui/StarBorder';
+import { useEffect, useRef, useState } from 'react';
+import s from './Hero.module.css';
+import { quotes } from '@/data/content';
 
-const Silk = dynamic(() => import('../ui/Silk'), { ssr: false });
+const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown',
+                'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
 
-const STATS = [
-  { to: 106, label: 'Sales shipped', suffix: '+' },
-  { to: 46.4, label: 'Best ROAS', suffix: 'x' },
-  { to: 24, label: 'Hrs to launch', prefix: '<' },
-  { to: 4, label: 'Products built', suffix: '+' },
-];
-
-const scrollTo = id => {
-  const el = document.getElementById(id);
-  if (el && window.lenis) window.lenis.scrollTo(el, { offset: -60, duration: 1.2 });
-};
+/* A random quote from the archive, changes on each load */
+function useRandomQuote() {
+  const [quote] = useState(() => quotes[Math.floor(Math.random() * quotes.length)]);
+  return quote;
+}
 
 export default function Hero() {
+  const clockRef  = useRef(null);
+  const lineRefs  = useRef([]);
+  const [egg, setEgg] = useState(false);
+  const seq = useRef([]);
+  const quote = useRandomQuote();
+
+  /* Clock */
+  useEffect(() => {
+    const tick = () => {
+      if (!clockRef.current) return;
+      clockRef.current.textContent = new Date().toLocaleTimeString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  /* Name reveal */
+  useEffect(() => {
+    lineRefs.current.forEach((el, i) => {
+      if (!el) return;
+      setTimeout(() => {
+        el.style.transform = 'translateY(0)';
+        el.style.opacity = '1';
+      }, 180 + i * 130);
+    });
+  }, []);
+
+  /* Konami */
+  useEffect(() => {
+    const fn = (e) => {
+      seq.current = [...seq.current, e.key].slice(-KONAMI.length);
+      if (seq.current.join() === KONAMI.join()) setEgg(true);
+    };
+    window.addEventListener('keydown', fn);
+    return () => window.removeEventListener('keydown', fn);
+  }, []);
+
   return (
-    <section className="relative min-h-[100svh] flex items-center overflow-hidden">
-      <div className="absolute inset-0 z-0 opacity-40">
-        <Suspense fallback={null}>
-          <Silk speed={3} scale={1.5} color="#64ffda" noiseIntensity={1.2} rotation={0} />
-        </Suspense>
-      </div>
+    <section id="hero" className={s.root}>
 
-      <div className="absolute inset-0 z-[1]" style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 20%, var(--bg) 75%)' }} />
-      <div className="absolute bottom-0 left-0 right-0 h-40 z-[1]" style={{ background: 'linear-gradient(to top, var(--bg), transparent)' }} />
+      {/* ── top bar: purely informational, like a newspaper header ── */}
+      <header className={s.topBar}>
+        <div className={s.topLeft}>
+          <span className={s.topPulse} aria-hidden="true" />
+          <span className={s.topText}>Amit Pandit — Portfolio</span>
+        </div>
+        <time
+          ref={clockRef}
+          className={s.clock}
+          aria-label="Live time in Mumbai"
+          dateTime={new Date().toISOString()}
+        />
+        <span className={s.topRight}>Mumbai · AI-first</span>
+      </header>
 
-      <div className="relative z-10 w-full px-6 md:px-12 lg:px-16 max-w-[1200px] mx-auto pt-28 pb-20">
-        <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.5 }}
-          className="font-mono text-sm mb-8" style={{ color: 'var(--accent)' }}>
-          Hi, I&apos;m
-        </motion.p>
+      {/* ── the name — occupies most of the viewport ── */}
+      <div className={s.nameWrap} aria-label="Amit Pandit">
 
-        <div className="mb-4">
-          <SplitText text="Amit Pandit."
-            className="font-serif text-[clamp(3rem,10vw,7rem)] leading-[0.9] tracking-[-0.04em]"
-            delay={30} duration={1} ease="power3.out" textAlign="left"
-            from={{ opacity: 0, y: 60 }} to={{ opacity: 1, y: 0 }} threshold={0.1} rootMargin="0px" />
+        {/* "AMIT" — left edge, solid */}
+        <div className={s.nameRow}>
+          <div className={s.nameLineClip}>
+            <span
+              ref={el => lineRefs.current[0] = el}
+              className={s.nameWord}
+              style={{ transform: 'translateY(110%)', opacity: 0,
+                transition: 'transform 1.1s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease' }}
+            >
+              AMIT
+            </span>
+          </div>
+
+          {/*
+            This small annotation floats mid-name, slightly out of place.
+            It's a comment. Like margin notes in a manuscript.
+            Only legible if you slow down.
+          */}
+          <span className={s.nameAnnotation} aria-hidden="true">
+            builder /<br />writer /<br />both
+          </span>
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4, duration: 0.6 }}>
-          <p className="text-[clamp(1.5rem,4vw,2.5rem)] font-serif leading-[1.15] max-w-[600px] mb-10" style={{ color: 'var(--text-2)' }}>
-            I build products that{' '}
-            <span style={{ color: 'var(--accent)' }}>make money.</span>
-          </p>
-        </motion.div>
+        {/* "PANDIT" — indented, burgundy, italic — the one rule-break */}
+        <div className={s.nameRow}>
+          <div className={s.nameLineClip}>
+            <span
+              ref={el => lineRefs.current[1] = el}
+              className={`${s.nameWord} ${s.nameWordAlt}`}
+              style={{ transform: 'translateY(110%)', opacity: 0,
+                transition: 'transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.12s, opacity 0.4s ease 0.12s' }}
+            >
+              PANDIT
+            </span>
+          </div>
+        </div>
 
-        <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.8, duration: 0.5 }}
-          className="text-base max-w-[460px] leading-relaxed mb-10">
-          Product engineer who ships entire businesses from scratch. Last build:{' '}
-          <span style={{ color: 'var(--accent)' }}>106 purchases in 6 days</span> with a{' '}
-          <span style={{ color: 'var(--accent)' }}>46.4x ROAS</span>.
-        </motion.p>
-
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.1, duration: 0.5 }}
-          className="flex gap-4 flex-wrap mb-16 md:mb-24">
-          <StarBorder color="rgba(100,255,218,0.6)" speed="4s">
-            <button onClick={() => scrollTo('work')} className="px-6 py-3 font-mono text-sm" style={{ color: 'var(--accent)' }}>
-              See my work →
-            </button>
-          </StarBorder>
-          <button onClick={() => scrollTo('contact')}
-            className="px-6 py-3 font-mono text-sm rounded-[20px] border transition-colors"
-            style={{ borderColor: 'var(--border)', color: 'var(--text-2)' }}
-            onMouseEnter={e => { e.target.style.borderColor = 'var(--accent)'; e.target.style.color = 'var(--accent)'; }}
-            onMouseLeave={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.color = 'var(--text-2)'; }}>
-            Get in touch
-          </button>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 0.6 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t" style={{ borderColor: 'var(--border)' }}>
-          {STATS.map((s, i) => (
-            <div key={i}>
-              <span className="font-serif text-3xl md:text-4xl block mb-1" style={{ color: 'var(--text)' }}>
-                {s.prefix || ''}<CountUp to={s.to} duration={2.5} delay={0.3} />{s.suffix || ''}
-              </span>
-              <span className="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>{s.label}</span>
-            </div>
-          ))}
-        </motion.div>
       </div>
+
+      {/* ── the lower third ── */}
+      <div className={s.lower}>
+
+        {/* Left: tagline + identity markers */}
+        <div className={s.lowerLeft}>
+          <p className={s.tagline}>
+            I build things.
+            <br />
+            <em>I write about what it means.</em>
+          </p>
+
+          <div className={s.chips}>
+            <span className={s.chip} data-active="true">Builder</span>
+            <span className={s.chipDot} aria-hidden="true" />
+            <span className={s.chip}>Writer</span>
+            <span className={s.chipDot} aria-hidden="true" />
+            <span className={s.chip} data-muted="true">AI-first</span>
+          </div>
+        </div>
+
+        {/* Right: a quote from his own writing — random, regenerates each load */}
+        <div className={s.lowerRight}>
+          <span className={s.quoteLabel} aria-label="From the writing archive">
+            — from the archive
+          </span>
+          <blockquote className={s.quoteBlock}>
+            <p className={s.quoteText}>"{quote}"</p>
+          </blockquote>
+        </div>
+
+      </div>
+
+      {/* ── scroll cue ── */}
+      <div className={s.scrollCue} aria-hidden="true">
+        <span className={s.scrollWord}>scroll</span>
+        <div className={s.scrollTrack}>
+          <div className={s.scrollRunner} />
+        </div>
+      </div>
+
+      {/*
+        The watermark.
+        ∞ at 2.4% opacity.
+        Won't be seen on first look.
+        Noticed around second 40.
+      */}
+      <span className={s.watermark} aria-hidden="true">∞</span>
+
+      {/* ── Easter egg ── */}
+      {egg && (
+        <div
+          className={s.egg}
+          onClick={() => setEgg(false)}
+          role="alertdialog"
+          aria-modal="true"
+          aria-label="You found the easter egg"
+        >
+          <div className={s.eggBox}>
+            <p className={s.eggCode}>↑↑↓↓←→←→BA</p>
+            <p className={s.eggMsg}>
+              you found it.<br />
+              <em>some things reward attention.</em>
+            </p>
+            <p className={s.eggClose}>click to close</p>
+          </div>
+        </div>
+      )}
+
     </section>
   );
 }

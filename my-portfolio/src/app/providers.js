@@ -1,28 +1,19 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Lenis from 'lenis';
 
 export function Providers({ children }) {
-  const [ready, setReady] = useState(false);
-
   useEffect(() => {
-    setReady(true);
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.3,
+      easing: t => 1 - Math.pow(1 - t, 4),
       smoothWheel: true,
     });
-    window.lenis = lenis;
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    return () => lenis.destroy();
+    window.__lenis = lenis;
+    let raf;
+    const tick = (t) => { lenis.raf(t); raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+    return () => { cancelAnimationFrame(raf); lenis.destroy(); };
   }, []);
-
-  if (!ready) return null;
   return <>{children}</>;
 }

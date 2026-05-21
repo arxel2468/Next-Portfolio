@@ -1,69 +1,120 @@
 'use client';
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { IconBrandGithub, IconExternalLink } from '@tabler/icons-react';
+import s from './Projects.module.css';
 import { projects } from '@/data/content';
-import DecryptedText from '../ui/DecryptedText';
-import TiltedCard from '../ui/TiltedCard';
-import SpotlightCard from '../ui/SpotlightCard';
+
+function Arrow() {
+  return (
+    <span className={s.arrow} aria-hidden="true">
+      <span className={s.arrowLine} />
+      <span className={s.arrowHead} />
+    </span>
+  );
+}
+
+function ProjectCard({ p, i }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => el.classList.add(s.cardVisible), i * 110);
+        obs.unobserve(el);
+      }
+    }, { threshold: 0.08 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [i]);
+
+  return (
+    <article ref={ref} className={s.card} aria-label={p.title}>
+      {/* Image */}
+      <div className={s.cardImage}>
+        <Image
+          src={p.image}
+          alt={p.title}
+          fill
+          style={{ objectFit: 'cover' }}
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+        <div className={s.cardImageOverlay} aria-hidden="true" />
+        <span className={s.cardImageIndex} aria-hidden="true">{p.index}</span>
+      </div>
+
+      {/* Content */}
+      <div className={s.cardBody}>
+        <div className={s.cardTop}>
+          <span className={s.cardCategory}>{p.category}</span>
+          <span className={s.cardYear}>{p.year}</span>
+        </div>
+
+        <h3 className={s.cardTitle}>{p.title}</h3>
+        <p className={s.cardLede}>{p.lede}</p>
+        <p className={s.cardBody}>{p.body}</p>
+
+        <div className={s.cardBottom}>
+          <div className={s.cardTech}>
+            {p.tech.slice(0, 4).map(t => (
+              <span key={t} className={s.cardTag}>{t}</span>
+            ))}
+          </div>
+          <div className={s.cardLinks}>
+            {p.live && (
+              <a href={p.live} target="_blank" rel="noopener noreferrer"
+                 className={s.cardLink} aria-label={`Visit ${p.title}`}>
+                Live <Arrow />
+              </a>
+            )}
+            {p.github && (
+              <a href={p.github} target="_blank" rel="noopener noreferrer"
+                 className={`${s.cardLink} ${s.cardLinkGhost}`}
+                 aria-label={`${p.title} source`}>
+                Code <Arrow />
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
 
 export default function Projects() {
-  const others = projects.slice(1);
   return (
-    <section id="projects" className="py-20 md:py-32 px-6 md:px-12 lg:px-16 max-w-[1200px] mx-auto" style={{ background: 'var(--bg)' }}>
-      <span className="font-mono text-[11px] uppercase tracking-[0.2em] mb-3 block" style={{ color: 'var(--accent)' }}>02 · Selected Projects</span>
-      <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] mb-12" style={{ color: 'var(--text)' }}>
-        <DecryptedText text="Other things I've built." animateOn="view" speed={40} className="text-[var(--text)]" encryptedClassName="text-[var(--text-3)]" />
-      </h2>
+    <section id="projects" className={s.root} aria-label="Projects">
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {others.map((p, i) => (
-          <TiltedCard key={p.title} containerHeight="100%" containerWidth="100%" rotateAmplitude={8} scaleOnHover={1.02} className="h-full">
-            <SpotlightCard className="h-full flex flex-col p-0" spotlightColor="rgba(100,255,218,0.08)">
-              {/* Image */}
-              <div className="relative aspect-[16/10] overflow-hidden rounded-t-2xl">
-                {p.image ? (
-                  <Image src={p.image} alt={p.title} fill className="object-cover object-top" sizes="(max-width:768px) 100vw, 33vw" />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'var(--elevated)' }}>
-                    <span className="font-serif text-4xl" style={{ color: 'var(--text-3)' }}>{p.title[0]}</span>
-                  </div>
-                )}
-              </div>
+      <div className={s.header}>
+        <div className={s.headerMeta}>
+          <span className={s.headerIdx}>01</span>
+          <span className={s.headerLine} aria-hidden="true" />
+          <span className={s.headerLabel}>Projects</span>
+        </div>
+        <div className={s.headerMain}>
+          <h2 className={s.headerTitle}>
+            Other things<br /><em>I've built.</em>
+          </h2>
+          {/* The quiet self-commentary — exactly like how he writes */}
+          <p className={s.headerAside}>
+            not every project needs a case study.<br />
+            some things just work and that's enough.
+          </p>
+        </div>
+      </div>
 
-              <div className="p-5 flex flex-col flex-1">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="font-mono text-[9px] uppercase tracking-wider" style={{ color: 'var(--accent)' }}>{p.subtitle}</span>
-                  <div className="flex gap-2">
-                    {p.github && (
-                      <a href={p.github} target="_blank" rel="noopener noreferrer" className="transition-colors" style={{ color: 'var(--text-3)' }}
-                        onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-3)'}>
-                        <IconBrandGithub size={16} stroke={1.5} />
-                      </a>
-                    )}
-                    {p.live && (
-                      <a href={p.live} target="_blank" rel="noopener noreferrer" className="transition-colors" style={{ color: 'var(--text-3)' }}
-                        onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-3)'}>
-                        <IconExternalLink size={16} stroke={1.5} />
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                <h3 className="font-serif text-lg mb-2" style={{ color: 'var(--text)' }}>{p.title}</h3>
-                <p className="text-[13px] leading-relaxed mb-4 flex-1">{p.description}</p>
-
-                <div className="flex flex-wrap gap-1.5 mt-auto">
-                  {p.tech.map(t => (
-                    <span key={t} className="px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider rounded" style={{ color: 'var(--accent)', background: 'var(--accent-dim)' }}>
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </SpotlightCard>
-          </TiltedCard>
+      {/*
+        Two-column card grid.
+        But not uniform — cards have different image heights by design.
+        The grid breathes.
+      */}
+      <div className={s.grid}>
+        {projects.map((p, i) => (
+          <ProjectCard key={p.id} p={p} i={i} />
         ))}
       </div>
+
     </section>
   );
 }

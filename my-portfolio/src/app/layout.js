@@ -1,18 +1,24 @@
-import { GeistMono } from 'geist/font/mono';
-import { inter, dmSerif } from './fonts';
+import { playfair, garamond, mono } from './fonts';
 import './globals.css';
 
 export const metadata = {
   metadataBase: new URL('https://amitpandit.vercel.app'),
-  title: 'Amit Pandit — Product Engineer',
-  description: 'I build entire businesses from scratch. 106 purchases in 6 days.',
-  openGraph: { title: 'Amit Pandit — Product Engineer', description: 'I build entire businesses from scratch.', url: 'https://amitpandit.vercel.app', images: [{ url: '/og.png', width: 1200, height: 630 }], type: 'website' },
-  twitter: { card: 'summary_large_image', title: 'Amit Pandit', images: ['/og.png'] },
+  title: 'Amit Pandit',
+  description: 'Builder. Writer. Mumbai.',
+  openGraph: {
+    title: 'Amit Pandit — Builder. Writer.',
+    description: 'I build things. I write about what it means.',
+    url: 'https://amitpandit.vercel.app',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${dmSerif.variable} ${GeistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${playfair.variable} ${garamond.variable} ${mono.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

@@ -1,0 +1,306 @@
+.root {
+  padding: 80px 56px 96px 120px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── header ── */
+.header { margin-bottom: 64px; max-width: 680px; }
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.headerIdx {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ochre);
+}
+
+.headerRule {
+  display: block;
+  width: 36px; height: 1px;
+  background: var(--rule);
+}
+
+.headerLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.heading {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(36px, 5.5vw, 68px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+
+.heading em { font-style: italic; color: var(--ochre); }
+
+.sub {
+  font-family: var(--font-garamond), serif;
+  font-size: 16px;
+  color: var(--ink-3);
+  line-height: 1.8;
+}
+
+/* ── panels ── */
+.panels {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  align-items: start;
+  border: 1px solid var(--rule);
+}
+
+.panelLeft,
+.panelRight {
+  padding: 40px 44px;
+}
+
+.panelLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 10px;
+}
+
+.panelNote {
+  font-family: var(--font-garamond), serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-4);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+/* ── Calendly box ── */
+.calendlyBox {
+  background: white;
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+
+/* ── vertical divider ── */
+.divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+  border-left: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
+  width: 48px;
+}
+
+.dividerLine {
+  flex: 1;
+  width: 1px;
+  background: var(--rule);
+  max-height: 120px;
+}
+
+.dividerOr {
+  font-family: var(--font-garamond), serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-4);
+  padding: 12px 0;
+}
+
+/* ── form ── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.field { display: flex; flex-direction: column; gap: 9px; }
+
+.label {
+  font-family: var(--font-mono), monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.input,
+.textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(28,21,16,0.14);
+  padding: 13px 0;
+  font-family: var(--font-garamond), serif;
+  font-size: 16px;
+  color: var(--ink);
+  outline: none;
+  resize: none;
+  width: 100%;
+  line-height: 1.55;
+  transition: border-color 0.3s ease;
+}
+
+.input::placeholder, .textarea::placeholder {
+  color: rgba(28,21,16,0.2);
+  font-style: italic;
+}
+
+.input:focus, .textarea:focus {
+  border-color: var(--ochre);
+}
+
+.input:disabled, .textarea:disabled { opacity: 0.45; }
+
+/* ── form footer ── */
+.formFoot {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--ochre);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  cursor: none;
+  transition: gap 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+
+.submit:hover:not(:disabled) { gap: 24px; }
+.submit:disabled { opacity: 0.4; }
+
+.submitArr {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 26px;
+}
+
+.submitLine {
+  display: block; width: 100%; height: 1px;
+  background: var(--ochre);
+}
+
+.submitHead {
+  position: absolute; right: 0;
+  width: 6px; height: 6px;
+  border-right: 1px solid var(--ochre);
+  border-top: 1px solid var(--ochre);
+  transform: rotate(45deg) translateY(-1px);
+}
+
+.alt {
+  font-family: var(--font-garamond), serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-4);
+}
+
+.emailLink {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-style: normal;
+  color: var(--ink-3);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--rule);
+}
+
+/* ── error ── */
+.error {
+  font-family: var(--font-garamond), serif;
+  font-size: 14px;
+  color: var(--burgundy);
+}
+
+.error a { color: var(--burgundy); }
+
+/* ── sent ── */
+.sent {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 32px;
+  border: 1px solid var(--rule);
+  background: var(--bg-warm);
+}
+
+.sentMark {
+  font-size: 18px;
+  color: var(--ochre);
+  margin-top: 2px;
+}
+
+.sentHead {
+  font-family: var(--font-playfair), serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.sentSub {
+  font-family: var(--font-garamond), serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-3);
+}
+
+/* ── responsive ── */
+@media (max-width: 1200px) {
+  .panels {
+    grid-template-columns: 1fr;
+    border: 1px solid var(--rule);
+  }
+  .panelLeft { border-bottom: 1px solid var(--rule); }
+  .divider {
+    flex-direction: row;
+    width: 100%;
+    height: 48px;
+    padding: 0 40px;
+    border: none;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .dividerLine { flex: 1; max-height: 1px; height: 1px; }
+  .dividerOr { padding: 0 16px; }
+}
+
+@media (max-width: 1024px) {
+  .root { padding: 72px 40px 80px 80px; }
+}
+
+@media (max-width: 768px) {
+  .root { padding: 64px 24px 80px; }
+  .row { grid-template-columns: 1fr; }
+  .panelLeft, .panelRight { padding: 28px 24px; }
+}

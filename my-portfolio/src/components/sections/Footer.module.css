@@ -1,0 +1,122 @@
+.root {
+  background: var(--bg-dark-2);
+  padding: 64px 56px 48px 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* ── epigraph — a quote from his own writing ── */
+.epigraph {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 600px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 24px;
+}
+
+.epigraphMark {
+  font-family: var(--font-playfair), serif;
+  font-size: 40px;
+  color: var(--ochre);
+  line-height: 1;
+  display: block;
+  margin-bottom: -8px;
+  opacity: 0.6;
+}
+
+.epigraphText {
+  font-family: var(--font-garamond), serif;
+  font-style: italic;
+  font-size: clamp(17px, 2vw, 22px);
+  color: rgba(247,243,236,0.7);
+  line-height: 1.55;
+}
+
+.epigraphAttr {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(247,243,236,0.22);
+}
+
+/* ── bottom ── */
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 40px;
+  border-top: 1px solid rgba(247,243,236,0.06);
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.bottomLeft { display: flex; flex-direction: column; gap: 6px; }
+
+.name {
+  font-family: var(--font-playfair), serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #F7F3EC;
+  letter-spacing: -0.01em;
+}
+
+.byline {
+  font-family: var(--font-mono), monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(247,243,236,0.18);
+}
+
+.links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.link {
+  font-family: var(--font-mono), monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(247,243,236,0.3);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.link:hover { color: var(--ochre); }
+
+/* ── foot ── */
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.made {
+  font-family: var(--font-garamond), serif;
+  font-style: italic;
+  font-size: 13px;
+  color: rgba(247,243,236,0.14);
+  cursor: help;
+  transition: color 0.3s ease;
+}
+
+.made:hover { color: rgba(247,243,236,0.4); }
+
+.inf {
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-size: 18px;
+  color: rgba(247,243,236,0.1);
+  user-select: none;
+}
+
+@media (max-width: 900px) {
+  .root { padding: 56px 24px 40px; }
+  .bottom { flex-direction: column; align-items: flex-start; }
+  .links { gap: 16px; }
+}

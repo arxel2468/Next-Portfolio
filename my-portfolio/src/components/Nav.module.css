@@ -1,0 +1,108 @@
+/* ── Rail ── */
+.rail {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  transition: opacity 0.8s ease;
+}
+
+.railMark {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono), monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.3em;
+  color: var(--ink-4);
+}
+
+.railLine {
+  width: 1px;
+  height: 28px;
+  background: var(--rule);
+}
+
+.railBtn {
+  background: none;
+  border: none;
+  cursor: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 2px;
+}
+
+.railNub {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--rule);
+  display: block;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.railLabel {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono), monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.railBtnActive .railNub  { background: var(--ochre); transform: scale(1.6); }
+.railBtnActive .railLabel { color: var(--ochre); }
+.railBtn:hover .railNub  { background: var(--ochre); }
+.railBtn:hover .railLabel { color: var(--ochre); }
+
+.railCity {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono), monospace;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: var(--rule);
+}
+
+/* ── Mobile strip ── */
+.strip {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(247,243,236,0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--rule);
+  justify-content: space-around;
+  padding: 10px 0 14px;
+  z-index: 500;
+}
+
+.stripBtn {
+  background: none;
+  border: none;
+  font-family: var(--font-mono), monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  cursor: pointer;
+  padding: 6px 10px;
+  transition: color 0.25s ease;
+}
+
+.stripBtnActive { color: var(--ochre); }
+
+@media (max-width: 900px) {
+  .rail  { display: none; }
+  .strip { display: flex; }
+}

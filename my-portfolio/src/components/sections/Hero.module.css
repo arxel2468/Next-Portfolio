@@ -1,0 +1,313 @@
+.root {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  padding: 0 56px 0 120px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ── top bar ── */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule-light);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.topLeft { display: flex; align-items: center; gap: 10px; }
+
+.topPulse {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--ochre);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.3; transform: scale(0.8); }
+}
+
+.topText { color: var(--ink-3); }
+.topRight { opacity: 0.55; }
+
+.clock {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+  font-size: 10.5px;
+}
+
+/* ── name ── */
+.nameWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  padding: 24px 0 12px;
+}
+
+.nameRow {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+}
+
+.nameLineClip { overflow: hidden; line-height: 0.86; }
+
+.nameWord {
+  display: block;
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(96px, 16.5vw, 224px);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  will-change: transform;
+  line-height: 0.86;
+}
+
+/* PANDIT — indented, italic, ochre. One break. */
+.nameWordAlt {
+  font-style: italic;
+  color: var(--ochre);
+  padding-left: clamp(24px, 7vw, 112px);
+}
+
+/*
+  The annotation — floats beside the name.
+  Like a margin note. Only legible if you look.
+*/
+.nameAnnotation {
+  position: absolute;
+  right: 0;
+  top: 16px;
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  line-height: 1.9;
+  text-align: right;
+  opacity: 0.5;
+}
+
+/* ── lower third ── */
+.lower {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 40px;
+  align-items: end;
+  padding: 28px 0 12px;
+}
+
+.lowerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.tagline {
+  font-family: var(--font-garamond), serif;
+  font-size: clamp(18px, 2.4vw, 28px);
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+
+.tagline em {
+  font-style: italic;
+  color: var(--ink);
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chip {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  padding: 5px 12px;
+  border: 1px solid var(--rule);
+}
+
+.chip[data-active="true"] {
+  color: var(--ochre);
+  border-color: var(--ochre);
+  background: var(--ochre-dim);
+}
+
+.chip[data-muted="true"] {
+  border-style: dashed;
+  opacity: 0.6;
+}
+
+.chipDot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--ink-4);
+  opacity: 0.3;
+}
+
+/* ── quote block (right side) ── */
+.lowerRight {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 4px;
+}
+
+.quoteLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  opacity: 0.6;
+}
+
+.quoteBlock {
+  border-left: 2px solid var(--ochre);
+  padding-left: 16px;
+}
+
+.quoteText {
+  font-family: var(--font-garamond), serif;
+  font-style: italic;
+  font-size: clamp(13px, 1.4vw, 15px);
+  color: var(--ink-3);
+  line-height: 1.75;
+}
+
+/* ── scroll cue ── */
+.scrollCue {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 0 24px;
+  border-top: 1px solid var(--rule-light);
+}
+
+.scrollWord {
+  font-family: var(--font-mono), monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  opacity: 0.5;
+}
+
+.scrollTrack {
+  width: 60px; height: 1px;
+  background: var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+
+.scrollRunner {
+  position: absolute;
+  inset: 0;
+  background: var(--ochre);
+  transform: translateX(-100%);
+  animation: run 2.2s cubic-bezier(0.76,0,0.24,1) infinite;
+}
+
+@keyframes run {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(200%); opacity: 0; }
+}
+
+/* ── watermark ── */
+.watermark {
+  position: absolute;
+  bottom: -40px;
+  right: -16px;
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(200px, 36vw, 500px);
+  color: rgba(28,21,16,0.024);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+/* ── easter egg ── */
+.egg {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark);
+  z-index: 7000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: eggIn 0.45s cubic-bezier(0.16,1,0.3,1);
+}
+
+@keyframes eggIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.eggBox {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 48px;
+}
+
+.eggCode {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--ochre);
+}
+
+.eggMsg {
+  font-family: var(--font-garamond), serif;
+  font-size: clamp(24px, 4.5vw, 48px);
+  color: var(--bg);
+  line-height: 1.45;
+  opacity: 0.9;
+}
+
+.eggMsg em { font-style: italic; color: var(--ochre); }
+
+.eggClose {
+  font-family: var(--font-mono), monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  color: rgba(247,243,236,0.18);
+  text-transform: uppercase;
+}
+
+/* ── responsive ── */
+@media (max-width: 1024px) {
+  .root { padding: 0 40px 0 80px; }
+  .nameAnnotation { display: none; }
+}
+
+@media (max-width: 768px) {
+  .root { padding: 0 24px 80px; }
+  .nameWord { font-size: clamp(80px, 20vw, 120px); }
+  .lower { grid-template-columns: 1fr; gap: 28px; }
+  .topRight { display: none; }
+}

@@ -1,60 +1,127 @@
+export const stealstreet = {
+  id: 'stealstreet',
+  title: 'StealStreet.in',
+  year: '2024',
+  category: 'Work Experience · E-Commerce',
+  tagline: 'I built an entire business while most people were still making a Notion doc about it.',
+  description: [
+    'Complete e-commerce operation from scratch — Shopify store, brand identity, Shiprocket logistics, payment gateway, Meta Pixel, GA4, and Meta Ads.',
+    'The brief I gave myself: build something real, profitable, and fast. Not a side project. An actual business.',
+  ],
+  result: '106 purchases. 6 days. 46.4× return on ad spend. ₹0.48 cost per result.',
+  scope: [
+    'Shopify store design & build',
+    'Brand identity direction',
+    'Shiprocket logistics setup',
+    'Payment gateway integration',
+    'Meta Pixel & GA4 analytics',
+    'Meta Ads campaign & A/B tests',
+    'Domain & DNS configuration',
+  ],
+  stats: [
+    { value: '106',   unit: '',  label: 'Purchases',       sub: 'in 6 days'          },
+    { value: '46.4',  unit: '×', label: 'ROAS',            sub: 'return on ad spend'  },
+    { value: '₹0.48', unit: '',  label: 'Cost per result', sub: 'Meta Ads'            },
+    { value: '<24h',  unit: '',  label: 'Zero to live',    sub: 'conception → sale'   },
+  ],
+  tech: ['Shopify', 'Liquid', 'Meta Ads', 'GA4', 'Shiprocket'],
+  live: 'https://stealstreet.in',
+  // ← this was missing
+  images: {
+    hero: '/images/shopify.jpg',
+    logo: '/images/shopify-logo.jpg',
+  },
+  testimonial: {
+    quote: 'Built it really fast. Only took a day of our time to ship.',
+    by: 'Anurag & Parth, Founders',
+  },
+};
+
 export const projects = [
   {
-    title: 'StealStreet.in',
-    subtitle: 'E-commerce Business · From Zero to Profitable',
-    description: 'Complete e-commerce operation — Shopify store, brand identity, Shiprocket logistics, payment gateway, Meta Pixel & GA4, and Meta Ads. 106 purchases in 6 days. 46.4x ROAS. Profitable from day one.',
-    tech: ['Shopify', 'Liquid', 'Meta Ads', 'GA4', 'Shiprocket'],
-    live: 'https://stealstreet.in',
-    github: null,
-    image: '/images/shopify.jpg',
-    stats: [{ value: 106, label: 'Purchases', suffix: '' }, { value: 46.4, label: 'ROAS', suffix: 'x' }, { value: 0.48, label: 'CPR', prefix: '₹' }],
-    quote: 'Built it really fast. Only took a day of our time to ship.',
-    quoteBy: 'Anurag & Parth, Founders',
-    scope: ['Shopify store design & build', 'Brand identity direction', 'Shiprocket logistics setup', 'Payment gateway integration', 'Meta Pixel & GA4 analytics', 'Meta Ads campaign & A/B tests', 'Domain & DNS configuration'],
-  },
-  {
+    id: 'interviewgym',
+    index: '01',
     title: 'InterviewGym',
-    subtitle: 'AI Mock Interview Platform',
-    description: 'Real-time voice transcription, speech synthesis, and personalized feedback. Users practice with AI conversations and track progress.',
-    tech: ['Next.js 14', 'TypeScript', 'Prisma', 'Supabase', 'Groq AI'],
+    category: 'AI Platform',
+    year: '2024',
+    lede: 'An AI that listens to you practice, then tells you what the room actually heard.',
+    body: 'Real-time voice transcription, speech synthesis, and feedback that doesn\'t grade what you intended — it grades what came out. Built for the gap between self-perception and reality.',
+    tech: ['Next.js 14', 'TypeScript', 'Groq AI', 'Supabase', 'Prisma'],
     live: 'https://theinterviewgym.vercel.app',
     github: 'https://github.com/arxel2468/interviewgym',
-    image: '/images/interviewgym.png',
+    image: '/images/interviewgym.png', 
   },
   {
+    id: 'yoursaas',
+    index: '02',
     title: 'YourSaaS',
-    subtitle: 'Multi-Tenant SaaS Platform',
-    description: 'Isolated workspaces, RBAC, magic link invitations, and Razorpay billing. Solved Next.js 15 async data fetching challenges.',
+    category: 'Infrastructure',
+    year: '2024',
+    lede: 'The scaffolding tax every SaaS pays upfront — paid once, for everyone else.',
+    body: 'Multi-tenant workspaces, RBAC, magic link invitations, Razorpay billing. The architecture of a mature product, on day one.',
     tech: ['Next.js 15', 'TypeScript', 'Prisma', 'PostgreSQL', 'Razorpay'],
     live: 'https://multi-tenant-saas-phi-indol.vercel.app',
     github: 'https://github.com/arxel2468/multi-tenant-saas',
-    image: '/images/yoursaas.png',
+    image: '/images/yoursaas.png',      // ← add this
   },
   {
+    id: 'peakfood',
+    index: '03',
     title: 'Peak Food',
-    subtitle: 'ML-Powered Recipe Platform',
-    description: 'BiLSTM sentiment analysis on reviews. GitHub OAuth, Google API, MySQL to PostgreSQL migration.',
-    tech: ['Django', 'Keras', 'PostgreSQL', 'Google API'],
+    category: 'ML Research',
+    year: '2023',
+    lede: 'Sentiment analysis that reads between the lines, not just the stars.',
+    body: 'BiLSTM neural network trained on review language. What people write when they\'re being honest is different from what they click. The model reads the honesty.',
+    tech: ['Django', 'Keras', 'BiLSTM', 'PostgreSQL'],
     live: null,
     github: 'https://github.com/arxel2468/food',
-    image: '/images/peakfood.png',
+    image: '/images/peakfood.png',      // ← add this
+  },
+  {
+    id: 'WriteFlow',
+    index: '04',
+    title: 'WriteFlow',
+    category: 'AI Platform',
+    year: '2026',
+    lede: 'A focused writing tool that transforms scattered thoughts into structured, polished writing.',
+    body: 'Writers face a gap between "ideas in my head" and "finished piece of writing." Current tools either present a blank page, use AI to generate generic text, or overwhelm with features. WriteFlow solves this by breaking writing into natural stages and keeping AI in an advisory role.',
+    tech: ['Next.js 14', 'TypeScript', 'Groq AI', 'Supabase', 'Prisma'],
+    live: 'https://writeflowapp.vercel.app',
+    github: 'https://github.com/arxel2468/writeflow',
+    image: 'images/undraw_programming_re_kg9v.svg', 
   },
 ];
 
-export const skills = [
-  { group: 'Frontend', items: ['React', 'Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'] },
-  { group: 'Backend', items: ['Python', 'Django', 'Node.js', 'REST APIs', 'PostgreSQL'] },
-  { group: 'Commerce', items: ['Shopify', 'Liquid', 'Meta Ads', 'GA4', 'SEO'] },
-  { group: 'Tools', items: ['Git', 'Docker', 'Prisma', 'Supabase', 'Vercel'] },
-  { group: 'AI/ML', items: ['Groq', 'Keras', 'LSTM', 'NLP'] },
+export const quotes = [
+  'Death is the consequence of the attempt to live.',
+  'For a burdened heart is alive still.',
+  'The dead only haunt the living when they are forgotten. So remember — but don\'t remain.',
+  'My hands seem to know what my mind refuses to see.',
+  'There is a man I never was. I mourn him.',
+  'Clarity is psychedelic.',
+  'After destruction, there is only one thing to do: to create myself anew.',
+  'The coma is self-induced. You can wake up when you want.',
+  'We have all hidden these small feelings, and we search the world for people who carry them too.',
+  'Pain is the secondary form of feeling alive. Love is primary.',
+  'I refuse to live in a world of the dead.',
+  'Centuries apart, and yet feeling all the same.',
+  'We build anyway — accepting that fate, or simply ignoring it.',
+  'I am not the haunted. I am the curse.',
+  'Days are slow like eternity, but years go by in a blink of an eye.',
+  'There is no natural mirror in nature. Even water shows our faces all distorted.',
+  'You don\'t betray yourself when you\'re wrong. You betray yourself when you\'re unconscious.',
 ];
 
-export const socials = [
-  { name: 'GitHub', url: 'https://github.com/arxel2468' },
-  { name: 'LinkedIn', url: 'https://linkedin.com/in/amitpandit2468' },
-  { name: 'X', url: 'https://twitter.com/amitpandit2468' },
-];
-
-export const email = '1amitpandit2468@gmail.com';
-
-export const tickerItems = ['106 Purchases in 6 Days', '46.4x ROAS', '₹0.48 Cost Per Result', '<24h Store to Live', '4+ Products Shipped', 'Open to Work'];
+export const about = {
+name: 'Amit Pandit',
+location: 'Mumbai, India',
+tagline: 'I build things. I write about what it means.',
+calendly: 'https://calendly.com/amitpandit2468',
+email: '1amitpandit2468@gmail.com',
+socials: [
+{ label: 'GitHub', url: 'https://github.com/arxel2468' },
+{ label: 'Substack', url: 'https://amitpandit.substack.com' },
+{ label: 'LinkedIn', url: 'https://linkedin.com/in/amitpandit2468' },
+{ label: 'X / Twitter', url: 'https://twitter.com/amitpandit2468' },
+],
+};
