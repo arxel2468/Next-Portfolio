@@ -1,18 +1,82 @@
+
 .grain {
+  /*
+   * Fixed position — sits above all content, below the cursor.
+   * inset: 0 means it covers exactly the viewport, no more.
+   * The old implementation used inset: -100% (3× the viewport)
+   * to allow for CSS translate offsets during animation.
+   * We don't animate, so we only need the viewport.
+   */
   position: fixed;
-  inset: -100%;
-  width: 300%; height: 300%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  /*
+   * Pointer events: none — the grain must never intercept
+   * mouse/touch events. Without this, every click on the page
+   * would be caught by the grain element.
+   */
   pointer-events: none;
+
+  /*
+   * Z-index: just below the cursor (z-cursor: 9000)
+   * but above all page content. The cursor renders above grain
+   * so it feels physically present, not painted on.
+   */
   z-index: 8000;
+
+  /*
+   * Opacity: 3.5%
+   * This is the optical sweet spot for grain texture.
+   * Below 2%: invisible, no effect.
+   * Above 5%: visually distracting, reads as "dirty screen."
+   * 3.5%: subliminal richness. You feel it, you don't see it.
+   */
   opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: shift 0.5s steps(1) infinite;
+
+  /*
+   * The noise texture.
+   * Generated with SVG feTurbulence filter:
+   *   - fractalNoise type (not turbulence) → organic, not psychedelic
+   *   - baseFrequency 0.72 → medium grain size (not too fine, not chunky)
+   *   - numOctaves 4 → detail complexity at multiple scales
+   *   - stitchTiles: stitch → seamless tiling, no visible repeat
+   *
+   * The SVG is inlined as a data URI — zero additional network request.
+   * The background-size: 256px creates a tight tile that's imperceptible
+   * as a repeat.
+   */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+
+  /*
+   * mix-blend-mode: overlay
+   * This blends the grain with the content beneath it rather than
+   * sitting opaquely on top. The result is grain that darkens
+   * light areas and lightens dark areas — exactly how film grain behaves.
+   * On the warm paper background: very subtle warmth.
+   * On the dark Writing/Footer sections: slightly lifted texture.
+   */
+  mix-blend-mode: overlay;
+
+  /*
+   * will-change: unset (default)
+   * We do NOT set will-change: transform here.
+   * will-change creates a new composite layer in the GPU.
+   * Since this element doesn't move, creating a layer is pure waste.
+   * Only set will-change on elements that actually animate.
+   */
 }
 
-@keyframes shift {
-  0%  { transform: translate(0,0); }
-  20% { transform: translate(-2%,-3%); }
-  40% { transform: translate(3%,1%); }
-  60% { transform: translate(-1%,4%); }
-  80% { transform: translate(4%,-2%); }
+/*
+ * Reduced motion: even though there's no animation here,
+ * we keep the pattern consistent — hide non-essential decorative
+ * elements when the user prefers reduced visual complexity.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    display: none;
+  }
 }

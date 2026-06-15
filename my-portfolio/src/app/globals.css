@@ -1,69 +1,510 @@
+/* src/app/globals.css
+ *
+ * ─── THE DESIGN SYSTEM ──────────────────────────────────────────────────────
+ *
+ * This file is the single source of truth for all design tokens.
+ * It is imported once in layout.js and its variables cascade to every
+ * component in the application.
+ *
+ * STRUCTURE:
+ *   1. Tailwind directives
+ *   2. CSS custom properties (design tokens)
+ *   3. Base reset & normalization
+ *   4. Global typographic defaults
+ *   5. Lenis smooth scroll compatibility
+ *   6. Accessibility & motion preferences
+ *   7. Selection & scrollbar styling
+ *   8. Focus management
+ *
+ * ─────────────────────────────────────────────────────────────────────────── */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 1: DESIGN TOKENS
+   The mathematical foundation. Everything below here consumes these values.
+   Never write a raw hex, pixel, or font-family outside of :root.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 :root {
-  --bg:         #F7F3EC;
-  --bg-warm:    #EFE8DA;
-  --bg-dark:    #1C1510;
-  --bg-dark-2:  #251C15;
-  --ink:        #1C1510;
-  --ink-2:      #4A3728;
-  --ink-3:      #8C7260;
-  --ink-4:      #B5A090;
-  --ochre:      #C4892A;
-  --ochre-dim:  rgba(196,137,42,0.12);
-  --burgundy:   #7D1D2E;
-  --rust:       #B84A2A;
-  --rule:       rgba(28,21,16,0.1);
-  --rule-light: rgba(28,21,16,0.06);
+
+  /* ── COLOR SYSTEM ─────────────────────────────────────────────────────── */
+
+  /*
+   * Philosophy: ink-on-paper. Background is warm white — not #FFFFFF
+   * (a monitor artifact) but a slightly warm, slightly aged paper tone.
+   * Foreground is warm near-black — ink is never pure black.
+   *
+   * The Tailwind color utilities (bg-paper, text-ink, etc.) map to these
+   * variables via tailwind.config.js. Changing a value here changes it
+   * everywhere simultaneously.
+   */
+
+  /* Light surface spectrum */
+  --color-bg:              #F5F2EE; /* warm paper — primary background       */
+  --color-surface:         #EFECE7; /* one step deeper — card backgrounds    */
+  --color-surface-hover:   #E8E4DE; /* interactive surface hover             */
+
+  /* Ink spectrum — warm near-black to tertiary */
+  --color-ink:             #1A1814; /* primary text — warm, not cold black   */
+  --color-ink-secondary:   #6B6760; /* secondary text, captions              */
+  --color-ink-tertiary:    #A8A49E; /* disabled states, decorative rules     */
+
+  /* Hairline rules — the structural skeleton */
+  --color-rule:            #D4CFC8; /* standard hairline dividers            */
+  --color-rule-light:      rgba(26, 24, 20, 0.06); /* ultra-subtle rules    */
+
+  /*
+   * THE ACCENT — ochre. Not gold, not yellow. Ochre.
+   * Use it rarely. Every use should mean something.
+   * When the eye lands on ochre, it should feel earned.
+   */
+  --color-accent:          #C4922A; /* primary accent — all interactive CTAs */
+  --color-accent-subtle:   #F0E4C8; /* accent as fill — chip backgrounds     */
+  --color-accent-dim:      rgba(196, 146, 42, 0.12); /* ghost fill for tags */
+
+  /* Dark surfaces — Writing section, Footer */
+  --color-dark:            #141210; /* deep warm dark — not cold black       */
+  --color-dark-2:          #1C1A17; /* slightly lighter dark surface         */
+  --color-dark-rule:       rgba(240, 235, 227, 0.07); /* dark-bg hairlines  */
+  --color-dark-ink:        #F0EBE3; /* text on dark backgrounds              */
+  --color-dark-ink-2:      rgba(240, 235, 227, 0.55); /* secondary on dark  */
+  --color-dark-ink-3:      rgba(240, 235, 227, 0.25); /* tertiary on dark   */
+
+  /* Legacy aliases — keeps existing component CSS working during migration  */
+  --bg:         var(--color-bg);
+  --bg-warm:    var(--color-surface);
+  --bg-dark:    var(--color-dark);
+  --bg-dark-2:  var(--color-dark-2);
+  --ink:        var(--color-ink);
+  --ink-2:      #4A3728; /* warm mid-tone — kept from original               */
+  --ink-3:      var(--color-ink-secondary);
+  --ink-4:      var(--color-ink-tertiary);
+  --ochre:      var(--color-accent);
+  --ochre-dim:  var(--color-accent-dim);
+  --rule:       var(--color-rule);
+  --rule-light: var(--color-rule-light);
+  --burgundy:   #7D1D2E; /* selection highlight, error states                */
+
+  /* ── TYPOGRAPHY SYSTEM ───────────────────────────────────────────────── */
+
+  /*
+   * These variables inject the font stacks loaded in fonts.js.
+   * The layout.js root element receives the font variables as className,
+   * which injects them into :root for cascade consumption.
+   *
+   * DO NOT redeclare font-family values here. Reference these variables.
+   */
+
+  /* Font family stacks */
+  --font-playfair: 'Playfair Display', 'Georgia', serif;
+  --font-garamond: 'EB Garamond', 'Georgia', serif;
+  --font-inter:    'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --font-mono:     'JetBrains Mono', 'Fira Code', monospace;
+
+  /*
+   * Type scale: Major Third (×1.250) from 16px base.
+   * Reference these in component CSS as: font-size: var(--text-body);
+   * In Tailwind, use the named utilities: text-body, text-lead, etc.
+   */
+  --text-micro:    0.625rem;   /* 10px  — eyebrow labels, index numbers      */
+  --text-caption:  0.8125rem;  /* 13px  — captions, dates                    */
+  --text-body:     1rem;       /* 16px  — body copy (base)                   */
+  --text-lead:     1.125rem;   /* 18px  — lead paragraphs                    */
+  --text-sm-head:  1.25rem;    /* 20px  — small headings                     */
+  --text-md-head:  1.5625rem;  /* 25px  — medium headings                    */
+  --text-lg-head:  2rem;       /* 32px  — section headings                   */
+  --text-disp-sm:  2.5rem;     /* 40px  — display small                      */
+  --text-disp-md:  3.125rem;   /* 50px  — display medium                     */
+  --text-disp-lg:  3.9375rem;  /* 63px  — display large (desktop)            */
+
+  /*
+   * Line height system:
+   * Headings need less leading — the eye jumps shorter distances.
+   * Body copy needs breathing room — the eye traverses longer lines.
+   * These values are optical physics, not preferences.
+   */
+  --leading-tight:  1.1;   /* display type, hero names                       */
+  --leading-snug:   1.2;   /* section headings                               */
+  --leading-normal: 1.5;   /* lead paragraphs                                */
+  --leading-body:   1.7;   /* body copy — the sweet spot                     */
+  --leading-loose:  1.85;  /* long-form prose                                */
+
+  /*
+   * Tracking (letter-spacing):
+   * Large type → negative tracking (optically spread at scale).
+   * Small labels → positive tracking (optically cramped at small sizes).
+   */
+  --tracking-display: -0.04em;  /* hero name                                 */
+  --tracking-heading: -0.02em;  /* section headings                          */
+  --tracking-normal:   0em;     /* body copy                                 */
+  --tracking-label:    0.06em;  /* UI labels                                 */
+  --tracking-eyebrow:  0.12em;  /* section markers, small-caps               */
+
+  /* ── SPACING SYSTEM ──────────────────────────────────────────────────── */
+
+  /*
+   * Perfect Fourth ratio (×1.333) from 8px base.
+   * Use these for ALL spacing: padding, margin, gap.
+   * Never write a raw pixel value for spacing in a component.
+   */
+  --sp-1:   0.5rem;     /* 8px    — tight component gaps                    */
+  --sp-2:   0.6875rem;  /* 11px   — icon-text gaps                          */
+  --sp-3:   0.875rem;   /* 14px   — compact padding                         */
+  --sp-4:   1.1875rem;  /* 19px   — standard padding                        */
+  --sp-5:   1.5625rem;  /* 25px   — component separation                    */
+  --sp-6:   2.0625rem;  /* 33px   — section internal gap                    */
+  --sp-7:   2.75rem;    /* 44px   — between subsections                     */
+  --sp-8:   3.6875rem;  /* 59px   — major breaks                            */
+  --sp-9:   4.875rem;   /* 78px   — section top/bottom padding              */
+  --sp-10:  6.5rem;     /* 104px  — maximum rhythm unit                     */
+
+  /* Section vertical padding — the scroll rhythm */
+  --section-pad-y: clamp(5rem, 10vw, 9rem);
+
+  /* ── GRID & LAYOUT ───────────────────────────────────────────────────── */
+
+  /*
+   * 12-column grid, left-anchored (not centered).
+   * The nav rail occupies the left 120px.
+   * Content begins after the rail.
+   * All sections share these values — this is what makes the
+   * grid feel consistent across sections.
+   */
+  --grid-gutter:    1.5rem;   /* 24px — column gutter                       */
+  --grid-margin:    3.75rem;  /* 60px — page edge margin                    */
+  --nav-width:      7.5rem;   /* 120px — fixed left nav rail                */
+  --content-inset:  3.5rem;   /* 56px — right page margin                   */
+  --max-content:    78rem;    /* 1248px — content max-width                  */
+
+  /*
+   * CANONICAL SECTION PADDING:
+   * Every section uses these values. The consistency is what makes the
+   * vertical rhythm feel designed rather than accidental.
+   *
+   * Desktop: 80px top, 96px bottom, 56px right, 120px left (nav width)
+   * Tablet:  72px top, 80px bottom, 40px right, 80px left
+   * Mobile:  64px top, 80px bottom, 24px horizontal
+   */
+  --pad-section:          80px var(--content-inset) 96px var(--nav-width);
+  --pad-section-tablet:   72px 40px 80px 80px;
+  --pad-section-mobile:   64px 24px 80px;
+
+  /* ── ANIMATION ───────────────────────────────────────────────────────── */
+
+  /*
+   * Easing functions — used in CSS transitions for elements not
+   * managed by Framer Motion. The "physical" quality comes from
+   * asymmetric curves: fast in, slow out (or vice versa).
+   * Never use linear or ease-in-out for visual transitions.
+   */
+  --ease-expo:    cubic-bezier(0.76, 0, 0.24, 1);    /* primary reveals     */
+  --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);      /* interactive out     */
+  --ease-in:      cubic-bezier(0.7, 0, 1, 0.5);       /* exit animations     */
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);  /* magnetic snap-back  */
+
+  /* Duration scale */
+  --dur-instant:  80ms;
+  --dur-fast:     200ms;
+  --dur-normal:   400ms;
+  --dur-slow:     700ms;
+  --dur-reveal:   1200ms;
+
+  /* ── BORDERS & RADIUS ────────────────────────────────────────────────── */
+
+  --radius-sm:    4px;
+  --radius-md:    8px;
+  --radius-lg:    16px;
+  --radius-full:  999px;
+
+  --border-rule:   1px solid var(--color-rule);
+  --border-accent: 1px solid var(--color-accent);
+
+  /* ── Z-INDEX STACK ───────────────────────────────────────────────────── */
+
+  --z-base:     0;
+  --z-above:    10;
+  --z-nav:      100;
+  --z-cursor:   9000;
+  --z-overlay:  9999;
 }
 
-*, *::before, *::after {
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 2: BASE RESET & NORMALIZATION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 html {
-  font-size: 16px;
+  font-size: 16px; /* Base unit. 1rem = 16px. Do not change. */
+
+  /*
+   * Font smoothing:
+   * antialiased renders thinner strokes — correct for light text on dark.
+   * On light backgrounds (our default), antialiased still looks better
+   * because our warm ink color (#1A1814) is slightly softer than true black.
+   */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /*
+   * We disable native scroll-behavior here because Lenis manages smooth
+   * scrolling. If both are active, you get double-smoothing.
+   */
   scroll-behavior: auto;
+
+  /* Prevent horizontal overflow from any misaligned element */
+  overflow-x: hidden;
 }
 
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-
 body {
-  background: var(--bg);
-  color: var(--ink);
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+
+  /*
+   * Body font is Garamond — the editorial workhorse.
+   * Every element inherits this and overrides with the correct
+   * font-family for its role (mono for labels, sans for UI).
+   */
   font-family: var(--font-garamond), Georgia, serif;
-  overflow-x: hidden;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+
+  /*
+   * cursor: none — we have a custom cursor (Cursor.jsx).
+   * The media query below restores cursor on touch devices.
+   */
   cursor: none;
-  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* Restore native cursor on touch/coarse pointer devices */
+@media (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
+
+  * {
+    cursor: auto !important;
+  }
+}
+
+/* Remove default list styles — we style lists explicitly */
+ol, ul {
+  list-style: none;
+}
+
+/* Remove default button styles — we style buttons explicitly */
+button {
+  background: none;
+  border: none;
+  cursor: none;
+  font: inherit;
+  color: inherit;
 }
 
 @media (pointer: coarse) {
-  body { cursor: auto; }
-  * { cursor: auto !important; }
+  button {
+    cursor: pointer;
+  }
 }
 
+/* Images and media — block display prevents inline gap artifact */
+img, video, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Anchors — remove default underline, we apply deliberately */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 3: LENIS SMOOTH SCROLL COMPATIBILITY
+   These classes are added/removed by Lenis on the html element.
+   They prevent conflicts between Lenis and native scroll-behavior.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 4: SECTION LAYOUT SYSTEM
+   The canonical padding values applied to every major section.
+   This replaces the per-section padding declarations that caused
+   the invisible 8px grid misalignment between sections.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/*
+ * .section-layout — apply this class to every <section> root element.
+ * It enforces the grid alignment that makes sections feel unified.
+ *
+ * Usage in component CSS:
+ *   .root { composes: section-layout; }
+ *   OR in JSX:
+ *   <section className="section-layout">
+ */
+.section-layout {
+  padding: var(--pad-section);
+}
+
+@media (max-width: 1024px) {
+  .section-layout {
+    padding: var(--pad-section-tablet);
+  }
+}
+
+@media (max-width: 768px) {
+  .section-layout {
+    padding: var(--pad-section-mobile);
+  }
+}
+
+/*
+ * .section-header — the consistent "01 ── LABEL" header pattern
+ * used across Projects, StealStreet, Writing, and Contact.
+ * Centralizing this prevents the 4 near-identical CSS blocks
+ * that currently exist across section module files.
+ */
+.section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-6);
+}
+
+.section-eyebrow__index {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--color-accent);
+}
+
+.section-eyebrow__rule {
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--color-rule);
+  flex-shrink: 0;
+}
+
+.section-eyebrow__label {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-ink-tertiary);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 5: SELECTION & SCROLLBAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/*
+ * Text selection styling.
+ * Burgundy background with paper text — feels like a physical highlight.
+ */
 ::selection {
-  background: var(--burgundy);
-  color: var(--bg);
+  background-color: var(--burgundy);
+  color: var(--color-bg);
 }
 
-::-webkit-scrollbar { display: none; }
+::-moz-selection {
+  background-color: var(--burgundy);
+  color: var(--color-bg);
+}
+
+/* Hide the native scrollbar — Lenis handles the scroll feel */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 6: FOCUS MANAGEMENT
+   Accessibility: visible focus rings for keyboard navigation.
+   They use the accent color to remain on-brand.
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 :focus-visible {
-  outline: 1px solid var(--ochre);
+  outline: 1.5px solid var(--color-accent);
   outline-offset: 3px;
+  border-radius: var(--radius-sm);
 }
 
+/* Remove focus ring for mouse/touch users (only show for keyboard) */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 7: REDUCED MOTION
+   Respect the user's system preference. When prefers-reduced-motion
+   is set, all animations and transitions are cut to near-instant.
+   Framer Motion also reads this preference — no additional config needed.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+
+  /* Allow Framer Motion to still render final states */
+  .motion-safe\:animate-none {
+    animation: none !important;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 8: FONT-VARIANT NUMERIC
+   Tabular numerals for all clock/counter/stat elements.
+   This prevents the number "jitter" where varying-width digits
+   cause horizontal reflow during count animations.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tabular-nums,
+time,
+[data-stat] {
+  font-variant-numeric: tabular-nums;
 }
