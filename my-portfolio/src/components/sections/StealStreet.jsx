@@ -1,193 +1,284 @@
+// src/components/sections/StealStreet.jsx
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { motion, useInView, animate, useScroll, useTransform } from 'framer-motion';
 import s from './StealStreet.module.css';
+import { RevealSection, RevealItem } from '@/components/ui/RevealSection';
 import { stealstreet } from '@/data/content';
 
-function CountUp({ to, suffix = '', prefix = '', decimals = 0, duration = 1800 }) {
-  const [val, setVal] = useState('0');
-  const ref = useRef(null);
-  const ran = useRef(false);
+// Framer-native counter — replaces the custom RAF CountUp
+function StatNumber({ to, suffix = '', prefix = '', decimals = 0, duration = 2 }) {
+  const ref      = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const started  = useRef(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const num = parseFloat(String(to).replace(/[^0-9.]/g, ''));
-    if (isNaN(num)) { setVal(String(to)); return; }
+    if (!isInView || started.current) return;
+    started.current = true;
 
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !ran.current) {
-        ran.current = true;
-        const t0 = performance.now();
-        const tick = (now) => {
-          const p = Math.min((now - t0) / duration, 1);
-          const e = 1 - Math.pow(2, -10 * p);
-          const cur = num * e;
-          setVal(decimals > 0 ? cur.toFixed(decimals) : String(Math.floor(cur)));
-          if (p < 1) requestAnimationFrame(tick);
-          else setVal(decimals > 0 ? num.toFixed(decimals) : String(num));
-        };
-        requestAnimationFrame(tick);
-        obs.unobserve(el);
-      }
-    }, { threshold: 0.6 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [to, duration, decimals]);
+    const raw = parseFloat(String(to).replace(/[^0-9.]/g, ''));
+    if (isNaN(raw)) {
+      if (ref.current) ref.current.textContent = `${prefix}${to}${suffix}`;
+      return;
+    }
 
-  return <span ref={ref}>{prefix}{val}{suffix}</span>;
+    const controls = animate(0, raw, {
+      duration,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => {
+        if (ref.current) {
+          ref.current.textContent =
+            `${prefix}${decimals > 0 ? v.toFixed(decimals) : Math.floor(v)}${suffix}`;
+        }
+      },
+      onComplete: () => {
+        if (ref.current) {
+          ref.current.textContent =
+            `${prefix}${decimals > 0 ? raw.toFixed(decimals) : raw}${suffix}`;
+        }
+      },
+    });
+
+    return () => controls.stop();
+  }, [isInView, to, suffix, prefix, decimals, duration]);
+
+  return (
+    <span ref={ref} aria-label={`${prefix}${to}${suffix}`}>
+      {prefix}0{suffix}
+    </span>
+  );
+}
+
+// The hero stat — 46.4× rendered as typographic sculpture
+function HeroStat({ value, label }) {
+  const ref      = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-60px' });
+  const started  = useRef(false);
+
+  useEffect(() => {
+    if (!isInView || started.current) return;
+    started.current = true;
+
+    const controls = animate(0, 46.4, {
+      duration: 2.4,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => {
+        if (ref.current) ref.current.textContent = `${v.toFixed(1)}×`;
+      },
+      onComplete: () => {
+        if (ref.current) ref.current.textContent = '46.4×';
+      },
+    });
+
+    return () => controls.stop();
+  }, [isInView]);
+
+  return (
+    <div className={s.heroStatWrap}>
+      <motion.span
+        ref={ref}
+        className={s.heroStatValue}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        aria-label="46.4 times return on ad spend"
+      >
+        0×
+      </motion.span>
+      <motion.span
+        className={s.heroStatLabel}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+      >
+        {label}
+      </motion.span>
+    </div>
+  );
 }
 
 export default function StealStreet() {
-  const d = stealstreet;
-  const rootRef = useRef(null);
+  const d          = stealstreet;
+  const sectionRef = useRef(null);
 
-  useEffect(() => {
-    const blocks = rootRef.current?.querySelectorAll(`.${s.revealBlock}`);
-    if (!blocks) return;
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const delay = Number(entry.target.getAttribute('data-delay') ?? 0);
-            setTimeout(() => {
-              entry.target.classList.add(s.revealed);
-            }, delay);
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.08 }
-    );
-
-    blocks.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
+  // Subtle parallax on the hero image
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
 
   return (
     <section
       id="stealstreet"
-      ref={rootRef}
+      ref={sectionRef}
       className={s.root}
       aria-label="StealStreet — featured work"
     >
 
       {/* ── Section marker ── */}
-      <div className={`${s.marker} ${s.revealBlock}`} data-delay="0">
-        <span className={s.markerTag}>Work Experience</span>
-        <span className={s.markerRule} aria-hidden="true" />
-        <span className={s.markerSub}>The one that proved the system</span>
-      </div>
-
-      {/* ── Hero image — completely plain & unshaded ── */}
-      <div className={`${s.imageHeroPlain} ${s.revealBlock}`} data-delay="60">
-        <Image
-          src={d.images.hero}
-          alt="StealStreet store"
-          fill
-          style={{ objectFit: 'cover', objectPosition: 'center' }}
-          priority
-          sizes="(max-width: 768px) 100vw, 90vw"
-        />
-      </div>
-
-      {/* ── Info Header Block (Moved below the image) ── */}
-      <div className={`${s.metaHeader} ${s.revealBlock}`} data-delay="80">
-        <div className={s.metaLeft}>
-          <div className={s.metaLogo}>
-            <Image
-              src={d.images.logo}
-              alt="StealStreet logo"
-              width={48}
-              height={48}
-              style={{ objectFit: 'contain' }}
-            />
+      <RevealSection>
+        <RevealItem>
+          <div className={s.marker}>
+            <span className={s.markerTag}>Work Experience</span>
+            <span className={s.markerRule} aria-hidden="true" />
+            <span className={s.markerSub}>The one that proved the system</span>
           </div>
-          <div className={s.metaText}>
-            <h2 className={s.metaTitle}>
-              StealStreet<span className={s.metaTLD}>.in</span>
-            </h2>
-            <p className={s.metaCategory}>{d.category}</p>
+        </RevealItem>
+      </RevealSection>
+
+      {/* ── Hero image with parallax ── */}
+      <RevealSection>
+        <RevealItem>
+          <div className={s.imageWrap}>
+            <motion.div className={s.imageInner} style={{ y: imageY }}>
+              <Image
+                src={d.images.hero}
+                alt="StealStreet store"
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
+                priority
+                sizes="(max-width: 768px) 100vw, 90vw"
+              />
+            </motion.div>
           </div>
-        </div>
-        
-        <a
-          href={d.live}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={s.metaVisit}
-          aria-label="Visit StealStreet.in"
-        >
-          <span>Visit store</span>
-          <span className={s.visitArrowWrap} aria-hidden="true');">
-            <span className={s.visitLine} />
-            <span className={s.visitHead} />
-          </span>
-        </a>
-      </div>
+        </RevealItem>
+      </RevealSection>
+
+      {/* ── Meta header ── */}
+      <RevealSection>
+        <RevealItem>
+          <div className={s.metaHeader}>
+            <div className={s.metaLeft}>
+              <div className={s.metaLogo}>
+                <Image
+                  src={d.images.logo}
+                  alt="StealStreet logo"
+                  width={48}
+                  height={48}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+              <div className={s.metaText}>
+                <h2 className={s.metaTitle}>
+                  StealStreet
+                  <span className={s.metaTLD}>.in</span>
+                </h2>
+                <p className={s.metaCategory}>{d.category}</p>
+              </div>
+            </div>
+            <a
+              href={d.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={s.metaVisit}
+              aria-label="Visit StealStreet.in"
+            >
+              <span>Visit store</span>
+              <span className={s.visitArrow} aria-hidden="true">
+                <span className={s.visitLine} />
+                <span className={s.visitHead} />
+              </span>
+            </a>
+          </div>
+        </RevealItem>
+      </RevealSection>
+
+      {/* ── THE HERO STAT — 46.4× as typographic sculpture ── */}
+      <RevealSection>
+        <RevealItem>
+          <div className={s.heroStatSection}>
+            <HeroStat value="46.4×" label="return on ad spend" />
+            <div className={s.heroStatRule} aria-hidden="true" />
+            <p className={s.heroStatContext}>
+              106 purchases &nbsp;·&nbsp; 6 days &nbsp;·&nbsp; ₹0.48 cost per result
+            </p>
+          </div>
+        </RevealItem>
+      </RevealSection>
 
       {/* ── Tagline ── */}
-      <div className={`${s.taglineRow} ${s.revealBlock}`} data-delay="100">
-        <p className={s.tagline}>{d.tagline}</p>
-      </div>
-
-      {/* ── Stats bar ── */}
-      <div className={`${s.statsBar} ${s.revealBlock}`} data-delay="140">
-        {d.stats.map((stat, i) => (
-          <div key={i} className={s.stat}>
-            <span className={s.statValue}>
-              {stat.value === '<24h' ? (
-                '<24h'
-              ) : (
-                <CountUp
-                  to={stat.value}
-                  suffix={stat.unit}
-                  decimals={String(stat.value).includes('.') ? 1 : 0}
-                  duration={1600 + i * 180}
-                />
-              )}
-            </span>
-            <span className={s.statLabel}>{stat.label}</span>
-            <span className={s.statSub}>{stat.sub}</span>
+      <RevealSection>
+        <RevealItem>
+          <div className={s.taglineRow}>
+            <p className={s.tagline}>{d.tagline}</p>
           </div>
-        ))}
-      </div>
+        </RevealItem>
+      </RevealSection>
 
-      {/* ── Body ── */}
-      <div className={s.body}>
-        <div className={`${s.bodyLeft} ${s.revealBlock}`} data-delay="180">
-          {d.description.map((p, i) => (
-            <p key={i} className={s.bodyPara}>{p}</p>
+      {/* ── Supporting stats bar ── */}
+      <RevealSection>
+        <div className={s.statsBar}>
+          {d.stats.map((stat, i) => (
+            <RevealItem key={i}>
+              <div className={s.stat}>
+                <span className={s.statValue}>
+                  {stat.value === '<24h' ? (
+                    '<24h'
+                  ) : (
+                    <StatNumber
+                      to={stat.value}
+                      suffix={stat.unit}
+                      decimals={String(stat.value).includes('.') ? 1 : 0}
+                      duration={1.6 + i * 0.18}
+                    />
+                  )}
+                </span>
+                <span className={s.statLabel}>{stat.label}</span>
+                <span className={s.statSub}>{stat.sub}</span>
+              </div>
+            </RevealItem>
           ))}
-
-          <div className={s.resultBand}>
-            <span className={s.resultBandMark} aria-hidden="true">→</span>
-            <p className={s.resultText}>{d.result}</p>
-          </div>
-
-          <blockquote className={s.quote}>
-            <p className={s.quoteText}>"{d.testimonial.quote}"</p>
-            <cite className={s.quoteBy}>— {d.testimonial.by}</cite>
-          </blockquote>
         </div>
+      </RevealSection>
 
-        <div className={`${s.bodyRight} ${s.revealBlock}`} data-delay="220">
-          <p className={s.scopeHeading}>What was built</p>
-          <ol className={s.scopeList}>
-            {d.scope.map((item, i) => (
-              <li key={i} className={s.scopeItem}>
-                <span className={s.scopeN}>{String(i + 1).padStart(2, '0')}</span>
-                <span className={s.scopeT}>{item}</span>
-              </li>
-            ))}
-          </ol>
-          <div className={s.techRow}>
-            {d.tech.map((t) => (
-              <span key={t} className={s.tech}>{t}</span>
-            ))}
-          </div>
-        </div>
+      {/* ── Body: description + scope ── */}
+      <div className={s.body}>
+        <RevealSection>
+          <RevealItem>
+            <div className={s.bodyLeft}>
+              {d.description.map((p, i) => (
+                <p key={i} className={s.bodyPara}>{p}</p>
+              ))}
+
+              <div className={s.resultBand}>
+                <span className={s.resultMark} aria-hidden="true">→</span>
+                <p className={s.resultText}>{d.result}</p>
+              </div>
+
+              <blockquote className={s.quote}>
+                <p className={s.quoteText}>"{d.testimonial.quote}"</p>
+                <cite className={s.quoteBy}>— {d.testimonial.by}</cite>
+              </blockquote>
+            </div>
+          </RevealItem>
+        </RevealSection>
+
+        <RevealSection>
+          <RevealItem>
+            <div className={s.bodyRight}>
+              <p className={s.scopeHeading}>What was built</p>
+              <ol className={s.scopeList}>
+                {d.scope.map((item, i) => (
+                  <li key={i} className={s.scopeItem}>
+                    <span className={s.scopeN}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className={s.scopeT}>{item}</span>
+                  </li>
+                ))}
+              </ol>
+              <div className={s.techRow}>
+                {d.tech.map((t) => (
+                  <span key={t} className={s.tech}>{t}</span>
+                ))}
+              </div>
+            </div>
+          </RevealItem>
+        </RevealSection>
       </div>
 
       <div className={s.bleed} aria-hidden="true" />
