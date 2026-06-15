@@ -2,7 +2,7 @@
 
 .root {
   padding: var(--sp-9) var(--page-x-wide);
-  background: var(--bg-mid);
+  background: var(--bg);
 }
 
 /* ── Header ── */
@@ -42,26 +42,23 @@
 /* ── Row ── */
 .row {
   border-bottom: 1px solid var(--rule);
-  transition: background var(--dur-fast) ease;
+  overflow: hidden;
 }
 
-.row:hover,
-.rowOpen {
-  background: rgba(44, 40, 37, 0.025);
-}
-
-/* The always-visible index line */
+/* Row head — always visible */
 .rowHead {
   display: grid;
-  grid-template-columns: 40px 1fr auto auto auto;
+  grid-template-columns: 40px 1fr auto auto 32px;
   gap: var(--sp-4);
   align-items: center;
   width: 100%;
   padding: var(--sp-4) 0;
   text-align: left;
-  background: none;
-  border: none;
-  transition: none;
+  transition: background var(--dur-fast) ease;
+}
+
+.row:not(.rowOpen) .rowHead:hover {
+  background: rgba(44, 40, 37, 0.02);
 }
 
 .rowNum {
@@ -80,8 +77,8 @@
   transition: color var(--dur-fast) ease;
 }
 
-.row:hover .rowTitle,
-.rowOpen .rowTitle { color: var(--accent); }
+.row:not(.rowOpen) .rowHead:hover .rowTitle { color: var(--accent); }
+.rowOpen .rowTitle { color: var(--bg); }
 
 .rowCategory {
   font-family: var(--font-mono), monospace;
@@ -89,14 +86,20 @@
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--ink-4);
+  transition: color var(--dur-fast) ease;
 }
+
+.rowOpen .rowCategory { color: rgba(238, 234, 227, 0.4); }
 
 .rowYear {
   font-family: var(--font-mono), monospace;
   font-size: var(--text-micro);
   color: var(--ink-4);
   letter-spacing: 0.08em;
+  transition: color var(--dur-fast) ease;
 }
+
+.rowOpen .rowYear { color: rgba(238, 234, 227, 0.4); }
 
 .rowToggle {
   font-family: var(--font-sans);
@@ -105,23 +108,35 @@
   color: var(--ink-3);
   line-height: 1;
   display: inline-block;
-  width: 24px;
   text-align: center;
   transition: color var(--dur-fast) ease;
 }
 
-.row:hover .rowToggle { color: var(--accent); }
+.rowOpen .rowToggle { color: rgba(238, 234, 227, 0.6); }
 
-/* ── Expanded body ── */
+/*
+ * The open row header inverts — the button itself becomes dark
+ * as the dark interior below slides open.
+ * This makes it feel like one continuous material being revealed.
+ */
+.rowOpen .rowHead {
+  background: var(--bg-dark);
+  padding-left: var(--sp-3);
+  padding-right: var(--sp-3);
+  margin: 0 calc(-1 * var(--sp-3));
+}
+
+/* ── Dark interior ── */
 .rowBody {
   overflow: hidden;
+  background: var(--bg-dark);
 }
 
 .rowBodyInner {
   display: grid;
   grid-template-columns: 220px 1fr;
   gap: var(--sp-6);
-  padding: var(--sp-3) 0 var(--sp-6) 40px;
+  padding: var(--sp-5) var(--sp-3) var(--sp-7);
   align-items: start;
 }
 
@@ -131,7 +146,9 @@
   height: 140px;
   overflow: hidden;
   flex-shrink: 0;
-  background: var(--bg-deep);
+  background: var(--bg-dark-2);
+  /* Slight desaturation inside dark interior */
+  filter: brightness(0.9);
 }
 
 .rowText {
@@ -143,14 +160,15 @@
 .rowLede {
   font-style: italic;
   font-size: var(--text-caption);
-  color: var(--ink-2);
+  color: var(--dark-ink);
   line-height: var(--leading-body);
   font-weight: 300;
+  opacity: 0.8;
 }
 
 .rowDesc {
   font-size: var(--text-caption);
-  color: var(--ink-3);
+  color: var(--dark-ink-2);
   line-height: var(--leading-loose);
   font-weight: 300;
 }
@@ -162,7 +180,7 @@
   flex-wrap: wrap;
   gap: var(--sp-3);
   padding-top: var(--sp-3);
-  border-top: 1px solid var(--rule-light);
+  border-top: 1px solid var(--dark-rule);
 }
 
 .rowTech {
@@ -176,9 +194,9 @@
   font-size: 7.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-4);
+  color: var(--dark-ink-3);
   padding: 3px 7px;
-  border: 1px solid var(--rule);
+  border: 1px solid var(--dark-rule);
 }
 
 .rowLinks {
@@ -195,18 +213,23 @@
   transition: opacity var(--dur-fast) ease;
 }
 
-.rowLink:hover { opacity: 0.7; }
-.rowLinkGhost  { color: var(--ink-3); }
+.rowLink:hover   { opacity: 0.7; }
+.rowLinkGhost    { color: var(--dark-ink-3); }
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .root { padding: var(--sp-8) var(--page-x); }
   .rowBodyInner { grid-template-columns: 1fr; }
-  .rowThumb { width: 100%; height: 200px; }
+  .rowThumb { width: 100%; height: 180px; }
 }
 
 @media (max-width: 768px) {
-  .rowHead { grid-template-columns: 32px 1fr auto; }
+  .rowHead     { grid-template-columns: 32px 1fr 32px; }
   .rowCategory,
-  .rowYear { display: none; }
+  .rowYear     { display: none; }
+  .rowOpen .rowHead {
+    margin: 0 calc(-1 * var(--page-x));
+    padding-left: var(--page-x);
+    padding-right: var(--page-x);
+  }
 }

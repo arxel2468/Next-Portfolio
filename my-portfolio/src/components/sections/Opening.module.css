@@ -9,7 +9,7 @@
   padding: var(--sp-9) var(--page-x-wide);
 }
 
-/* ── Quote field — breathes behind everything ── */
+/* ── Quote field ── */
 .field {
   position: absolute;
   inset: 0;
@@ -24,10 +24,9 @@
   font-weight: 300;
   color: var(--ink);
   line-height: 1.6;
-  max-width: 240px;
-  /* opacity set inline per quote */
+  max-width: 220px;
   white-space: normal;
-  transform-origin: left center;
+  will-change: transform;
 }
 
 /* ── Main content ── */
@@ -53,7 +52,6 @@
   font-size: var(--text-md);
   font-weight: 400;
   color: var(--ink);
-  letter-spacing: var(--tracking-normal);
   line-height: 1;
 }
 
@@ -65,20 +63,37 @@
   color: var(--ink-3);
 }
 
-/* ── Hook — the single most important line ── */
+/* ── Hook — the typographic break ── */
 .hook {
-  font-family: var(--font-sans);
-  font-size: clamp(2.8rem, 7vw, 6rem);
-  font-weight: 300;
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-tight);
-  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  /* No gap between lines — they're one thought with two voices */
 }
 
-.hook em {
-  font-style: italic;
-  /* Slightly lighter — the second half of the thought */
+.hookLight {
+  font-family: var(--font-sans);
+  font-size: clamp(2.4rem, 6vw, 5.2rem);
+  font-weight: 200;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.1;
   color: var(--ink-2);
+  /* Slightly indented — the thought begins tentatively */
+  padding-left: 0;
+}
+
+.hookHeavy {
+  font-family: var(--font-sans);
+  font-size: clamp(2.8rem, 7vw, 6.4rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--ink);
+  /*
+   * The resolution shifts right — like the answer
+   * landing one step further than the question.
+   */
+  padding-left: clamp(1.5rem, 4vw, 4rem);
 }
 
 /* ── Stats ── */
@@ -88,7 +103,7 @@
   gap: 0;
   border-top: 1px solid var(--rule);
   padding-top: var(--sp-4);
-  max-width: 380px;
+  max-width: 360px;
 }
 
 .stat {
@@ -101,7 +116,7 @@
 
 .statValue {
   font-family: var(--font-sans);
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-size: clamp(1.3rem, 2.8vw, 1.9rem);
   font-weight: 500;
   color: var(--ink);
   letter-spacing: var(--tracking-tight);
@@ -120,14 +135,14 @@
 /* ── Scroll cue ── */
 .scrollCue {
   position: absolute;
-  bottom: var(--sp-5);
+  bottom: var(--sp-6);
   left: 50%;
   transform: translateX(-50%);
 }
 
 .scrollLine {
   width: 1px;
-  height: 64px;
+  height: 56px;
   background: var(--rule);
   position: relative;
   overflow: hidden;
@@ -136,18 +151,18 @@
 .scrollDot {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: -1px;
   width: 3px;
   height: 3px;
   border-radius: 50%;
   background: var(--accent);
-  margin-left: -1px;
 }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .root    { padding: var(--sp-9) var(--page-x); }
-  .content { gap: var(--sp-6); }
-  .fieldQuote { display: none; } /* Too cluttered on small screens */
+  .root       { padding: var(--sp-9) var(--page-x); }
+  .content    { gap: var(--sp-6); }
+  .fieldQuote { display: none; }
+  .hookLight  { font-size: clamp(2rem, 8vw, 3rem); }
+  .hookHeavy  { font-size: clamp(2.4rem, 9vw, 3.6rem); padding-left: clamp(1rem, 3vw, 2rem); }
 }

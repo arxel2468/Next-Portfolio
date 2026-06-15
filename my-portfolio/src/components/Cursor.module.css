@@ -4,53 +4,54 @@
   position: fixed;
   top: 0;
   left: 0;
-  /* translate() set by JS — origin at top-left, offset by half size */
   width: 16px;
   height: 16px;
   pointer-events: none;
   z-index: var(--z-cursor);
   will-change: transform;
-  transition: opacity 0.3s ease;
-
-  /* The crosshair — two pseudo elements forming + shape */
+  transition: opacity 0.2s ease;
 }
 
-/* Horizontal bar */
+/* Horizontal bar of crosshair */
 .cursor::before {
   content: '';
   position: absolute;
-  top: 50%;
+  top: 7px;
   left: 0;
-  width: 100%;
+  width: 16px;
   height: 1px;
   background: var(--ink);
-  transform: translateY(-50%) translateX(-50%) translateX(8px);
-  transition: width var(--dur-fast) var(--ease-out),
-              background var(--dur-fast) ease;
+  transition:
+    width 150ms ease,
+    background 150ms ease,
+    opacity 150ms ease;
 }
 
-/* Vertical bar */
+/* Vertical bar of crosshair */
 .cursor::after {
   content: '';
   position: absolute;
-  left: 50%;
+  left: 7px;
   top: 0;
-  height: 100%;
   width: 1px;
+  height: 16px;
   background: var(--ink);
-  transform: translateX(-50%) translateY(-50%) translateY(8px);
-  transition: height var(--dur-fast) var(--ease-out),
-              background var(--dur-fast) ease;
+  transition:
+    height 150ms ease,
+    background 150ms ease,
+    opacity 150ms ease;
 }
 
-/* On hover — collapse crosshair into filled square */
+/* On interactive elements — bars contract to a filled square center */
 .cursor.active::before {
-  width: 6px;
+  width: 5px;
+  left: 5px;
   background: var(--accent);
 }
 
 .cursor.active::after {
-  height: 6px;
+  height: 5px;
+  top: 5px;
   background: var(--accent);
 }
 

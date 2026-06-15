@@ -2,128 +2,91 @@
 
 .root {
   position: relative;
-  background: var(--bg);
-}
-
-/* ── Full bleed image ── */
-.imageFrame {
-  position: relative;
-  width: 100%;
-  height: clamp(320px, 55vh, 680px);
   overflow: hidden;
+  background: var(--bg-mid);
+  /*
+   * The watermark needs room to breathe vertically.
+   * Generous padding so content doesn't crowd the stamp.
+   */
+  padding: 0;
 }
 
-.imageInner {
+/* ── Watermark — the wordmark as background stamp ── */
+.watermark {
   position: absolute;
-  inset: -12% 0;
+  /*
+   * Center it vertically in the section.
+   * Width: slightly wider than the section so it feels
+   * like it was always there, not placed.
+   */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110%;
+  pointer-events: none;
   will-change: transform;
+
+  /*
+   * Opacity: low enough to be subliminal above the fold,
+   * legible if you look for it.
+   * mix-blend-mode: multiply darkens where it overlaps content
+   * making it feel printed into the surface, not layered on top.
+   */
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+  user-select: none;
 }
 
-.imageGradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 30%,
-    rgba(28, 25, 23, 0.75) 100%
-  );
-  z-index: 1;
-}
-
-/* The 42.3× — lives on the image, bottom left */
-.imageNumber {
-  position: absolute;
-  bottom: var(--sp-6);
-  left: var(--page-x-wide);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-1);
-}
-
-.imageNumberValue {
-  font-family: var(--font-sans);
-  font-size: clamp(64px, 12vw, 160px);
-  font-weight: 200;
-  color: #EDE8E1;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
-  font-variant-numeric: tabular-nums;
-}
-
-.imageNumberLabel {
-  font-family: var(--font-mono), monospace;
-  font-size: var(--text-micro);
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
-  color: rgba(237, 232, 225, 0.6);
-}
-
-/* ── Content ── */
+/* ── Content — sits above watermark ── */
 .content {
-  padding: var(--sp-7) var(--page-x-wide) var(--sp-9);
+  position: relative;
+  z-index: 1;
+  padding: var(--sp-9) var(--page-x-wide);
   display: flex;
   flex-direction: column;
   gap: var(--sp-7);
 }
 
-/* ── Title block ── */
-.titleBlock {
+/* ── Marker ── */
+.marker {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  flex-direction: column;
+  gap: var(--sp-2);
   padding-bottom: var(--sp-6);
   border-bottom: 1px solid var(--rule);
 }
 
-.titleLeft {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-1);
-}
-
-.titleEyebrow {
+.markerEyebrow {
   font-family: var(--font-mono), monospace;
   font-size: var(--text-micro);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--ink-3);
+}
+
+.markerTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
 }
 
 .title {
   font-family: var(--font-sans);
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 300;
-  letter-spacing: var(--tracking-tight);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 200;
+  letter-spacing: -0.04em;
   color: var(--ink);
   line-height: 1;
 }
 
-.titleTld {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.4em;
-  font-weight: 400;
-  color: var(--ink-3);
-  vertical-align: super;
-}
-
-.titleSub {
-  font-family: var(--font-mono), monospace;
-  font-size: var(--text-micro);
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
 .visitLink {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-1);
   font-family: var(--font-mono), monospace;
   font-size: var(--text-micro);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
-  color: var(--ink-2);
+  color: var(--ink-3);
   border-bottom: 1px solid var(--rule);
   padding-bottom: 2px;
   transition:
@@ -136,79 +99,100 @@
   border-color: var(--accent);
 }
 
-.visitArrow {
-  display: inline-block;
-  font-style: normal;
+.markerSub {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
-/* ── Stats row — weighted, not equal ── */
+/* ── Tagline ── */
+.tagline {
+  font-family: var(--font-sans);
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  font-weight: 300;
+  color: var(--ink-2);
+  line-height: var(--leading-body);
+  max-width: 640px;
+  font-style: italic;
+}
+
+/* ── Stats — one primary, four secondary ── */
 .statsRow {
   display: flex;
-  gap: var(--sp-7);
+  gap: var(--sp-8);
   align-items: flex-end;
+  flex-wrap: wrap;
 }
 
-.statBig {
+.statPrimary {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--sp-1);
   flex-shrink: 0;
 }
 
-.statBigValue {
+.statPrimaryValue {
   font-family: var(--font-sans);
-  font-size: clamp(4rem, 10vw, 8rem);
+  /*
+   * This is the largest number on the page.
+   * It should feel like sculpture, not data.
+   */
+  font-size: clamp(5rem, 13vw, 11rem);
   font-weight: 200;
   color: var(--ink);
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
   line-height: 0.85;
   font-variant-numeric: tabular-nums;
 }
 
-.statBigLabel {
-  font-family: var(--font-sans);
-  font-size: var(--text-caption);
-  font-weight: 400;
-  color: var(--ink-2);
-}
-
-.statBigSub {
+.statPrimaryLabel {
   font-family: var(--font-mono), monospace;
   font-size: var(--text-micro);
-  letter-spacing: var(--tracking-wide);
-  color: var(--ink-4);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
-.statsSmall {
+.statSecondaryGroup {
   display: flex;
-  flex-direction: column;
-  gap: var(--sp-3);
-  padding-left: var(--sp-7);
+  gap: var(--sp-6);
+  flex-wrap: wrap;
+  padding-left: var(--sp-8);
   border-left: 1px solid var(--rule);
   padding-bottom: var(--sp-2);
 }
 
-.statSmall {
+.statSecondary {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
-.statSmallValue {
+.statSecondaryValue {
   font-family: var(--font-sans);
-  font-size: var(--text-md);
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
   font-weight: 300;
   color: var(--ink);
   letter-spacing: var(--tracking-tight);
   font-variant-numeric: tabular-nums;
+  line-height: 1;
 }
 
-.statSmallLabel {
+.statSecondaryLabel {
   font-family: var(--font-mono), monospace;
   font-size: var(--text-micro);
-  letter-spacing: var(--tracking-wide);
+  letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.statSecondarySub {
+  font-family: var(--font-mono), monospace;
+  font-size: 8px;
   color: var(--ink-4);
+  letter-spacing: 0.08em;
 }
 
 /* ── Body ── */
@@ -217,6 +201,8 @@
   grid-template-columns: 1fr 1fr;
   gap: var(--sp-8);
   align-items: start;
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--rule);
 }
 
 .bodyLeft {
@@ -311,23 +297,21 @@
   border: 1px solid var(--rule);
 }
 
-/* The rule that bleeds past the right edge — implies more beyond */
-.bleedRule {
-  height: 1px;
-  background: linear-gradient(90deg, var(--rule) 0%, transparent 100%);
-  margin-right: calc(-1 * var(--page-x-wide));
-}
-
 /* ── Responsive ── */
 @media (max-width: 1024px) {
-  .content { padding: var(--sp-6) var(--page-x); }
+  .content { padding: var(--sp-8) var(--page-x); }
   .body    { grid-template-columns: 1fr; gap: var(--sp-6); }
-  .statsRow { flex-direction: column; align-items: flex-start; gap: var(--sp-5); }
-  .statsSmall { border-left: none; padding-left: 0; border-top: 1px solid var(--rule); padding-top: var(--sp-4); }
+  .statsRow { gap: var(--sp-5); }
+  .statSecondaryGroup {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--rule);
+    padding-top: var(--sp-5);
+  }
 }
 
 @media (max-width: 768px) {
-  .imageFrame { height: clamp(240px, 45vh, 400px); }
-  .imageNumber { left: var(--page-x); }
-  .imageNumberValue { font-size: clamp(48px, 16vw, 100px); }
+  .watermark { width: 160%; }
+  .statPrimaryValue { font-size: clamp(4rem, 18vw, 7rem); }
+  .statSecondaryGroup { gap: var(--sp-4); }
 }

@@ -1,4 +1,3 @@
-// src/components/Cursor.jsx
 'use client';
 import { useEffect, useRef } from 'react';
 import s from './Cursor.module.css';
@@ -13,13 +12,12 @@ export default function Cursor() {
 
   useEffect(() => {
     if (!window.matchMedia('(pointer: fine)').matches) return;
-
     const el = cursorRef.current;
     if (!el) return;
 
     const onMove = (e) => {
       pos.current = { x: e.clientX, y: e.clientY };
-      if (!hovering.current) el.style.opacity = '1';
+      el.style.opacity = '1';
     };
 
     const onLeave  = () => { el.style.opacity = '0'; };
@@ -34,29 +32,31 @@ export default function Cursor() {
       el.classList.remove(s.active);
     };
 
-    const attachToTargets = () => {
+    const attachTargets = () => {
       document.querySelectorAll('a, button, [data-hover]').forEach((t) => {
         t.addEventListener('mouseenter', onInteractEnter);
         t.addEventListener('mouseleave', onInteractLeave);
       });
     };
-    attachToTargets();
+    attachTargets();
 
     const onVisibility = () => {
       visible.current = document.visibilityState === 'visible';
     };
+
     document.addEventListener('visibilitychange', onVisibility);
     document.addEventListener('mousemove', onMove);
     document.addEventListener('mouseleave', onLeave);
     document.addEventListener('mouseenter', onEnter);
 
-    // Smooth lerp follow
     const tick = () => {
       if (visible.current) {
-        current.current.x += (pos.current.x - current.current.x) * 0.12;
-        current.current.y += (pos.current.y - current.current.y) * 0.12;
-        el.style.transform =
-          `translate(${current.current.x}px, ${current.current.y}px)`;
+        // 0.18 — noticeably snappier, still smoothed
+        current.current.x += (pos.current.x - current.current.x) * 0.18;
+        current.current.y += (pos.current.y - current.current.y) * 0.18;
+
+        // Offset by half the cursor size (8px) so crosshair center = pointer
+        el.style.transform = `translate(${current.current.x - 8}px, ${current.current.y - 8}px)`;
       }
       rafRef.current = requestAnimationFrame(tick);
     };

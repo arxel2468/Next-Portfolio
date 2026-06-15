@@ -28,7 +28,7 @@ export const stealstreet = {
   live: 'https://stealstreet.in',
   // ← this was missing
   images: {
-    hero: '/images/shopify.jpg',
+    hero: '/images/logo-no-background.png',
     logo: '/images/shopify-logo.jpg',
   },
   testimonial: {

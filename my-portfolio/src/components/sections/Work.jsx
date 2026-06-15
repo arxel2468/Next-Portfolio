@@ -1,6 +1,5 @@
-// src/components/sections/Work.jsx
 'use client';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import {
   motion,
@@ -9,7 +8,6 @@ import {
   useInView,
   animate,
 } from 'framer-motion';
-import { useEffect } from 'react';
 import s from './Work.module.css';
 import { stealstreet } from '@/data/content';
 
@@ -45,122 +43,122 @@ export default function Work() {
   const d          = stealstreet;
   const sectionRef = useRef(null);
 
-  // Parallax on the image — content scrolls, image drifts slower
+  // Watermark drifts upward slower than scroll — creates depth
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
-  const imageY = useTransform(scrollYProgress, [0, 1], ['-10%', '10%']);
+  const watermarkY = useTransform(scrollYProgress, [0, 1], ['4%', '-4%']);
 
   return (
     <section id="work" ref={sectionRef} className={s.root}>
 
-      {/* ── Full bleed image — no padding, edge to edge ── */}
-      <div className={s.imageFrame}>
-        <motion.div className={s.imageInner} style={{ y: imageY }}>
-          <Image
-            src={d.images.hero}
-            alt="StealStreet store"
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
-            priority
-            sizes="100vw"
-          />
-          {/* Dark gradient — bottom only, for the overlaid number */}
-          <div className={s.imageGradient} />
-        </motion.div>
+      {/*
+        The wordmark watermark — rendered at natural ratio so it never clips.
+        Position: absolute, centered, enormous, low opacity.
+        It's a stamp, not an image.
+      */}
+      <motion.div
+        className={s.watermark}
+        style={{ y: watermarkY }}
+        aria-hidden="true"
+      >
+        <Image
+          src={d.images.hero}
+          alt=""
+          width={1400}
+          height={400}
+          style={{
+            width: '100%',
+            height: 'auto',
+            objectFit: 'contain',
+          }}
+          priority
+        />
+      </motion.div>
 
-        {/* The number — stenciled on the image */}
-        <motion.div
-          className={s.imageNumber}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <span className={s.imageNumberValue}>
-            <AnimatedNumber to={42.3} decimals={1} duration={2.4} />×
-          </span>
-          <span className={s.imageNumberLabel}>return on ad spend</span>
-        </motion.div>
-      </div>
-
-      {/* ── Content — padded, below the image ── */}
+      {/* ── All content sits above the watermark ── */}
       <div className={s.content}>
 
-        {/* Title block */}
+        {/* Section marker */}
         <motion.div
-          className={s.titleBlock}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div className={s.titleLeft}>
-            <span className={s.titleEyebrow}>Work Experience</span>
-            <h2 className={s.title}>StealStreet<span className={s.titleTld}>.in</span></h2>
-            <p className={s.titleSub}>{d.category}</p>
-          </div>
-          <a
-            href={d.live}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={s.visitLink}
-            data-hover
-          >
-            Visit store
-            <motion.span
-              className={s.visitArrow}
-              initial={{ x: 0 }}
-              whileHover={{ x: 4 }}
-              transition={{ duration: 0.2 }}
-              aria-hidden="true"
-            >
-              ↗
-            </motion.span>
-          </a>
-        </motion.div>
-
-        {/* Supporting stats — not equal boxes, weighted by meaning */}
-        <motion.div
-          className={s.statsRow}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {/* Big stat */}
-          <div className={s.statBig}>
-            <span className={s.statBigValue}>
-              <AnimatedNumber to={106} duration={1.8} />
-            </span>
-            <span className={s.statBigLabel}>purchases</span>
-            <span className={s.statBigSub}>in 6 days</span>
-          </div>
-          {/* Small stats */}
-          <div className={s.statsSmall}>
-            <div className={s.statSmall}>
-              <span className={s.statSmallValue}>₹0.48</span>
-              <span className={s.statSmallLabel}>cost per result</span>
-            </div>
-            <div className={s.statSmall}>
-              <span className={s.statSmallValue}>&lt;24h</span>
-              <span className={s.statSmallLabel}>zero to first sale</span>
-            </div>
-            <div className={s.statSmall}>
-              <span className={s.statSmallValue}>₹2K</span>
-              <span className={s.statSmallLabel}>total ad spend</span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Body — two column */}
-        <motion.div
-          className={s.body}
+          className={s.marker}
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className={s.markerEyebrow}>Work Experience</span>
+          <div className={s.markerTitle}>
+            <h2 className={s.title}>StealStreet</h2>
+            <a
+              href={d.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={s.visitLink}
+              data-hover
+            >
+              Visit store ↗
+            </a>
+          </div>
+          <p className={s.markerSub}>{d.category}</p>
+        </motion.div>
+
+        {/* Tagline */}
+        <motion.p
+          className={s.tagline}
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.8, delay: 0.1 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+        >
+          {d.tagline}
+        </motion.p>
+
+        {/* Stats — weighted by meaning, not equal boxes */}
+        <motion.div
+          className={s.statsRow}
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+        >
+          <div className={s.statPrimary}>
+            <span className={s.statPrimaryValue}>
+              <AnimatedNumber to={42.3} decimals={1} duration={2.4} />×
+            </span>
+            <span className={s.statPrimaryLabel}>return on ad spend</span>
+          </div>
+
+          <div className={s.statSecondaryGroup}>
+            {[
+              { value: '106',   label: 'purchases',           sub: 'in 6 days'       },
+              { value: '₹0.48', label: 'cost per result',     sub: 'Meta Ads'        },
+              { value: '<24h',  label: 'zero to first sale',  sub: 'conception → ₹'  },
+              { value: '₹2K',   label: 'total ad spend',      sub: '5 campaigns'     },
+            ].map((st) => (
+              <div key={st.label} className={s.statSecondary}>
+                <span className={s.statSecondaryValue}>
+                  {/^\d/.test(st.value) && st.value !== '₹0.48' && st.value !== '<24h' && st.value !== '₹2K' ? (
+                    <AnimatedNumber to={parseInt(st.value)} duration={1.8} />
+                  ) : (
+                    st.value
+                  )}
+                </span>
+                <span className={s.statSecondaryLabel}>{st.label}</span>
+                <span className={s.statSecondarySub}>{st.sub}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Body */}
+        <motion.div
+          className={s.body}
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.7, delay: 0.2 }}
         >
           <div className={s.bodyLeft}>
             {d.description.map((p, i) => (
@@ -192,8 +190,6 @@ export default function Work() {
           </div>
         </motion.div>
 
-        {/* The horizontal rule that bleeds past the edge */}
-        <div className={s.bleedRule} aria-hidden="true" />
       </div>
 
     </section>
