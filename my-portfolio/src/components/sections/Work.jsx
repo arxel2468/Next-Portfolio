@@ -59,23 +59,27 @@ export default function Work() {
         It's a stamp, not an image.
       */}
       <motion.div
-        className={s.watermark}
-        style={{ y: watermarkY }}
-        aria-hidden="true"
-      >
-        <Image
-          src={d.images.hero}
-          alt=""
-          width={1400}
-          height={400}
-          style={{
-            width: '100%',
-            height: 'auto',
-            objectFit: 'contain',
-          }}
-          priority
-        />
-      </motion.div>
+  className={s.watermark}
+  style={{ 
+    y: watermarkY,
+    x: '-50%', // Framer Motion handles centering transforms natively
+    yPercent: -50 // Combines smoothly with your custom watermarkY scroll math
+  }}
+  aria-hidden="true"
+>
+  <Image
+    src={d.images.hero}
+    alt=""
+    fill
+    sizes="110vw"
+    style={{
+      objectFit: 'contain',
+    }}
+    priority
+  />
+</motion.div>
+
+
 
       {/* ── All content sits above the watermark ── */}
       <div className={s.content}>

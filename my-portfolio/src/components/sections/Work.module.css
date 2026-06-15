@@ -12,30 +12,27 @@
 }
 
 /* ── Watermark — the wordmark as background stamp ── */
+/* src/components/sections/Work.module.css */
+
+/* src/components/sections/Work.module.css */
+
 .watermark {
   position: absolute;
-  /*
-   * Center it vertically in the section.
-   * Width: slightly wider than the section so it feels
-   * like it was always there, not placed.
-   */
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 110%;
+  /* REMOVED: transform: translate(-50%, -50%); -> Handled by motion.div style */
+  
+  width: 100%;
+  aspect-ratio: 1400 / 400; /* Ensures container retains your asset profile proportions */
+  
   pointer-events: none;
   will-change: transform;
-
-  /*
-   * Opacity: low enough to be subliminal above the fold,
-   * legible if you look for it.
-   * mix-blend-mode: multiply darkens where it overlaps content
-   * making it feel printed into the surface, not layered on top.
-   */
   opacity: 0.07;
   mix-blend-mode: multiply;
   user-select: none;
 }
+
+
 
 /* ── Content — sits above watermark ── */
 .content {

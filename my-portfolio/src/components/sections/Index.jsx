@@ -1,5 +1,6 @@
+// src/components/sections/Index.jsx
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import s from './Index.module.css';
@@ -10,9 +11,8 @@ function ProjectRow({ project, isOpen, onToggle }) {
     <motion.article
       className={`${s.row} ${isOpen ? s.rowOpen : ''}`}
       aria-label={project.title}
-      layout
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
     >
+      {/* The index line — always visible */}
       <button
         className={s.rowHead}
         onClick={onToggle}
@@ -26,13 +26,14 @@ function ProjectRow({ project, isOpen, onToggle }) {
         <motion.span
           className={s.rowToggle}
           animate={{ rotate: isOpen ? 45 : 0 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           aria-hidden="true"
         >
           +
         </motion.span>
       </button>
 
+      {/* The exhale — expands on hover/click */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
@@ -42,26 +43,22 @@ function ProjectRow({ project, isOpen, onToggle }) {
               height: 'auto',
               opacity: 1,
               transition: {
-                height:  { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
-                opacity: { duration: 0.35, delay: 0.12 },
+                height:  { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+                opacity: { duration: 0.3, delay: 0.1 },
               },
             }}
             exit={{
               height: 0,
               opacity: 0,
               transition: {
-                height:  { duration: 0.45, ease: [0.76, 0, 0.24, 1] },
+                height:  { duration: 0.4, ease: [0.76, 0, 0.24, 1] },
                 opacity: { duration: 0.2 },
               },
             }}
           >
-            {/*
-              The dark interior — a different material revealed when
-              you open the drawer. Not just expanded content but a
-              different space entirely.
-            */}
             <div className={s.rowBodyInner}>
 
+              {/* Thumbnail */}
               {project.image && (
                 <div className={s.rowThumb}>
                   <Image
@@ -74,10 +71,10 @@ function ProjectRow({ project, isOpen, onToggle }) {
                 </div>
               )}
 
+              {/* Text */}
               <div className={s.rowText}>
                 <p className={s.rowLede}>{project.lede}</p>
                 <p className={s.rowDesc}>{project.body}</p>
-
                 <div className={s.rowFoot}>
                   <div className={s.rowTech}>
                     {project.tech.slice(0, 4).map((t) => (
@@ -136,7 +133,9 @@ export default function Index() {
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       >
         <h2 className={s.heading}>Things I've built.</h2>
-        <p className={s.sub}>Tap to open.</p>
+        <p className={s.sub}>
+          Click to open. Some things reward a closer look.
+        </p>
       </motion.div>
 
       <motion.div
@@ -144,7 +143,7 @@ export default function Index() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: '-40px' }}
-        transition={{ duration: 0.6, delay: 0.15 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
       >
         {projects.map((p) => (
           <ProjectRow
