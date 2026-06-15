@@ -1,29 +1,59 @@
-.dot {
+/* src/components/Cursor.module.css */
+
+.cursor {
   position: fixed;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--ochre);
+  top: 0;
+  left: 0;
+  /* translate() set by JS — origin at top-left, offset by half size */
+  width: 16px;
+  height: 16px;
   pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: multiply;
-  transition: width .2s ease, height .2s ease;
-  will-change: left, top;
+  z-index: var(--z-cursor);
+  will-change: transform;
+  transition: opacity 0.3s ease;
+
+  /* The crosshair — two pseudo elements forming + shape */
 }
 
-.ring {
-  position: fixed;
-  width: 38px; height: 38px;
-  border-radius: 50%;
-  border: 1px solid rgba(196,137,42,0.35);
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  will-change: left, top;
-  transition: width .35s ease, height .35s ease, border-color .3s ease;
+/* Horizontal bar */
+.cursor::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--ink);
+  transform: translateY(-50%) translateX(-50%) translateX(8px);
+  transition: width var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) ease;
 }
 
-.dot.over  { width: 4px; height: 4px; }
-.ring.over { width: 56px; height: 56px; border-color: rgba(196,137,42,0.18); }
+/* Vertical bar */
+.cursor::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background: var(--ink);
+  transform: translateX(-50%) translateY(-50%) translateY(8px);
+  transition: height var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) ease;
+}
 
-@media (pointer: coarse) { .dot, .ring { display: none; } }
+/* On hover — collapse crosshair into filled square */
+.cursor.active::before {
+  width: 6px;
+  background: var(--accent);
+}
+
+.cursor.active::after {
+  height: 6px;
+  background: var(--accent);
+}
+
+@media (pointer: coarse) {
+  .cursor { display: none; }
+}

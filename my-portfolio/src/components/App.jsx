@@ -1,14 +1,14 @@
 // src/components/App.jsx
 'use client';
-import Cursor from './Cursor';
-import Nav from './Nav';
-import Hero from './sections/Hero';
-import StealStreet from './sections/StealStreet';
-import Projects from './sections/Projects';
-import Writing from './sections/Writing';
-import Contact from './sections/Contact';
-import Footer from './sections/Footer';
-import Grain from './ui/Grain';
+import Cursor   from './Cursor';
+import Nav      from './Nav';
+import Opening  from './sections/Opening';
+import Work     from './sections/Work';
+import Index    from './sections/Index';
+import Archive  from './sections/Archive';
+import Contact  from './sections/Contact';
+import Footer   from './sections/Footer';
+import Grain    from './ui/Grain';
 
 export default function App({ substackPosts = [] }) {
   return (
@@ -17,10 +17,10 @@ export default function App({ substackPosts = [] }) {
       <Cursor />
       <Nav />
       <main>
-        <Hero />
-        <StealStreet />
-        <Projects />
-        <Writing posts={substackPosts} />
+        <Opening />
+        <Work />
+        <Index />
+        <Archive posts={substackPosts} />
         <Contact />
       </main>
       <Footer />

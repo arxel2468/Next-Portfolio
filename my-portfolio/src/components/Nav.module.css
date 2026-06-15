@@ -1,124 +1,135 @@
 /* src/components/Nav.module.css */
 
-/* ── Rail ── */
-.rail {
+/* ── Monogram ── */
+.monogram {
   position: fixed;
-  left: 24px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: var(--z-nav);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--sp-4);
-}
-
-.railMark {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-family: var(--font-mono), monospace;
-  font-size: 8.5px;
-  letter-spacing: 0.3em;
-  color: var(--color-ink-tertiary);
-}
-
-.railLine {
-  width: 1px;
-  height: 28px;
-  background: var(--color-rule);
-}
-
-.railBtn {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 2px;
-  background: none;
-  border: none;
-}
-
-/* Framer shared-layout indicator — the dot that slides between items */
-.railIndicator {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--radius-full);
-  /* Visual indicator is handled by railNub below */
-}
-
-.railNub {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--color-rule);
-  display: block;
-  transition:
-    background var(--dur-normal) ease,
-    transform var(--dur-normal) ease;
-}
-
-.railLabel {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-family: var(--font-mono), monospace;
-  font-size: 8px;
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
-  color: var(--color-ink-tertiary);
-  transition: color var(--dur-normal) ease;
-  white-space: nowrap;
-}
-
-.railBtnActive .railNub  {
-  background: var(--color-accent);
-  transform: scale(1.6);
-}
-.railBtnActive .railLabel { color: var(--color-accent); }
-.railBtn:hover .railNub   { background: var(--color-accent); }
-.railBtn:hover .railLabel { color: var(--color-accent); }
-
-.railCity {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-family: var(--font-mono), monospace;
-  font-size: 8px;
-  letter-spacing: 0.3em;
-  color: var(--color-rule);
-}
-
-/* ── Mobile strip ── */
-.strip {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(245, 242, 238, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: var(--border-rule);
-  justify-content: space-around;
-  padding: 10px 0 14px;
+  top: var(--sp-4);
+  left: var(--sp-4);
   z-index: var(--z-nav);
 }
 
-.stripBtn {
-  background: none;
-  border: none;
+.monogramBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: var(--sp-1);
+}
+
+.monogramText {
   font-family: var(--font-mono), monospace;
-  font-size: 8.5px;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-ink-tertiary);
-  cursor: pointer;
-  padding: 6px 10px;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--ink);
+  line-height: 1;
   transition: color var(--dur-fast) ease;
 }
 
-.stripBtnActive { color: var(--color-accent); }
+.monogramBtn:hover .monogramText { color: var(--accent); }
 
-@media (max-width: 900px) {
-  .rail  { display: none; }
-  .strip { display: flex; }
+.monogramSub {
+  font-family: var(--font-mono), monospace;
+  font-size: 8px;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--ink-3);
+  transition: color var(--dur-fast) ease;
 }
+
+.monogramBtn:hover .monogramSub { color: var(--accent); }
+
+/* ── Overlay ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-nav) + 50);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.overlayBg {
+  position: absolute;
+  inset: 0;
+  background: rgba(238, 234, 227, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* ── Nav items ── */
+.overlayNav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding: 0 var(--page-x-wide);
+}
+
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  width: fit-content;
+  border: none;
+  background: none;
+  text-align: left;
+}
+
+.navNum {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wider);
+  color: var(--ink-4);
+  transition: color var(--dur-fast) ease;
+}
+
+.navLabel {
+  font-family: var(--font-sans);
+  font-size: clamp(2.5rem, 7vw, 5.5rem);
+  font-weight: 300;
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink);
+  line-height: 1;
+  transition: color var(--dur-fast) ease;
+}
+
+.navItem:hover .navLabel,
+.navItemActive .navLabel { color: var(--accent); }
+
+.navItem:hover .navNum,
+.navItemActive .navNum   { color: var(--accent); }
+
+.navDot {
+  position: absolute;
+  right: -var(--sp-4);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ── Footer strip ── */
+.overlayFoot {
+  position: absolute;
+  bottom: var(--sp-5);
+  left: var(--page-x-wide);
+  display: flex;
+  gap: var(--sp-5);
+  z-index: 1;
+}
+
+.overlayFoot a {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--ink-3);
+  transition: color var(--dur-fast) ease;
+}
+
+.overlayFoot a:hover { color: var(--accent); }

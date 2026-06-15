@@ -1,0 +1,153 @@
+/* src/components/sections/Opening.module.css */
+
+.root {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: var(--sp-9) var(--page-x-wide);
+}
+
+/* ── Quote field — breathes behind everything ── */
+.field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.fieldQuote {
+  position: absolute;
+  font-family: var(--font-sans);
+  font-size: clamp(9px, 1vw, 11px);
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.6;
+  max-width: 240px;
+  /* opacity set inline per quote */
+  white-space: normal;
+  transform-origin: left center;
+}
+
+/* ── Main content ── */
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+  max-width: 720px;
+  will-change: transform, opacity;
+}
+
+/* ── Identity ── */
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: var(--tracking-normal);
+  line-height: 1;
+}
+
+.location {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ── Hook — the single most important line ── */
+.hook {
+  font-family: var(--font-sans);
+  font-size: clamp(2.8rem, 7vw, 6rem);
+  font-weight: 300;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--ink);
+}
+
+.hook em {
+  font-style: italic;
+  /* Slightly lighter — the second half of the thought */
+  color: var(--ink-2);
+}
+
+/* ── Stats ── */
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  padding-top: var(--sp-4);
+  max-width: 380px;
+}
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--rule-light);
+}
+
+.statValue {
+  font-family: var(--font-sans);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: var(--tracking-tight);
+  min-width: 72px;
+  font-variant-numeric: tabular-nums;
+}
+
+.statLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ── Scroll cue ── */
+.scrollCue {
+  position: absolute;
+  bottom: var(--sp-5);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.scrollLine {
+  width: 1px;
+  height: 64px;
+  background: var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+
+.scrollDot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-left: -1px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .root    { padding: var(--sp-9) var(--page-x); }
+  .content { gap: var(--sp-6); }
+  .fieldQuote { display: none; } /* Too cluttered on small screens */
+}

@@ -1,17 +1,17 @@
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
 
   theme: {
-    display: ['var(--font-playfair)', 'Georgia', 'serif'],
-
+    // ─── FONTS ─────────────────────────────────────────────────────────────
+    // Note: To make these work as font family classes (e.g. font-display),
+    // they need to be defined inside the fontFamily object.
+    fontFamily: {
+      display: ['var(--font-playfair)', 'Georgia', 'serif'],
       body: ['var(--font-garamond)', 'Georgia', 'serif'],
-
       sans: ['var(--font-inter)', 'Helvetica Neue', 'system-ui', 'sans-serif'],
-
       mono: ['var(--font-mono)', 'Fira Code', 'monospace'],
-    },
+    }, // Fixed: This bracket now safely closes the fontFamily block, NOT the theme block.
 
     extend: {
       colors: {
@@ -121,21 +121,17 @@ module.exports = {
       },
 
       // ─── CUSTOM ANIMATIONS ──────────────────────────────────────────────────
-      // CSS keyframe animations for elements that don't use Framer Motion
       keyframes: {
-        // The pulsing dot in the topbar
         pulse: {
           '0%, 100%': { opacity: '1',   transform: 'scale(1)' },
           '50%':       { opacity: '0.3', transform: 'scale(0.75)' },
         },
-        // The scroll-track runner
         run: {
           '0%':   { transform: 'translateX(-100%)', opacity: '0' },
           '15%':  { opacity: '1' },
           '85%':  { opacity: '1' },
           '100%': { transform: 'translateX(200%)', opacity: '0' },
         },
-        // Nav rail fade in (delayed 2s after mount)
         fadeUp: {
           from: { opacity: '0', transform: 'translateY(8px)' },
           to:   { opacity: '1', transform: 'translateY(0)' },
@@ -147,7 +143,7 @@ module.exports = {
         'fade-up': 'fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards',
       },
     },
-  },
+  }, // This bracket now properly closes the entire theme object.
 
   plugins: [],
 };
