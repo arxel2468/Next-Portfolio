@@ -1,3 +1,4 @@
+// src/components/App.jsx
 'use client';
 import Cursor from './Cursor';
 import Nav from './Nav';

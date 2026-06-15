@@ -1,25 +1,27 @@
+/* src/components/sections/Footer.module.css */
+
 .root {
-  background: var(--bg-dark-2);
-  padding: 64px 56px 48px 120px;
+  background: var(--color-dark-2);
+  padding: var(--sp-9) var(--content-inset) var(--sp-8) var(--nav-width);
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: var(--sp-7);
 }
 
-/* ── epigraph — a quote from his own writing ── */
+/* ── Epigraph ── */
 .epigraph {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--sp-2);
   max-width: 600px;
-  border-left: 2px solid var(--ochre);
-  padding-left: 24px;
+  border-left: 2px solid var(--color-accent);
+  padding-left: var(--sp-5);
 }
 
 .epigraphMark {
   font-family: var(--font-playfair), serif;
   font-size: 40px;
-  color: var(--ochre);
+  color: var(--color-accent);
   line-height: 1;
   display: block;
   margin-bottom: -8px;
@@ -30,66 +32,69 @@
   font-family: var(--font-garamond), serif;
   font-style: italic;
   font-size: clamp(17px, 2vw, 22px);
-  color: rgba(247,243,236,0.7);
-  line-height: 1.55;
+  color: rgba(240, 235, 227, 0.7);
+  line-height: var(--leading-normal);
 }
 
 .epigraphAttr {
   font-family: var(--font-mono), monospace;
-  font-size: 9px;
-  letter-spacing: 0.18em;
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
-  color: rgba(247,243,236,0.22);
+  color: rgba(240, 235, 227, 0.22);
 }
 
-/* ── bottom ── */
+/* ── Bottom ── */
 .bottom {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding-top: 40px;
-  border-top: 1px solid rgba(247,243,236,0.06);
+  padding-top: var(--sp-7);
+  border-top: 1px solid rgba(240, 235, 227, 0.06);
   flex-wrap: wrap;
-  gap: 24px;
+  gap: var(--sp-5);
 }
 
-.bottomLeft { display: flex; flex-direction: column; gap: 6px; }
+.bottomLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
 .name {
   font-family: var(--font-playfair), serif;
-  font-size: 20px;
+  font-size: var(--text-sm-head);
   font-weight: 700;
-  color: #F7F3EC;
+  color: var(--color-dark-ink);
   letter-spacing: -0.01em;
 }
 
 .byline {
   font-family: var(--font-mono), monospace;
   font-size: 8.5px;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
-  color: rgba(247,243,236,0.18);
+  color: rgba(240, 235, 227, 0.18);
 }
 
 .links {
   display: flex;
-  gap: 24px;
+  gap: var(--sp-5);
   flex-wrap: wrap;
 }
 
 .link {
   font-family: var(--font-mono), monospace;
   font-size: 9.5px;
-  letter-spacing: 0.15em;
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: rgba(247,243,236,0.3);
-  text-decoration: none;
-  transition: color 0.3s ease;
+  color: rgba(240, 235, 227, 0.3);
+  transition: color var(--dur-normal) ease;
 }
 
-.link:hover { color: var(--ochre); }
+.link:hover { color: var(--color-accent); }
 
-/* ── foot ── */
+/* ── Foot ── */
 .foot {
   display: flex;
   justify-content: space-between;
@@ -99,24 +104,25 @@
 .made {
   font-family: var(--font-garamond), serif;
   font-style: italic;
-  font-size: 13px;
-  color: rgba(247,243,236,0.14);
+  font-size: var(--text-caption);
+  color: rgba(240, 235, 227, 0.14);
   cursor: help;
-  transition: color 0.3s ease;
+  transition: color var(--dur-normal) ease;
 }
 
-.made:hover { color: rgba(247,243,236,0.4); }
+.made:hover { color: rgba(240, 235, 227, 0.4); }
 
 .inf {
   font-family: var(--font-playfair), serif;
   font-style: italic;
   font-size: 18px;
-  color: rgba(247,243,236,0.1);
+  color: rgba(240, 235, 227, 0.1);
   user-select: none;
 }
 
+/* ── Responsive ── */
 @media (max-width: 900px) {
-  .root { padding: 56px 24px 40px; }
+  .root   { padding: var(--sp-8) var(--sp-5) var(--sp-7); }
   .bottom { flex-direction: column; align-items: flex-start; }
-  .links { gap: 16px; }
+  .links  { gap: var(--sp-3); }
 }

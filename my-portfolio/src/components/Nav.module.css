@@ -1,15 +1,16 @@
+/* src/components/Nav.module.css */
+
 /* ── Rail ── */
 .rail {
   position: fixed;
   left: 24px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 500;
+  z-index: var(--z-nav);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  transition: opacity 0.8s ease;
+  gap: var(--sp-4);
 }
 
 .railMark {
@@ -18,33 +19,43 @@
   font-family: var(--font-mono), monospace;
   font-size: 8.5px;
   letter-spacing: 0.3em;
-  color: var(--ink-4);
+  color: var(--color-ink-tertiary);
 }
 
 .railLine {
   width: 1px;
   height: 28px;
-  background: var(--rule);
+  background: var(--color-rule);
 }
 
 .railBtn {
-  background: none;
-  border: none;
-  cursor: none;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5px;
   padding: 2px;
+  background: none;
+  border: none;
+}
+
+/* Framer shared-layout indicator — the dot that slides between items */
+.railIndicator {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-full);
+  /* Visual indicator is handled by railNub below */
 }
 
 .railNub {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--rule);
+  background: var(--color-rule);
   display: block;
-  transition: background 0.3s ease, transform 0.3s ease;
+  transition:
+    background var(--dur-normal) ease,
+    transform var(--dur-normal) ease;
 }
 
 .railLabel {
@@ -52,17 +63,20 @@
   transform: rotate(180deg);
   font-family: var(--font-mono), monospace;
   font-size: 8px;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
-  color: var(--ink-4);
-  transition: color 0.3s ease;
+  color: var(--color-ink-tertiary);
+  transition: color var(--dur-normal) ease;
   white-space: nowrap;
 }
 
-.railBtnActive .railNub  { background: var(--ochre); transform: scale(1.6); }
-.railBtnActive .railLabel { color: var(--ochre); }
-.railBtn:hover .railNub  { background: var(--ochre); }
-.railBtn:hover .railLabel { color: var(--ochre); }
+.railBtnActive .railNub  {
+  background: var(--color-accent);
+  transform: scale(1.6);
+}
+.railBtnActive .railLabel { color: var(--color-accent); }
+.railBtn:hover .railNub   { background: var(--color-accent); }
+.railBtn:hover .railLabel { color: var(--color-accent); }
 
 .railCity {
   writing-mode: vertical-rl;
@@ -70,21 +84,23 @@
   font-family: var(--font-mono), monospace;
   font-size: 8px;
   letter-spacing: 0.3em;
-  color: var(--rule);
+  color: var(--color-rule);
 }
 
 /* ── Mobile strip ── */
 .strip {
   display: none;
   position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: rgba(247,243,236,0.94);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-top: 1px solid var(--rule);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(245, 242, 238, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: var(--border-rule);
   justify-content: space-around;
   padding: 10px 0 14px;
-  z-index: 500;
+  z-index: var(--z-nav);
 }
 
 .stripBtn {
@@ -92,15 +108,15 @@
   border: none;
   font-family: var(--font-mono), monospace;
   font-size: 8.5px;
-  letter-spacing: 0.15em;
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
-  color: var(--ink-4);
+  color: var(--color-ink-tertiary);
   cursor: pointer;
   padding: 6px 10px;
-  transition: color 0.25s ease;
+  transition: color var(--dur-fast) ease;
 }
 
-.stripBtnActive { color: var(--ochre); }
+.stripBtnActive { color: var(--color-accent); }
 
 @media (max-width: 900px) {
   .rail  { display: none; }

@@ -1,3 +1,5 @@
+// src/components/sections/Footer.jsx
+import { motion } from 'framer-motion';
 import s from './Footer.module.css';
 import { about } from '@/data/content';
 
@@ -5,12 +7,6 @@ export default function Footer() {
   return (
     <footer className={s.root} role="contentinfo">
 
-      {/*
-        The quote from his own writing in the footer.
-        Not a copyright notice.
-        Not a "Made with ❤️".
-        A line that says who this person is.
-      */}
       <div className={s.epigraph}>
         <span className={s.epigraphMark} aria-hidden="true">"</span>
         <p className={s.epigraphText}>
@@ -23,11 +19,13 @@ export default function Footer() {
       <div className={s.bottom}>
         <div className={s.bottomLeft}>
           <span className={s.name}>Amit Pandit</span>
-          <span className={s.byline}>Mumbai · Builder · Writer · {new Date().getFullYear()}</span>
+          <span className={s.byline}>
+            Mumbai · Builder · Writer · {new Date().getFullYear()}
+          </span>
         </div>
 
         <nav className={s.links} aria-label="Social links">
-          {about.socials.map(l => (
+          {about.socials.map((l) => (
             <a
               key={l.label}
               href={l.url}
@@ -42,10 +40,9 @@ export default function Footer() {
       </div>
 
       <div className={s.foot}>
-        {/* Easter egg on hover */}
         <span
           className={s.made}
-          title="not a template. not a theme. written from scratch at odd hours."
+          title="not a template. not a theme. written from scratch."
         >
           made with obsession
         </span>
